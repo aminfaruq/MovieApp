@@ -5,7 +5,6 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F6F6"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -29,7 +28,8 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary" />
+            android:background="@color/colorPrimary"
+            app:tabMode="auto"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
