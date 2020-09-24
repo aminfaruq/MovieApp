@@ -16,7 +16,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/img_backgroud_top_rated"
             android:layout_width="0dp"
             android:layout_height="212dp"
             android:scaleType="centerCrop"
@@ -47,7 +47,7 @@
             android:fontFamily="@font/poppins_medium"
             android:textSize="17sp"
             app:layout_constraintStart_toEndOf="@+id/img_top_rated"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/img_backgroud_top_rated"
             tools:text="Moonlight" />
 
         <TextView
