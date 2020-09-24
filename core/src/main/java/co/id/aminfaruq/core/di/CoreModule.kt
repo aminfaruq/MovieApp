@@ -1,5 +1,6 @@
 package co.id.aminfaruq.core.di
 
+import co.id.aminfaruq.core.data.mapper.TopRatedMapper
 import co.id.aminfaruq.core.data.source.remote.network.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -47,5 +48,5 @@ val repositoryModule = module {
 }
 
 val mapperModule = module {
-
+    single { TopRatedMapper() }
 }
