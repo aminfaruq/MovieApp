@@ -1,7 +1,6 @@
 package co.id.aminfaruq.movieapp
 
 import android.app.Application
-import co.id.aminfaruq.core.di.databaseModule
 import co.id.aminfaruq.core.di.mapperModule
 import co.id.aminfaruq.core.di.networkModule
 import co.id.aminfaruq.core.di.repositoryModule
@@ -17,12 +16,12 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Stetho.initializeWithDefaults(this)
-       /* startKoin {
+        startKoin {
             androidLogger()
             androidContext(this@MyApplication)
             modules(
                 listOf(
-                    databaseModule,
+                    /* databaseModule,*/
                     networkModule,
                     repositoryModule,
                     useCaseModule,
@@ -30,6 +29,6 @@ class MyApplication : Application() {
                     mapperModule
                 )
             )
-        }*/
+        }
     }
 }
