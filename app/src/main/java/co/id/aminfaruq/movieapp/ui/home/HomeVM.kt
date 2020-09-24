@@ -1,11 +1,13 @@
 package co.id.aminfaruq.movieapp.ui.home
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import co.id.aminfaruq.core.domain.model.TopRated
 import co.id.aminfaruq.core.domain.usecase.HomeUseCase
 import co.id.aminfaruq.core.ui.BaseViewModel
 import co.id.aminfaruq.core.utils.Constants
 import co.id.aminfaruq.core.utils.RxUtils
+import kotlin.math.log
 
 class HomeVM(private val homeUseCase: HomeUseCase) : BaseViewModel() {
 
