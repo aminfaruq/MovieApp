@@ -1,5 +1,9 @@
 package co.id.aminfaruq.core.domain.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class TopRated(
     val adult: Boolean,
     val backdrop_path: String,
@@ -15,4 +19,4 @@ data class TopRated(
     val video: Boolean,
     val vote_average: Int,
     val vote_count: Int
-)
+) : Parcelable
