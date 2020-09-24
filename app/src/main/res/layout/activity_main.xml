@@ -28,8 +28,8 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:tabMode="auto"/>
+            android:background="?attr/colorPrimary"
+            app:tabMode="scrollable"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
