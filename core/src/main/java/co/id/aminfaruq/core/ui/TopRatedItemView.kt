@@ -22,7 +22,7 @@ class TopRatedItemView(val topRated: TopRated) : Item() {
         tvName.text = topRated.original_title
         tvKind.text = "Trailer"
         btnWatchList.setOnClickListener {
-            
+
         }
 
     }
