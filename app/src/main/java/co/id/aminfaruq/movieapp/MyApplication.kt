@@ -17,7 +17,7 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Stetho.initializeWithDefaults(this)
-        startKoin {
+       /* startKoin {
             androidLogger()
             androidContext(this@MyApplication)
             modules(
@@ -30,6 +30,6 @@ class MyApplication : Application() {
                     mapperModule
                 )
             )
-        }
+        }*/
     }
 }
