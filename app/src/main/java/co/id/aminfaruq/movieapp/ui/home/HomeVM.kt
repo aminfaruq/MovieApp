@@ -7,7 +7,6 @@ import co.id.aminfaruq.core.domain.usecase.HomeUseCase
 import co.id.aminfaruq.core.ui.BaseViewModel
 import co.id.aminfaruq.core.utils.Constants
 import co.id.aminfaruq.core.utils.RxUtils
-import kotlin.math.log
 
 class HomeVM(private val homeUseCase: HomeUseCase) : BaseViewModel() {
 

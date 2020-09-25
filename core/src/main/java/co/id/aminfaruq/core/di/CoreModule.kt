@@ -1,9 +1,9 @@
 package co.id.aminfaruq.core.di
 
 import co.id.aminfaruq.core.data.mapper.TopRatedMapper
-import co.id.aminfaruq.core.data.repository.TopRatedRepositoryImpl
+import co.id.aminfaruq.core.data.repository.HomeRepositoryImpl
 import co.id.aminfaruq.core.data.source.remote.network.ApiService
-import co.id.aminfaruq.core.domain.repository.TopRatedRepository
+import co.id.aminfaruq.core.domain.repository.HomeRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -47,10 +47,10 @@ fun getExecutor(): Executor {
 
 val repositoryModule = module {
     single {
-        TopRatedRepositoryImpl(
+        HomeRepositoryImpl(
             get(),
             get()
-        ) as TopRatedRepository
+        ) as HomeRepository
     }
 }
 

@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import co.id.aminfaruq.core.ui.TopRatedAdapter
+import co.id.aminfaruq.core.ui.HomeAdapter
 import co.id.aminfaruq.movieapp.R
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.android.ext.android.inject
@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val topRatedAdapter = TopRatedAdapter()
+        val topRatedAdapter = HomeAdapter()
 
         viewModel.getTopRated()
         with(viewModel) {

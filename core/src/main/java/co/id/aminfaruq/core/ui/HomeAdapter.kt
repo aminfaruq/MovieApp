@@ -11,7 +11,7 @@ import coil.load
 import kotlinx.android.synthetic.main.item_top_rated.view.*
 import java.util.*
 
-class TopRatedAdapter : RecyclerView.Adapter<TopRatedAdapter.ViewHolder>() {
+class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
 
     private var listData = ArrayList<TopRated>()
@@ -32,7 +32,7 @@ class TopRatedAdapter : RecyclerView.Adapter<TopRatedAdapter.ViewHolder>() {
         return listData.size
     }
 
-    override fun onBindViewHolder(holder: TopRatedAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HomeAdapter.ViewHolder, position: Int) {
         val data = listData[position]
         holder.bind(data)
     }
