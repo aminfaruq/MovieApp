@@ -5,4 +5,6 @@ object Constants {
     const val API_KEY = "9351b653885866a95fcef04c4f0c7426"
     const val LANG = "en-US"
     const val SORT_BY = "popularity.desc"
+    const val ADULT = false
+    const val VIDEO = false
 }

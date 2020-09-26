@@ -9,7 +9,8 @@
     android:clickable="true"
     android:focusable="true"
     app:cardCornerRadius="8dp"
-    app:cardElevation="3dp">
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="#000000">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -40,6 +41,7 @@
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView
+            android:textColor="@android:color/white"
             android:id="@+id/tv_name_top_rated"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -55,6 +57,7 @@
             tools:text="Moonlight" />
 
         <TextView
+            android:textColor="#888888"
             android:id="@+id/tv_kind_top_rated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
