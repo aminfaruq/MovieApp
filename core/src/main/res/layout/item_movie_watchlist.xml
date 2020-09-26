@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="16dp"
+    android:layout_margin="8dp"
     android:layout_width="150dp"
     android:layout_height="325dp"
     app:cardCornerRadius="10dp"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/item_vote" />
+            app:srcCompat="@drawable/ic_item_vote" />
 
         <ImageView
             android:id="@+id/imageView3"
@@ -72,14 +72,13 @@
             app:layout_constraintTop_toBottomOf="@+id/img_movie" />
 
         <TextView
-            android:textColor="@android:color/white"
             android:id="@+id/tv_date_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/poppins"
+            android:textColor="@android:color/white"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
