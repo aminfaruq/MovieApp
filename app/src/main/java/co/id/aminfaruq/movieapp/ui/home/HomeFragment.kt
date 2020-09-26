@@ -29,12 +29,12 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val topRatedAdapter = HomeAdapter()
+        //val topRatedAdapter = HomeAdapter()
 
         viewModel.getTopRated()
         with(viewModel) {
             postData.observe(viewLifecycleOwner, Observer {
-                topRatedAdapter.setData(it)
+               // topRatedAdapter.setData(it)
             })
 
             messageData.observe(viewLifecycleOwner, Observer { messageInfo ->
@@ -48,11 +48,11 @@ class HomeFragment : Fragment() {
         }
 
         val linearLayout = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        with(rv_top_rated) {
+       /* with(rv_top_rated) {
             layoutManager = linearLayout
             adapter = topRatedAdapter
             setHasFixedSize(true)
-        }
+        }*/
 
 
     }

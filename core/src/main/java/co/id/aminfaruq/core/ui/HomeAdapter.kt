@@ -11,17 +11,27 @@ import coil.load
 import kotlinx.android.synthetic.main.item_top_rated.view.*
 import java.util.*
 
-class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
+class HomeAdapter(viewType: Int) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
+
+    //type 1 for top rated
+    val TYPE_1: Int = 1
+
+    //type 2 for
+    val TYPE_2: Int = 2
 
 
-    private var listData = ArrayList<TopRated>()
+    // TODO: 26/09/20 :  Top rated
+    private var topRatedData = ArrayList<TopRated>()
 
-    fun setData(newListData: List<TopRated>?) {
+    fun setTopRatedData(newListData: List<TopRated>?) {
         if (newListData == null) return
-        listData.clear()
-        listData.addAll(newListData)
+        topRatedData.clear()
+        topRatedData.addAll(newListData)
         notifyDataSetChanged()
     }
+
+    // TODO: 26/09/20 :  Discover
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(
@@ -29,11 +39,11 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
         )
 
     override fun getItemCount(): Int {
-        return listData.size
+        return topRatedData.size
     }
 
     override fun onBindViewHolder(holder: HomeAdapter.ViewHolder, position: Int) {
-        val data = listData[position]
+        val data = topRatedData[position]
         holder.bind(data)
     }
 

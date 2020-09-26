@@ -1,5 +1,6 @@
 package co.id.aminfaruq.core.di
 
+import co.id.aminfaruq.core.data.mapper.DiscoverMapper
 import co.id.aminfaruq.core.data.mapper.TopRatedMapper
 import co.id.aminfaruq.core.data.repository.HomeRepositoryImpl
 import co.id.aminfaruq.core.data.source.remote.network.ApiService
@@ -56,4 +57,5 @@ val repositoryModule = module {
 
 val mapperModule = module {
     single { TopRatedMapper() }
+    single { DiscoverMapper() }
 }
