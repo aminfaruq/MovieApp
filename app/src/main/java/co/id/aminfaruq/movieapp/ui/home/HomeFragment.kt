@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,11 +31,53 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        viewModel.getTopRated()
+        viewModel.getDiscoverMovie(10770)
+
+
+        btn_action.setOnClickListener {
+            btn_action.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_click)
+            btn_action.setTextColor(resources.getColor(android.R.color.white))
+            btn_drama.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_horror.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_thriler.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            viewModel.getDiscoverMovie(28)
+        }
+
+        btn_drama.setOnClickListener {
+            btn_drama.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_click)
+            btn_drama.setTextColor(resources.getColor(android.R.color.white))
+            btn_action.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_horror.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_thriler.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            viewModel.getDiscoverMovie(18)
+        }
+
+        btn_horror.setOnClickListener {
+            btn_horror.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_click)
+            btn_horror.setTextColor(resources.getColor(android.R.color.white))
+            btn_action.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_drama.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_thriler.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            viewModel.getDiscoverMovie(27)
+        }
+
+        btn_thriler.setOnClickListener {
+            btn_thriler.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_click)
+            btn_thriler.setTextColor(resources.getColor(android.R.color.white))
+            btn_action.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_drama.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_horror.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            viewModel.getDiscoverMovie(53)
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         val topRatedAdapter = TopRatedAdapter()
         val discoverAdapter = DiscoverAdapter()
 
-        viewModel.getTopRated()
-        viewModel.getDiscoverMovie(28)
         with(viewModel) {
             postTopRatedData.observe(viewLifecycleOwner, Observer {
                 topRatedAdapter.setTopRatedData(it)
@@ -66,7 +109,6 @@ class HomeFragment : Fragment() {
             adapter = discoverAdapter
             setHasFixedSize(true)
         }
-
 
     }
 

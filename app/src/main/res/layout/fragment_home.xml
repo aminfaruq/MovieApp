@@ -90,23 +90,27 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_drama"
+                    android:layout_width="89dp"
+                    android:layout_height="37dp"
                     android:layout_marginTop="16dp"
+                    android:background="@drawable/corner_button_def"
                     android:text="Drama"
+                    android:textColor="#FFFFFF"
                     app:layout_constraintStart_toStartOf="@+id/textView6"
                     app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
                 <Button
-                    android:id="@+id/button2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:id="@+id/btn_action"
+                    android:layout_width="89dp"
+                    android:layout_height="37dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/corner_button_def"
                     android:text="Action"
-                    app:layout_constraintStart_toEndOf="@+id/button"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_drama"
+                    app:layout_constraintStart_toEndOf="@+id/btn_drama"
+                    app:layout_constraintTop_toTopOf="@+id/btn_drama" />
 
                 <TextView
                     android:id="@+id/textView6"
@@ -129,7 +133,32 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button" />
+                    app:layout_constraintTop_toBottomOf="@+id/btn_drama" />
+
+                <Button
+                    android:id="@+id/btn_horror"
+                    android:layout_width="89dp"
+                    android:layout_height="37dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/corner_button_def"
+                    android:text="Horror"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_action"
+                    app:layout_constraintStart_toEndOf="@+id/btn_action"
+                    app:layout_constraintTop_toTopOf="@+id/btn_action" />
+
+                <Button
+                    android:id="@+id/btn_thriler"
+                    android:layout_width="89dp"
+                    android:layout_height="37dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/corner_button_def"
+                    android:text="Thriller"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_horror"
+                    app:layout_constraintStart_toEndOf="@+id/btn_horror"
+                    app:layout_constraintTop_toTopOf="@+id/btn_horror"
+                    app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
