@@ -23,4 +23,10 @@ class HomeIteractor(private val homeRepository: HomeRepository) : HomeUseCase {
         page,
         with_genres
     )
+
+    override fun getUpcomingMovie(
+        api_key: String,
+        language: String,
+        page: Int
+    ) = homeRepository.getUpcomingMovie(api_key, language, page)
 }

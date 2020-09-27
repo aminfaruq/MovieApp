@@ -2,6 +2,7 @@ package co.id.aminfaruq.core.data.repository
 
 import co.id.aminfaruq.core.data.mapper.DiscoverMapper
 import co.id.aminfaruq.core.data.mapper.TopRatedMapper
+import co.id.aminfaruq.core.data.mapper.UpcomingMapper
 import co.id.aminfaruq.core.data.source.remote.network.ApiService
 import co.id.aminfaruq.core.domain.model.Discover
 import co.id.aminfaruq.core.domain.model.TopRated
@@ -12,7 +13,8 @@ import io.reactivex.Single
 class HomeRepositoryImpl(
     private val apiService: ApiService,
     private val itemTopRatedMapper: TopRatedMapper,
-    private val itemDiscoverMapper: DiscoverMapper
+    private val itemDiscoverMapper: DiscoverMapper,
+    private val itemUpcomingMapper: UpcomingMapper
 ) : HomeRepository {
     override fun getTopRated(api_key: String, language: String, page: Int): Single<List<TopRated>> {
         return apiService.getTopRated(api_key, language, page).map {
@@ -47,7 +49,12 @@ class HomeRepositoryImpl(
         language: String,
         page: Int
     ): Single<List<Upcoming>> {
-        TODO("Not yet implemented")
+        return apiService.upcomingMovie(
+            api_key, language, page
+        ).map {
+            itemUpcomingMapper.mapToListDomain(it.results)
+        }
+
     }
 
 }

@@ -38,7 +38,7 @@ class TopRatedAdapter : RecyclerView.Adapter<TopRatedAdapter.ViewHolder>() {
         holder.bind(data)
     }
 
-    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(data: TopRated) {
             with(itemView) {
                 img_backgroud_top_rated.load(Constants.URL_IMAGE + data.backdrop_path)

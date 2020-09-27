@@ -12,8 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.id.aminfaruq.core.ui.DiscoverAdapter
 import co.id.aminfaruq.core.ui.TopRatedAdapter
+import co.id.aminfaruq.core.ui.UpcomingAdapter
 import co.id.aminfaruq.movieapp.R
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.layout_coming_soon.*
 import kotlinx.android.synthetic.main.layout_top_pick.*
 import org.koin.android.ext.android.inject
 
@@ -33,6 +35,7 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.getTopRated()
+        viewModel.getUpcomingMovie()
         viewModel.getDiscoverMovie(10770)
 
 
@@ -78,6 +81,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         val topRatedAdapter = TopRatedAdapter()
         val discoverAdapter = DiscoverAdapter()
+        val upcomingAdapter = UpcomingAdapter()
 
         with(viewModel) {
             postTopRatedData.observe(viewLifecycleOwner, Observer {
@@ -86,6 +90,10 @@ class HomeFragment : Fragment() {
 
             postDiscoverData.observe(viewLifecycleOwner, Observer {
                 discoverAdapter.setDiscoverMovieData(it)
+            })
+
+            postUpcomingData.observe(viewLifecycleOwner , Observer {
+                upcomingAdapter.setUpcomingMovieData(it)
             })
 
             messageData.observe(viewLifecycleOwner, Observer { messageInfo ->
@@ -108,6 +116,11 @@ class HomeFragment : Fragment() {
         with(rv_discover) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = discoverAdapter
+            setHasFixedSize(true)
+        }
+        with(rv_coming_soon) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = upcomingAdapter
             setHasFixedSize(true)
         }
 
