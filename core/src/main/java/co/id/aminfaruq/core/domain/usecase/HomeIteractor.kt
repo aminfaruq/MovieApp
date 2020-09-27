@@ -1,6 +1,8 @@
 package co.id.aminfaruq.core.domain.usecase
 
+import co.id.aminfaruq.core.domain.model.People
 import co.id.aminfaruq.core.domain.repository.HomeRepository
+import io.reactivex.Single
 
 class HomeIteractor(private val homeRepository: HomeRepository) : HomeUseCase {
     override fun getTopRated(api_key: String, language: String, page: Int) =
@@ -29,4 +31,10 @@ class HomeIteractor(private val homeRepository: HomeRepository) : HomeUseCase {
         language: String,
         page: Int
     ) = homeRepository.getUpcomingMovie(api_key, language, page)
+
+    override fun getPeoplePopular(
+        api_key: String,
+        language: String,
+        page: Int
+    ) = homeRepository.getPeoplePopular(api_key, language, page)
 }

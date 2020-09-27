@@ -11,10 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.id.aminfaruq.core.ui.DiscoverAdapter
+import co.id.aminfaruq.core.ui.PeopleAdapter
 import co.id.aminfaruq.core.ui.TopRatedAdapter
 import co.id.aminfaruq.core.ui.UpcomingAdapter
 import co.id.aminfaruq.movieapp.R
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.layout_actor.*
 import kotlinx.android.synthetic.main.layout_coming_soon.*
 import kotlinx.android.synthetic.main.layout_top_pick.*
 import org.koin.android.ext.android.inject
@@ -36,42 +38,59 @@ class HomeFragment : Fragment() {
 
         viewModel.getTopRated()
         viewModel.getUpcomingMovie()
+        viewModel.getActorMovie()
         viewModel.getDiscoverMovie(10770)
 
 
         btn_action.setOnClickListener {
-            btn_action.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_click)
+            btn_action.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_click)
             btn_action.setTextColor(resources.getColor(android.R.color.white))
-            btn_drama.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
-            btn_horror.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
-            btn_thriler.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_drama.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
+            btn_horror.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
+            btn_thriler.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
             viewModel.getDiscoverMovie(28)
         }
 
         btn_drama.setOnClickListener {
-            btn_drama.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_click)
+            btn_drama.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_click)
             btn_drama.setTextColor(resources.getColor(android.R.color.white))
-            btn_action.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
-            btn_horror.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
-            btn_thriler.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_action.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
+            btn_horror.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
+            btn_thriler.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
             viewModel.getDiscoverMovie(18)
         }
 
         btn_horror.setOnClickListener {
-            btn_horror.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_click)
+            btn_horror.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_click)
             btn_horror.setTextColor(resources.getColor(android.R.color.white))
-            btn_action.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
-            btn_drama.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
-            btn_thriler.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_action.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
+            btn_drama.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
+            btn_thriler.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
             viewModel.getDiscoverMovie(27)
         }
 
         btn_thriler.setOnClickListener {
-            btn_thriler.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_click)
+            btn_thriler.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_click)
             btn_thriler.setTextColor(resources.getColor(android.R.color.white))
-            btn_action.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
-            btn_drama.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
-            btn_horror.background = ContextCompat.getDrawable(context!!,R.drawable.corner_button_def)
+            btn_action.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
+            btn_drama.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
+            btn_horror.background =
+                ContextCompat.getDrawable(context!!, R.drawable.corner_button_def)
             viewModel.getDiscoverMovie(53)
         }
 
@@ -82,6 +101,8 @@ class HomeFragment : Fragment() {
         val topRatedAdapter = TopRatedAdapter()
         val discoverAdapter = DiscoverAdapter()
         val upcomingAdapter = UpcomingAdapter()
+        val actorAdapter = PeopleAdapter()
+
 
         with(viewModel) {
             postTopRatedData.observe(viewLifecycleOwner, Observer {
@@ -92,8 +113,12 @@ class HomeFragment : Fragment() {
                 discoverAdapter.setDiscoverMovieData(it)
             })
 
-            postUpcomingData.observe(viewLifecycleOwner , Observer {
+            postUpcomingData.observe(viewLifecycleOwner, Observer {
                 upcomingAdapter.setUpcomingMovieData(it)
+            })
+
+            postPeopleData.observe(viewLifecycleOwner, Observer {
+                actorAdapter.setPeopleData(it)
             })
 
             messageData.observe(viewLifecycleOwner, Observer { messageInfo ->
@@ -121,6 +146,12 @@ class HomeFragment : Fragment() {
         with(rv_coming_soon) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = upcomingAdapter
+            setHasFixedSize(true)
+        }
+
+        with(rv_actor) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = actorAdapter
             setHasFixedSize(true)
         }
 

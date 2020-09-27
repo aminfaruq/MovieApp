@@ -1,6 +1,7 @@
 package co.id.aminfaruq.core.data.source.remote.network
 
 import co.id.aminfaruq.core.data.source.remote.response.discover.ResponseDiscover
+import co.id.aminfaruq.core.data.source.remote.response.people.ResponsePeople
 import co.id.aminfaruq.core.data.source.remote.response.topRated.ResponseTopRated
 import co.id.aminfaruq.core.data.source.remote.response.upcoming.ResponseUpcoming
 import io.reactivex.Single
@@ -33,4 +34,11 @@ interface ApiService {
         @Query("language") language: String,
         @Query("page") page: Int
     ): Single<ResponseUpcoming>
+
+    @GET("person/popular")
+    fun peoplePopular(
+        @Query("api_key") api_key: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Single<ResponsePeople>
 }

@@ -1,6 +1,7 @@
 package co.id.aminfaruq.core.domain.usecase
 
 import co.id.aminfaruq.core.domain.model.Discover
+import co.id.aminfaruq.core.domain.model.People
 import co.id.aminfaruq.core.domain.model.TopRated
 import co.id.aminfaruq.core.domain.model.Upcoming
 import io.reactivex.Single
@@ -28,4 +29,10 @@ interface HomeUseCase {
         language: String,
         page: Int
     ): Single<List<Upcoming>>
+
+    fun getPeoplePopular(
+        api_key: String,
+        language: String,
+        page: Int
+    ): Single<List<People>>
 }

@@ -1,6 +1,7 @@
 package co.id.aminfaruq.core.di
 
 import co.id.aminfaruq.core.data.mapper.DiscoverMapper
+import co.id.aminfaruq.core.data.mapper.PeopleMapper
 import co.id.aminfaruq.core.data.mapper.TopRatedMapper
 import co.id.aminfaruq.core.data.mapper.UpcomingMapper
 import co.id.aminfaruq.core.data.repository.HomeRepositoryImpl
@@ -53,6 +54,7 @@ val repositoryModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         ) as HomeRepository
     }
@@ -62,4 +64,5 @@ val mapperModule = module {
     single { TopRatedMapper() }
     single { DiscoverMapper() }
     single { UpcomingMapper() }
+    single { PeopleMapper() }
 }
