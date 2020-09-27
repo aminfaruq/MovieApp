@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import co.id.aminfaruq.core.R
-import co.id.aminfaruq.core.domain.model.Discover
 import co.id.aminfaruq.core.domain.model.Popular
 import co.id.aminfaruq.core.utils.Constants
 import coil.load
