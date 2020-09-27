@@ -1,13 +1,23 @@
 package co.id.aminfaruq.movieapp.ui.movie
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import co.id.aminfaruq.core.ui.PopularAdapter
 import co.id.aminfaruq.movieapp.R
+import kotlinx.android.synthetic.main.layout_popular_movie.*
+import org.koin.android.ext.android.inject
 
 class MovieFragment : Fragment() {
+
+    private val viewModel: MovieVM by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -17,4 +27,39 @@ class MovieFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_movie, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.getPopular()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val popularMovieAdapter = PopularAdapter()
+
+        with(viewModel) {
+            postPopularData.observe(viewLifecycleOwner, Observer {
+                popularMovieAdapter.setPopularData(it)
+            })
+
+            messageData.observe(viewLifecycleOwner, Observer { messageInfo ->
+                Toast.makeText(context, messageInfo, Toast.LENGTH_SHORT).show()
+                Log.e("HomeFragment", messageInfo.toString())
+            })
+
+            showProgressBar.observe(viewLifecycleOwner, Observer {
+
+            })
+        }
+
+        with(rv_popular_movie) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = popularMovieAdapter
+            setHasFixedSize(true)
+        }
+    }
+
+
 }
+

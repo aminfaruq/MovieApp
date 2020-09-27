@@ -1,4 +1,4 @@
-package co.id.aminfaruq.core.domain.usecase
+package co.id.aminfaruq.core.domain.usecase.home
 
 import co.id.aminfaruq.core.domain.model.Discover
 import co.id.aminfaruq.core.domain.model.People

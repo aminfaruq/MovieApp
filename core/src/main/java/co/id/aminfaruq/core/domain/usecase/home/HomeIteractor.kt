@@ -1,8 +1,6 @@
-package co.id.aminfaruq.core.domain.usecase
+package co.id.aminfaruq.core.domain.usecase.home
 
-import co.id.aminfaruq.core.domain.model.People
 import co.id.aminfaruq.core.domain.repository.HomeRepository
-import io.reactivex.Single
 
 class HomeIteractor(private val homeRepository: HomeRepository) : HomeUseCase {
     override fun getTopRated(api_key: String, language: String, page: Int) =

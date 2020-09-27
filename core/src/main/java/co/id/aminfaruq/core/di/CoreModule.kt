@@ -1,12 +1,11 @@
 package co.id.aminfaruq.core.di
 
-import co.id.aminfaruq.core.data.mapper.DiscoverMapper
-import co.id.aminfaruq.core.data.mapper.PeopleMapper
-import co.id.aminfaruq.core.data.mapper.TopRatedMapper
-import co.id.aminfaruq.core.data.mapper.UpcomingMapper
+import co.id.aminfaruq.core.data.mapper.*
 import co.id.aminfaruq.core.data.repository.HomeRepositoryImpl
+import co.id.aminfaruq.core.data.repository.MovieRepositoryImpl
 import co.id.aminfaruq.core.data.source.remote.network.ApiService
 import co.id.aminfaruq.core.domain.repository.HomeRepository
+import co.id.aminfaruq.core.domain.repository.MovieRepository
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -65,6 +64,11 @@ val repositoryModule = module {
             get(),
             get()
         ) as HomeRepository
+
+        MovieRepositoryImpl(
+            get(),
+            get()
+        ) as MovieRepository
     }
 }
 
@@ -73,4 +77,5 @@ val mapperModule = module {
     single { DiscoverMapper() }
     single { UpcomingMapper() }
     single { PeopleMapper() }
+    single { PopularMapper() }
 }

@@ -19,8 +19,13 @@ class HomeRepositoryImpl(
     private val itemUpcomingMapper: UpcomingMapper,
     private val itemPeopleMapper: PeopleMapper
 ) : HomeRepository {
-    override fun getTopRated(api_key: String, language: String, page: Int): Single<List<TopRated>> {
-        return apiService.getTopRated(api_key, language, page).map {
+    override fun getTopRated(
+        api_key: String, language: String, page: Int
+    ): Single<List<TopRated>> {
+        return apiService.getTopRated(
+            api_key,
+            language,
+            page).map {
             itemTopRatedMapper.mapToListDomain(it.results)
         }
     }

@@ -5,7 +5,7 @@ import co.id.aminfaruq.core.domain.model.Discover
 import co.id.aminfaruq.core.domain.model.People
 import co.id.aminfaruq.core.domain.model.TopRated
 import co.id.aminfaruq.core.domain.model.Upcoming
-import co.id.aminfaruq.core.domain.usecase.HomeUseCase
+import co.id.aminfaruq.core.domain.usecase.home.HomeUseCase
 import co.id.aminfaruq.core.ui.BaseViewModel
 import co.id.aminfaruq.core.utils.Constants
 import co.id.aminfaruq.core.utils.RxUtils

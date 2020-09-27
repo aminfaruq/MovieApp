@@ -12,3 +12,4 @@ data class People(
     val popularity: Double?,
     val profile_path: String?
 )
+
