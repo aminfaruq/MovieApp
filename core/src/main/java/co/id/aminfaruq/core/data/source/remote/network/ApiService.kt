@@ -2,6 +2,7 @@ package co.id.aminfaruq.core.data.source.remote.network
 
 import co.id.aminfaruq.core.data.source.remote.response.discover.ResponseDiscover
 import co.id.aminfaruq.core.data.source.remote.response.topRated.ResponseTopRated
+import co.id.aminfaruq.core.data.source.remote.response.upcoming.ResponseUpcoming
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -25,4 +26,11 @@ interface ApiService {
         @Query("page") page: Int,
         @Query("with_genres") with_genres: Int
     ): Single<ResponseDiscover>
+
+    @GET("movie/upcoming")
+    fun upcomingMovie(
+        @Query("api_key") api_key: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Single<ResponseUpcoming>
 }

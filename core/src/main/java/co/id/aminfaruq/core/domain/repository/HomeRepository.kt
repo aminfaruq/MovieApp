@@ -2,6 +2,7 @@ package co.id.aminfaruq.core.domain.repository
 
 import co.id.aminfaruq.core.domain.model.Discover
 import co.id.aminfaruq.core.domain.model.TopRated
+import co.id.aminfaruq.core.domain.model.Upcoming
 import io.reactivex.Single
 
 interface HomeRepository {
@@ -20,6 +21,12 @@ interface HomeRepository {
         include_video: Boolean,
         page: Int,
         with_genres: Int
-    ) : Single<List<Discover>>
+    ): Single<List<Discover>>
+
+    fun getUpcomingMovie(
+        api_key: String,
+        language: String,
+        page: Int
+    ): Single<List<Upcoming>>
 
 }
