@@ -65,6 +65,9 @@ val repositoryModule = module {
             get()
         ) as HomeRepository
 
+    }
+
+    single {
         MovieRepositoryImpl(
             get(),
             get()

@@ -25,7 +25,7 @@ class PopularAdapter : RecyclerView.Adapter<PopularAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_actor, parent, false)
+                .inflate(R.layout.item_movie_watchlist, parent, false)
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -40,10 +40,10 @@ class PopularAdapter : RecyclerView.Adapter<PopularAdapter.ViewHolder>() {
         @SuppressLint("SetTextI18n")
         fun bind(data : Popular) {
             with(itemView) {
-                tv_vote.text = data.voteAverage.toString()
-                img_movie.load(Constants.URL_IMAGE + data.posterPath)
-                tv_name_movie.text = data.originalTitle
-                tv_date_time.text = " ${data.releaseDate} . ${data.originalLanguage}"
+                tv_vote.text = data.vote_average.toString()
+                img_movie.load(Constants.URL_IMAGE + data.poster_path)
+                tv_name_movie.text = data.original_title
+                tv_date_time.text = " ${data.release_date} . ${data.original_language}"
 
             }
         }
