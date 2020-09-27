@@ -14,6 +14,7 @@ import co.id.aminfaruq.core.ui.DiscoverAdapter
 import co.id.aminfaruq.core.ui.TopRatedAdapter
 import co.id.aminfaruq.movieapp.R
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.layout_top_pick.*
 import org.koin.android.ext.android.inject
 
 class HomeFragment : Fragment() {
