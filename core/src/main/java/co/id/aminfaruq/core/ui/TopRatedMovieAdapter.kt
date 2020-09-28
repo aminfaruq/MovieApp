@@ -45,7 +45,7 @@ class TopRatedMovieAdapter: RecyclerView.Adapter<TopRatedMovieAdapter.ViewHolder
             with(itemView) {
                 tv_vote.text = data.vote_average.toString()
                 img_movie.load(Constants.URL_IMAGE + data.poster_path)
-                tv_name_movie.text = data.original_title
+                tv_name_movie.text = data.title
                 tv_date_time.text = " ${data.release_date} . ${data.original_language}"
             }
         }

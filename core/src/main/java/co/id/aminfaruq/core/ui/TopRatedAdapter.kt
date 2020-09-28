@@ -43,7 +43,7 @@ class TopRatedAdapter : RecyclerView.Adapter<TopRatedAdapter.ViewHolder>() {
             with(itemView) {
                 img_backgroud_top_rated.load(Constants.URL_IMAGE + data.backdrop_path)
                 img_top_rated.load(Constants.URL_IMAGE + data.poster_path)
-                tv_name_top_rated.text = data.original_title
+                tv_name_top_rated.text = data.title
                 tv_kind_top_rated.text = "Trailer"
                 btn_top_rated_watchlist.setOnClickListener {
 
