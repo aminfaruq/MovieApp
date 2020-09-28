@@ -27,6 +27,16 @@
              android:layout_marginStart="8dp"
              android:layout_marginEnd="8dp"/>
 
+       <include
+           android:layout_below="@id/include_popular_movie"
+           android:id="@+id/include_coming_soon_movie"
+           layout="@layout/layout_upcoming_movie"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="34dp"
+           android:layout_marginStart="8dp"
+           android:layout_marginEnd="8dp"/>
+
    </RelativeLayout>
 
 </androidx.core.widget.NestedScrollView>

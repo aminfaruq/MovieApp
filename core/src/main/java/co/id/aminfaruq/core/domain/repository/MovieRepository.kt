@@ -2,6 +2,7 @@ package co.id.aminfaruq.core.domain.repository
 
 import co.id.aminfaruq.core.domain.model.Popular
 import co.id.aminfaruq.core.domain.model.TopRated
+import co.id.aminfaruq.core.domain.model.Upcoming
 import io.reactivex.Single
 
 interface MovieRepository {
@@ -18,5 +19,11 @@ interface MovieRepository {
         language: String,
         page: Int
     ): Single<List<Popular>>
+
+    fun getUpcoming(
+        api_key: String,
+        language: String,
+        page: Int
+    ): Single<List<Upcoming>>
 
 }

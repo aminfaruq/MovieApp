@@ -1,6 +1,7 @@
 package co.id.aminfaruq.core.domain.usecase.movie
 
 import co.id.aminfaruq.core.domain.model.TopRated
+import co.id.aminfaruq.core.domain.model.Upcoming
 import co.id.aminfaruq.core.domain.repository.MovieRepository
 import io.reactivex.Single
 
@@ -10,5 +11,8 @@ class MovieInteractor(private val movieRepository: MovieRepository): MovieUseCas
 
     override fun getPopular(api_key: String, language: String, page: Int) =
         movieRepository.getPopular(api_key, language, page)
+
+    override fun getUpcoming(api_key: String, language: String, page: Int): Single<List<Upcoming>> =
+        movieRepository.getUpcoming(api_key, language, page)
 
 }
