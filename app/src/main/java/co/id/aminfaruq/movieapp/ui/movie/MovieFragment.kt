@@ -12,10 +12,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.id.aminfaruq.core.ui.PopularAdapter
 import co.id.aminfaruq.core.ui.TopRatedAdapter
+import co.id.aminfaruq.core.ui.TopRatedMovieAdapter
 import co.id.aminfaruq.core.ui.UpcomingAdapter
 import co.id.aminfaruq.movieapp.R
 import kotlinx.android.synthetic.main.fragment_movie.*
 import kotlinx.android.synthetic.main.layout_popular_movie.*
+import kotlinx.android.synthetic.main.layout_top_rated_movie.*
 import kotlinx.android.synthetic.main.layout_upcoming_movie.*
 import org.koin.android.ext.android.inject
 
@@ -45,6 +47,7 @@ class MovieFragment : Fragment() {
         val popularMovieAdapter = PopularAdapter()
         val topRatedAdapter = TopRatedAdapter()
         val upComingMovieAdapter = UpcomingAdapter()
+        val topRatedMovieAdapter = TopRatedMovieAdapter()
 
         with(viewModel) {
             postPopularData.observe(viewLifecycleOwner, Observer {
@@ -57,6 +60,10 @@ class MovieFragment : Fragment() {
 
             postUpcomingData.observe(viewLifecycleOwner, Observer {
                 upComingMovieAdapter.setUpcomingMovieData(it)
+            })
+
+            postTopRatedData.observe(viewLifecycleOwner, Observer {
+                topRatedMovieAdapter.setTopRatedData(it)
             })
 
             messageData.observe(viewLifecycleOwner, Observer { messageInfo ->
@@ -84,6 +91,12 @@ class MovieFragment : Fragment() {
         with(rv_upcoming_movie) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = upComingMovieAdapter
+            setHasFixedSize(true)
+        }
+
+        with(rv_top_rated_movie_list) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = topRatedMovieAdapter
             setHasFixedSize(true)
         }
 
