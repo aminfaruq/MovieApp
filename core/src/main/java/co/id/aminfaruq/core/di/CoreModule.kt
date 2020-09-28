@@ -70,7 +70,8 @@ val repositoryModule = module {
     single {
         MovieRepositoryImpl(
             get(),
-            get()
+            get(),
+            get(),
         ) as MovieRepository
     }
 }
