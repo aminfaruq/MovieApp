@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import co.id.aminfaruq.core.R
-import co.id.aminfaruq.core.domain.model.Popular
 import co.id.aminfaruq.core.domain.model.TopRated
 import co.id.aminfaruq.core.utils.Constants
 import coil.load
 import kotlinx.android.synthetic.main.item_movie_watchlist.view.*
-import java.util.ArrayList
+import java.util.*
 
 class TopRatedMovieAdapter: RecyclerView.Adapter<TopRatedMovieAdapter.ViewHolder>() {
 

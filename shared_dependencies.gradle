@@ -42,4 +42,5 @@ dependencies {
     implementation 'com.xwray:groupie-kotlin-android-extensions:2.3.0'
 
     implementation 'com.github.Johnyoat:non-swipe-view-pager:1.0.0'
+
 }

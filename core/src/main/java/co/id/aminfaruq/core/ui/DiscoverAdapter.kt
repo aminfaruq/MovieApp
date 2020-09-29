@@ -10,7 +10,6 @@ import co.id.aminfaruq.core.domain.model.Discover
 import co.id.aminfaruq.core.utils.Constants
 import coil.load
 import kotlinx.android.synthetic.main.item_movie_watchlist.view.*
-import kotlinx.android.synthetic.main.item_top_rated.view.*
 
 class DiscoverAdapter : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
 

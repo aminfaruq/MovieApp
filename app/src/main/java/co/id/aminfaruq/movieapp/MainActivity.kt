@@ -3,7 +3,6 @@ package co.id.aminfaruq.movieapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import co.id.aminfaruq.movieapp.ui.adapter.SectionPagerAdapter
-import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
