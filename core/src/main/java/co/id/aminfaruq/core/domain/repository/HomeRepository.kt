@@ -1,9 +1,6 @@
 package co.id.aminfaruq.core.domain.repository
 
-import co.id.aminfaruq.core.domain.model.Discover
-import co.id.aminfaruq.core.domain.model.People
-import co.id.aminfaruq.core.domain.model.TopRated
-import co.id.aminfaruq.core.domain.model.Upcoming
+import co.id.aminfaruq.core.domain.model.*
 import io.reactivex.Single
 
 interface HomeRepository {
@@ -36,5 +33,4 @@ interface HomeRepository {
         language: String,
         page: Int
     ): Single<List<People>>
-
 }
