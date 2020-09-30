@@ -14,7 +14,14 @@
     </dist:module>
 
     <application>
-        <activity android:name=".ui.DetailActivity"></activity>
+        <activity android:name=".ui.DetailActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="movieapp"
+                    android:host="detail"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
