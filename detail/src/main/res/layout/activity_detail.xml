@@ -7,9 +7,9 @@
     tools:context="co.id.aminfaruq.movieapp.detail.ui.DetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@android:color/black"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
 
         <include
             android:id="@+id/include_information"
@@ -44,6 +44,34 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/include_rated" />
+
+
+        <include
+            android:id="@+id/include_trailer"
+            layout="@layout/layout_clip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include_overview" />
+
+
+        <include
+            android:id="@+id/include_credits"
+            layout="@layout/layout_credits"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include_trailer" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
