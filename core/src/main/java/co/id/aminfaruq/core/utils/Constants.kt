@@ -7,4 +7,5 @@ object Constants {
     const val SORT_BY = "popularity.desc"
     const val ADULT = false
     const val VIDEO = false
+    const val BASE_URL = "https://api.themoviedb.org/3/"
 }

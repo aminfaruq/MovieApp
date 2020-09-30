@@ -7,6 +7,7 @@ import co.id.aminfaruq.core.data.mapper.UpcomingMapper
 import co.id.aminfaruq.core.data.repository.HomeRepositoryImpl
 import co.id.aminfaruq.core.data.source.remote.network.ApiService
 import co.id.aminfaruq.core.domain.repository.HomeRepository
+import co.id.aminfaruq.core.utils.Constants
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -41,7 +42,7 @@ val networkModule = module {
 
     single {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(get())
