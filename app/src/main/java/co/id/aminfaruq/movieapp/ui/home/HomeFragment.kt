@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
         viewModel.getUpcomingMovie()
         viewModel.getActorMovie()
         viewModel.getDiscoverMovie(10770)
-
+        loadUi()
 
         btn_action.setOnClickListener {
             btn_action.background =
@@ -98,8 +98,8 @@ class HomeFragment : Fragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
+
+    private fun loadUi(){
         val topRatedAdapter = TopRatedAdapter()
         val discoverAdapter = DiscoverAdapter(object : DiscoverAdapter.OnItemClick {
             override fun onClick(item: Discover) {
