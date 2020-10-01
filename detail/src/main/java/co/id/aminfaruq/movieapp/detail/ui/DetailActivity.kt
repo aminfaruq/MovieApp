@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import co.id.aminfaruq.core.ui.CreditsAdapter
 import co.id.aminfaruq.core.ui.GenresAdapter
 import co.id.aminfaruq.core.ui.TrailerAdapter
 import co.id.aminfaruq.core.utils.Constants
@@ -13,6 +14,7 @@ import co.id.aminfaruq.movieapp.detail.di.detailInject
 import co.id.aminfaruq.movieapp.utils.BUNDLE_KEY
 import coil.load
 import kotlinx.android.synthetic.main.layout_clip.*
+import kotlinx.android.synthetic.main.layout_credits.*
 import kotlinx.android.synthetic.main.layout_information.*
 import kotlinx.android.synthetic.main.layout_overview.*
 import kotlinx.android.synthetic.main.layout_rated_detail.*
@@ -32,9 +34,11 @@ class DetailActivity : AppCompatActivity() {
         val data = intent.getStringExtra(BUNDLE_KEY)
         viewModel.getDetailMovie(data.toString())
         viewModel.getTrailerMovie(data.toString())
+        viewModel.getCredit(data.toString())
 
         val genresAdapter = GenresAdapter()
         val trailerAdapter = TrailerAdapter()
+        val creditsAdapter = CreditsAdapter()
 
         with(viewModel) {
             postDetailMovieData.observe(this@DetailActivity, Observer { data ->
@@ -51,6 +55,10 @@ class DetailActivity : AppCompatActivity() {
 
             postTrailerMovieData.observe(this@DetailActivity, Observer {
                 trailerAdapter.setTopRatedData(it)
+            })
+
+            postCreditsMoviesData.observe(this@DetailActivity, Observer {
+                creditsAdapter.setCreditsData(it)
             })
 
             showProgressbar.observe(this@DetailActivity, Observer {
@@ -73,6 +81,13 @@ class DetailActivity : AppCompatActivity() {
 
         with(rv_clips_detail) {
             adapter = trailerAdapter
+            layoutManager =
+                LinearLayoutManager(this@DetailActivity, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+        }
+
+        with(rv_credits_detail) {
+            adapter = creditsAdapter
             layoutManager =
                 LinearLayoutManager(this@DetailActivity, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)

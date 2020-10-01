@@ -1,5 +1,6 @@
 package co.id.aminfaruq.core.data.source.remote.network
 
+import co.id.aminfaruq.core.data.source.remote.response.credits.ResponseCredits
 import co.id.aminfaruq.core.data.source.remote.response.detail.ResponseDetail
 import co.id.aminfaruq.core.data.source.remote.response.discover.ResponseDiscover
 import co.id.aminfaruq.core.data.source.remote.response.people.ResponsePeople
@@ -58,4 +59,10 @@ interface ApiService {
         @Query("api_key") api_key: String,
         @Query("language") language: String,
     ): Single<ResponseTrailer>
+
+    @GET("movie/{movie_id}/credits")
+    fun detailCredits(
+        @Path("movie_id") movie_id: String,
+        @Query("api_key") api_key: String
+    ) : Single<ResponseCredits>
 }

@@ -11,4 +11,6 @@ class DetailInteractor(private val detailRepository: DetailRepository) : DetailU
         api_key: String,
         language: String
     ) = detailRepository.getDetailTrailer(movie_id, api_key, language)
+
+    override fun getDetailCredits(movie_id: String, api_key: String) = detailRepository.getDetailCredits(movie_id, api_key)
 }

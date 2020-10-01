@@ -71,6 +71,7 @@ val repositoryModule = module {
         DetailRepositoryImpl(
             get(),
             get(),
+            get(),
             get()
         ) as DetailRepository
     }
@@ -85,4 +86,5 @@ val mapperModule = module {
     single { PeopleMapper() }
     single { DetailMapper() }
     single { TrailerMapper() }
+    single { CreditsMapper() }
 }
