@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.id.aminfaruq.core.ui.GenresAdapter
+import co.id.aminfaruq.core.ui.TrailerAdapter
 import co.id.aminfaruq.core.utils.Constants
 import co.id.aminfaruq.movieapp.detail.R
 import co.id.aminfaruq.movieapp.detail.di.detailInject
 import co.id.aminfaruq.movieapp.utils.BUNDLE_KEY
 import coil.load
+import kotlinx.android.synthetic.main.layout_clip.*
 import kotlinx.android.synthetic.main.layout_information.*
 import kotlinx.android.synthetic.main.layout_overview.*
 import kotlinx.android.synthetic.main.layout_rated_detail.*
@@ -28,9 +30,11 @@ class DetailActivity : AppCompatActivity() {
         loadKoinModules(detailInject)
 
         val data = intent.getStringExtra(BUNDLE_KEY)
-        data?.let { viewModel.getDetailMovie(it) }
+        viewModel.getDetailMovie(data.toString())
+        viewModel.getTrailerMovie(data.toString())
 
         val genresAdapter = GenresAdapter()
+        val trailerAdapter = TrailerAdapter()
 
         with(viewModel) {
             postDetailMovieData.observe(this@DetailActivity, Observer { data ->
@@ -45,8 +49,8 @@ class DetailActivity : AppCompatActivity() {
                 tv_vote_count.text = data.vote_count.toString()
             })
 
-            postTrailerMovieData.observe(this@DetailActivity , Observer {
-
+            postTrailerMovieData.observe(this@DetailActivity, Observer {
+                trailerAdapter.setTopRatedData(it)
             })
 
             showProgressbar.observe(this@DetailActivity, Observer {
@@ -65,6 +69,13 @@ class DetailActivity : AppCompatActivity() {
                 LinearLayoutManager(this@DetailActivity, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
 
+        }
+
+        with(rv_clips_detail) {
+            adapter = trailerAdapter
+            layoutManager =
+                LinearLayoutManager(this@DetailActivity, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
         }
 
     }

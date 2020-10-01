@@ -17,10 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="184dp"
             app:autoPlay="false"
-            app:showFullScreenButton="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:showFullScreenButton="true" />
 
         <TextView
             android:id="@+id/tv_name_trailer"
@@ -29,6 +29,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/poppins_medium"
+            android:maxLines="2"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +41,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
             app:cardBackgroundColor="@color/colorAccent"
             app:cardCornerRadius="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -50,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
-                android:padding="8dp"
+                android:padding="5dp"
                 android:text="Trailer"
                 android:textSize="16sp" />
 
