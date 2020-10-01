@@ -10,7 +10,7 @@ class DetailRepositoryImpl(
     private val apiService: ApiService,
     private val itemDetailMapper: DetailMapper
 ) : DetailRepository {
-    override fun getDetailMovie(movie_id: Int, api_key: String, language: String): Single<Detail> {
+    override fun getDetailMovie(movie_id: String, api_key: String, language: String): Single<Detail> {
         return apiService.detailMovie(movie_id, api_key, language).map {
             itemDetailMapper.mapToDomain(it)
         }

@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/black">
 
+
         <include
             android:id="@+id/include_information"
             layout="@layout/layout_information"

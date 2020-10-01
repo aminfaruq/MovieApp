@@ -10,11 +10,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import co.id.aminfaruq.core.domain.model.Discover
 import co.id.aminfaruq.core.ui.DiscoverAdapter
 import co.id.aminfaruq.core.ui.PeopleAdapter
 import co.id.aminfaruq.core.ui.TopRatedAdapter
 import co.id.aminfaruq.core.ui.UpcomingAdapter
 import co.id.aminfaruq.movieapp.R
+import co.id.aminfaruq.movieapp.utils.openDetailActivity
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.layout_actor.*
 import kotlinx.android.synthetic.main.layout_coming_soon.*
@@ -99,7 +101,11 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         val topRatedAdapter = TopRatedAdapter()
-        val discoverAdapter = DiscoverAdapter()
+        val discoverAdapter = DiscoverAdapter(object : DiscoverAdapter.OnItemClick {
+            override fun onClick(item: Discover) {
+                item.id?.let { openDetailActivity(context!!, it.toString()) }
+            }
+        })
         val upcomingAdapter = UpcomingAdapter()
         val actorAdapter = PeopleAdapter()
 

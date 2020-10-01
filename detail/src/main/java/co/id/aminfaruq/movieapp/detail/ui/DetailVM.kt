@@ -13,7 +13,7 @@ class DetailVM(private val detailUseCase: DetailUseCase) : BaseViewModel() {
     val showProgressbar = MutableLiveData<Boolean>()
     val messageData = MutableLiveData<String>()
 
-    fun getDetailMovie(idMovie: Int) {
+    fun getDetailMovie(idMovie: String) {
         showProgressbar.value = true
         compositeDisposable.add(
             detailUseCase.getDetailMovie(idMovie, Constants.API_KEY, Constants.LANG)

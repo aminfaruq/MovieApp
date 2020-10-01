@@ -12,7 +12,7 @@ import coil.load
 import kotlinx.android.synthetic.main.item_movie_watchlist.view.*
 import kotlinx.android.synthetic.main.item_top_rated.view.*
 
-class DiscoverAdapter : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
+class DiscoverAdapter(private val onItemClick: OnItemClick) : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
 
     // TODO: 26/09/20 discover
     private val discoverData = ArrayList<Discover>()
@@ -37,7 +37,7 @@ class DiscoverAdapter : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
         holder.bind(data)
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view){
 
         @SuppressLint("SetTextI18n")
         fun bind(data : Discover) {
@@ -47,8 +47,15 @@ class DiscoverAdapter : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
                 tv_name_movie.text = data.original_title
                 tv_date_time.text = " ${data.release_date} . ${data.original_language}"
 
+                view.setOnClickListener {
+                    onItemClick.onClick(data)
+                }
             }
         }
 
+    }
+
+    interface OnItemClick{
+        fun onClick(item : Discover)
     }
 }
