@@ -45,6 +45,10 @@ class DetailActivity : AppCompatActivity() {
                 tv_vote_count.text = data.vote_count.toString()
             })
 
+            postTrailerMovieData.observe(this@DetailActivity , Observer {
+
+            })
+
             showProgressbar.observe(this@DetailActivity, Observer {
 
             })
