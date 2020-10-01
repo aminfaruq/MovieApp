@@ -83,4 +83,5 @@ val mapperModule = module {
     single { UpcomingMapper() }
     single { PeopleMapper() }
     single { DetailMapper() }
+    single { TrailerMapper() }
 }

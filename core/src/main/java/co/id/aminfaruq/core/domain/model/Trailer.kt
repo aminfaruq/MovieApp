@@ -1,6 +1,6 @@
-package co.id.aminfaruq.core.data.source.remote.response.trailer
+package co.id.aminfaruq.core.domain.model
 
-data class TrailerItem(
+data class Trailer(
     val id: String?,
     val iso_3166_1: String?,
     val iso_639_1: String?,

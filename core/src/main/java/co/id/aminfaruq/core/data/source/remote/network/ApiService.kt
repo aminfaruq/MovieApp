@@ -4,6 +4,7 @@ import co.id.aminfaruq.core.data.source.remote.response.detail.ResponseDetail
 import co.id.aminfaruq.core.data.source.remote.response.discover.ResponseDiscover
 import co.id.aminfaruq.core.data.source.remote.response.people.ResponsePeople
 import co.id.aminfaruq.core.data.source.remote.response.topRated.ResponseTopRated
+import co.id.aminfaruq.core.data.source.remote.response.trailer.ResponseTrailer
 import co.id.aminfaruq.core.data.source.remote.response.upcoming.ResponseUpcoming
 import io.reactivex.Single
 import retrofit2.http.GET
@@ -46,8 +47,15 @@ interface ApiService {
 
     @GET("movie/{movie_id}")
     fun detailMovie(
-        @Path("movie_id") movie_id : String ,
+        @Path("movie_id") movie_id: String,
         @Query("api_key") api_key: String,
         @Query("language") language: String,
-    ) : Single<ResponseDetail>
+    ): Single<ResponseDetail>
+
+    @GET("movie/{movie_id}/videos")
+    fun detailTrailer(
+        @Path("movie_id") movie_id: String,
+        @Query("api_key") api_key: String,
+        @Query("language") language: String,
+    ): Single<ResponseTrailer>
 }
