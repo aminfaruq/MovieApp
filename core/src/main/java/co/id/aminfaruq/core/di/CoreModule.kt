@@ -70,6 +70,7 @@ val repositoryModule = module {
     single {
         DetailRepositoryImpl(
             get(),
+            get(),
             get()
         ) as DetailRepository
     }
