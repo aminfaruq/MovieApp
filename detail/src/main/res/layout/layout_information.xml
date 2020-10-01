@@ -78,16 +78,6 @@
             app:layout_constraintStart_toEndOf="@+id/img_detail_image"
             app:layout_constraintTop_toBottomOf="@+id/tv_kind_top_rated" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            app:layout_constraintBottom_toBottomOf="@+id/img_backgroud_detail"
-            app:layout_constraintEnd_toEndOf="@+id/img_backgroud_detail"
-            app:layout_constraintStart_toStartOf="@+id/img_backgroud_detail"
-            app:layout_constraintTop_toTopOf="@+id/img_backgroud_detail"
-            app:srcCompat="@drawable/ic_baseline_play_arrow_24" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_detail_genre"
             android:layout_width="0dp"
