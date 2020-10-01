@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#000000"
+    android:background="@android:color/black"
     tools:context=".ui.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -84,7 +84,6 @@
             app:layout_constraintTop_toBottomOf="@+id/include_coming_soon" />
 
         <include
-            android:id="@+id/include_actor"
             layout="@layout/layout_actor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

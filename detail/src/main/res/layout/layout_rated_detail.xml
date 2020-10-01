@@ -88,7 +88,6 @@
             tools:text="8.654" />
 
         <TextView
-            android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Popularity"
@@ -99,7 +98,6 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_popularity" />
 
         <ImageView
-            android:id="@+id/imageView7"
             android:layout_width="wrap_content"
             android:layout_height="46dp"
             android:layout_marginTop="8dp"

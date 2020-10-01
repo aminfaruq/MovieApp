@@ -61,7 +61,6 @@
 
 
         <include
-            android:id="@+id/include_credits"
             layout="@layout/layout_credits"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
