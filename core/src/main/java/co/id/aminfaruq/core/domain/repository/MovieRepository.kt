@@ -29,6 +29,11 @@ interface MovieRepository {
         language: String,
         page: Int
     ): Single<List<NowPlaying>>
+
+    fun getGenre(
+        api_key: String,
+        language: String
+    ): Single<List<Genre>>
 }
 
 

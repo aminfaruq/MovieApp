@@ -20,4 +20,7 @@ class MovieInteractor(private val movieRepository: MovieRepository): MovieUseCas
     override fun getNowPlaying(api_key: String, language: String, page: Int): Single<List<NowPlaying>> =
         movieRepository.getNowPlaying(api_key, language, page)
 
+    override fun getGenre(api_key: String, language: String): Single<List<Genre>> =
+        movieRepository.getGenre(api_key, language)
+
 }

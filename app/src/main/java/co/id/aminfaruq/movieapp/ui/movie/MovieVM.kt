@@ -1,10 +1,7 @@
 package co.id.aminfaruq.movieapp.ui.movie
 
 import androidx.lifecycle.MutableLiveData
-import co.id.aminfaruq.core.domain.model.NowPlaying
-import co.id.aminfaruq.core.domain.model.Popular
-import co.id.aminfaruq.core.domain.model.TopRated
-import co.id.aminfaruq.core.domain.model.Upcoming
+import co.id.aminfaruq.core.domain.model.*
 import co.id.aminfaruq.core.domain.usecase.movie.MovieUseCase
 import co.id.aminfaruq.core.ui.BaseViewModel
 import co.id.aminfaruq.core.utils.Constants
@@ -14,8 +11,8 @@ class MovieVM(private val movieUseCase: MovieUseCase): BaseViewModel() {
 
     val postTopRatedData = MutableLiveData<List<TopRated>>()
     val postPopularData = MutableLiveData<List<Popular>>()
-    val postUpcomingData = MutableLiveData<List<Upcoming>>()
     val postNowPlayingData = MutableLiveData<List<NowPlaying>>()
+    val postGenreData = MutableLiveData<List<Genre>>()
     val messageData = MutableLiveData<String>()
     val showProgressBar = MutableLiveData<Boolean>()
 
@@ -57,6 +54,21 @@ class MovieVM(private val movieUseCase: MovieUseCase): BaseViewModel() {
                 .subscribe({ result ->
                     if (result.isNotEmpty()) {
                         postNowPlayingData.value = result
+                    } else {
+                        messageData.value = "Data Kosong"
+                    }
+                }, this::onError)
+        )
+    }
+
+    fun getGenre() {
+        showProgressBar.value = true
+        compositeDisposable.add(
+            movieUseCase.getGenre(Constants.API_KEY, Constants.LANG)
+                .compose(RxUtils.applySingleAsync())
+                .subscribe({ result ->
+                    if (result.isNotEmpty()) {
+                        postGenreData.value = result
                     } else {
                         messageData.value = "Data Kosong"
                     }

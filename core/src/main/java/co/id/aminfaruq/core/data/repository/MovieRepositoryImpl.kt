@@ -1,9 +1,6 @@
 package co.id.aminfaruq.core.data.repository
 
-import co.id.aminfaruq.core.data.mapper.NowPlayingMapper
-import co.id.aminfaruq.core.data.mapper.PopularMapper
-import co.id.aminfaruq.core.data.mapper.TopRatedMapper
-import co.id.aminfaruq.core.data.mapper.UpcomingMapper
+import co.id.aminfaruq.core.data.mapper.*
 import co.id.aminfaruq.core.data.source.remote.network.ApiService
 import co.id.aminfaruq.core.domain.model.*
 import co.id.aminfaruq.core.domain.repository.MovieRepository
@@ -14,7 +11,8 @@ class MovieRepositoryImpl(
     private val itemPopularMapper: PopularMapper,
     private val itemTopRatedMapper: TopRatedMapper,
     private val itemUpcomingMapper: UpcomingMapper,
-    private val itemNowPlaying: NowPlayingMapper
+    private val itemNowPlaying: NowPlayingMapper,
+    private val itemGenre: GenreMapper
 ): MovieRepository {
     override fun getTopRated(api_key: String, language: String, page: Int): Single<List<TopRated>> {
         return apiService.getTopRated(api_key, language, page).map {
@@ -38,6 +36,12 @@ class MovieRepositoryImpl(
     override fun getNowPlaying(api_key: String, language: String, page: Int): Single<List<NowPlaying>> {
         return apiService.nowPlaying(api_key, language, page).map {
             itemNowPlaying.mapToListDomain(it.results)
+        }
+    }
+
+    override fun getGenre(api_key: String, language: String): Single<List<Genre>> {
+        return apiService.genres(api_key, language).map {
+            itemGenre.mapToListDomain(it.genres)
         }
     }
 

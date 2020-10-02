@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.id.aminfaruq.core.ui.*
 import co.id.aminfaruq.movieapp.R
 import kotlinx.android.synthetic.main.fragment_movie.*
+import kotlinx.android.synthetic.main.layout_genre.*
 import kotlinx.android.synthetic.main.layout_popular_movie.*
 import kotlinx.android.synthetic.main.layout_top_rated_movie.*
 import kotlinx.android.synthetic.main.layout_nowplaying_movie.*
@@ -35,6 +37,7 @@ class MovieFragment : Fragment() {
         viewModel.getPopular()
         viewModel.getTopRated()
         viewModel.getNowPlaying()
+        viewModel.getGenre()
 
         loadUi()
     }
@@ -49,6 +52,7 @@ class MovieFragment : Fragment() {
         val topRatedAdapter = TopRatedAdapter()
         val topRatedMovieAdapter = TopRatedMovieAdapter()
         val nowPlayingAdapter = NowPlayingAdapter()
+        val genreMoviesAdapter = GenreMoviesAdapter()
 
         with(viewModel) {
             postPopularData.observe(viewLifecycleOwner, Observer {
@@ -65,6 +69,10 @@ class MovieFragment : Fragment() {
 
             postNowPlayingData.observe(viewLifecycleOwner, Observer {
                 nowPlayingAdapter.setNowPlayingData(it)
+            })
+
+            postGenreData.observe(viewLifecycleOwner, Observer {
+                genreMoviesAdapter.setGenreMovieData(it)
             })
 
             messageData.observe(viewLifecycleOwner, Observer { messageInfo ->
@@ -98,6 +106,12 @@ class MovieFragment : Fragment() {
         with(rv_top_rated_movie_list) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = topRatedMovieAdapter
+            setHasFixedSize(true)
+        }
+
+        with(rv_movie_genres) {
+            layoutManager = GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
+            adapter = genreMoviesAdapter
             setHasFixedSize(true)
         }
 
