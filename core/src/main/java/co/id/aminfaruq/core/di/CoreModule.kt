@@ -1,11 +1,14 @@
 package co.id.aminfaruq.core.di
 
 import co.id.aminfaruq.core.data.mapper.*
+import co.id.aminfaruq.core.data.repository.DetailRepositoryImpl
 import co.id.aminfaruq.core.data.repository.HomeRepositoryImpl
 import co.id.aminfaruq.core.data.repository.MovieRepositoryImpl
 import co.id.aminfaruq.core.data.source.remote.network.ApiService
+import co.id.aminfaruq.core.domain.repository.DetailRepository
 import co.id.aminfaruq.core.domain.repository.HomeRepository
 import co.id.aminfaruq.core.domain.repository.MovieRepository
+import co.id.aminfaruq.core.utils.Constants
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -40,7 +43,7 @@ val networkModule = module {
 
     single {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(get())
@@ -75,6 +78,17 @@ val repositoryModule = module {
             get()
         ) as MovieRepository
     }
+
+    single {
+        DetailRepositoryImpl(
+            get(),
+            get(),
+            get(),
+            get()
+        ) as DetailRepository
+    }
+
+
 }
 
 val mapperModule = module {
@@ -83,4 +97,7 @@ val mapperModule = module {
     single { UpcomingMapper() }
     single { PeopleMapper() }
     single { PopularMapper() }
+    single { DetailMapper() }
+    single { TrailerMapper() }
+    single { CreditsMapper() }
 }
