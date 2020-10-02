@@ -9,15 +9,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import co.id.aminfaruq.core.ui.PopularAdapter
-import co.id.aminfaruq.core.ui.TopRatedAdapter
-import co.id.aminfaruq.core.ui.TopRatedMovieAdapter
-import co.id.aminfaruq.core.ui.UpcomingAdapter
+import co.id.aminfaruq.core.ui.*
 import co.id.aminfaruq.movieapp.R
 import kotlinx.android.synthetic.main.fragment_movie.*
 import kotlinx.android.synthetic.main.layout_popular_movie.*
 import kotlinx.android.synthetic.main.layout_top_rated_movie.*
-import kotlinx.android.synthetic.main.layout_upcoming_movie.*
+import kotlinx.android.synthetic.main.layout_nowplaying_movie.*
 import org.koin.android.ext.android.inject
 
 class MovieFragment : Fragment() {
@@ -37,16 +34,21 @@ class MovieFragment : Fragment() {
 
         viewModel.getPopular()
         viewModel.getTopRated()
-        viewModel.getUpcoming()
+        viewModel.getNowPlaying()
+
+        loadUi()
     }
 
     override fun onResume() {
         super.onResume()
 
+    }
+
+    private fun loadUi() {
         val popularMovieAdapter = PopularAdapter()
         val topRatedAdapter = TopRatedAdapter()
-        val upComingMovieAdapter = UpcomingAdapter()
         val topRatedMovieAdapter = TopRatedMovieAdapter()
+        val nowPlayingAdapter = NowPlayingAdapter()
 
         with(viewModel) {
             postPopularData.observe(viewLifecycleOwner, Observer {
@@ -57,12 +59,12 @@ class MovieFragment : Fragment() {
                 topRatedAdapter.setTopRatedData(it)
             })
 
-            postUpcomingData.observe(viewLifecycleOwner, Observer {
-                upComingMovieAdapter.setUpcomingMovieData(it)
-            })
-
             postTopRatedData.observe(viewLifecycleOwner, Observer {
                 topRatedMovieAdapter.setTopRatedData(it)
+            })
+
+            postNowPlayingData.observe(viewLifecycleOwner, Observer {
+                nowPlayingAdapter.setNowPlayingData(it)
             })
 
             messageData.observe(viewLifecycleOwner, Observer { messageInfo ->
@@ -87,9 +89,9 @@ class MovieFragment : Fragment() {
             setHasFixedSize(true)
         }
 
-        with(rv_upcoming_movie) {
+        with(rv_nowplaying_movie) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = upComingMovieAdapter
+            adapter = nowPlayingAdapter
             setHasFixedSize(true)
         }
 

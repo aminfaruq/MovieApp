@@ -3,6 +3,8 @@ package co.id.aminfaruq.core.data.source.remote.network
 import co.id.aminfaruq.core.data.source.remote.response.credits.ResponseCredits
 import co.id.aminfaruq.core.data.source.remote.response.detail.ResponseDetail
 import co.id.aminfaruq.core.data.source.remote.response.discover.ResponseDiscover
+import co.id.aminfaruq.core.data.source.remote.response.genre.ResponseGenre
+import co.id.aminfaruq.core.data.source.remote.response.nowPlaying.ResponseNowPlaying
 import co.id.aminfaruq.core.data.source.remote.response.people.ResponsePeople
 import co.id.aminfaruq.core.data.source.remote.response.popular.ResponsePopular
 import co.id.aminfaruq.core.data.source.remote.response.topRated.ResponseTopRated
@@ -73,6 +75,19 @@ interface ApiService {
         @Path("movie_id") movie_id: String,
         @Query("api_key") api_key: String
     ) : Single<ResponseCredits>
+
+    @GET("genre/movie/list")
+    fun genres(
+        @Query("api_key") api_key: String,
+        @Query("language") language: String,
+    ): Single<ResponseGenre>
+
+    @GET("movie/now_playing")
+    fun nowPlaying(
+        @Query("api_key") api_key: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Single<ResponseNowPlaying>
 
 }
 

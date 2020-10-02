@@ -7,7 +7,7 @@
     android:layout_margin="8dp"
     app:cardBackgroundColor="#323232"
     app:cardCornerRadius="10dp"
-    android:background="?attr/selectableItemBackground"
+    android:foreground="?attr/selectableItemBackground"
     tools:ignore="Overdraw">
 
     <androidx.constraintlayout.widget.ConstraintLayout

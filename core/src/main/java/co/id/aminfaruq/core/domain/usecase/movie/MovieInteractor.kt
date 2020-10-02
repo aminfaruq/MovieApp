@@ -1,5 +1,7 @@
 package co.id.aminfaruq.core.domain.usecase.movie
 
+import co.id.aminfaruq.core.domain.model.Genre
+import co.id.aminfaruq.core.domain.model.NowPlaying
 import co.id.aminfaruq.core.domain.model.TopRated
 import co.id.aminfaruq.core.domain.model.Upcoming
 import co.id.aminfaruq.core.domain.repository.MovieRepository
@@ -14,5 +16,8 @@ class MovieInteractor(private val movieRepository: MovieRepository): MovieUseCas
 
     override fun getUpcoming(api_key: String, language: String, page: Int): Single<List<Upcoming>> =
         movieRepository.getUpcoming(api_key, language, page)
+
+    override fun getNowPlaying(api_key: String, language: String, page: Int): Single<List<NowPlaying>> =
+        movieRepository.getNowPlaying(api_key, language, page)
 
 }

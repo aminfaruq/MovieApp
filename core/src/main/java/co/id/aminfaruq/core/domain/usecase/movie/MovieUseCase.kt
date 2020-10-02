@@ -1,8 +1,6 @@
 package co.id.aminfaruq.core.domain.usecase.movie
 
-import co.id.aminfaruq.core.domain.model.Popular
-import co.id.aminfaruq.core.domain.model.TopRated
-import co.id.aminfaruq.core.domain.model.Upcoming
+import co.id.aminfaruq.core.domain.model.*
 import io.reactivex.Single
 
 interface MovieUseCase {
@@ -24,4 +22,11 @@ interface MovieUseCase {
         language: String,
         page: Int
     ): Single<List<Upcoming>>
+
+    fun getNowPlaying(
+        api_key: String,
+        language: String,
+        page: Int
+    ): Single<List<NowPlaying>>
+
 }

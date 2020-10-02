@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="5dp"
-    app:cardBackgroundColor="#484848"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="6dp"
+    android:layout_marginStart="5dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#484848">
 
         <TextView
             android:id="@+id/tv_genres_name"
@@ -19,7 +19,7 @@
             android:padding="8dp"
             android:textAlignment="center"
             android:textColor="#BABABA"
-            android:textSize="16sp"
+            android:textSize="14sp"
             tools:text="Action" />
 
     </LinearLayout>

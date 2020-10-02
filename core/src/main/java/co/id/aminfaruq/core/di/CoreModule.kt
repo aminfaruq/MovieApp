@@ -75,6 +75,7 @@ val repositoryModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         ) as MovieRepository
     }
@@ -100,4 +101,5 @@ val mapperModule = module {
     single { DetailMapper() }
     single { TrailerMapper() }
     single { CreditsMapper() }
+    single { NowPlayingMapper() }
 }

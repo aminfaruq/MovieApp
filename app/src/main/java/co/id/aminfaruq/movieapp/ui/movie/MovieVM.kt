@@ -1,6 +1,7 @@
 package co.id.aminfaruq.movieapp.ui.movie
 
 import androidx.lifecycle.MutableLiveData
+import co.id.aminfaruq.core.domain.model.NowPlaying
 import co.id.aminfaruq.core.domain.model.Popular
 import co.id.aminfaruq.core.domain.model.TopRated
 import co.id.aminfaruq.core.domain.model.Upcoming
@@ -14,6 +15,7 @@ class MovieVM(private val movieUseCase: MovieUseCase): BaseViewModel() {
     val postTopRatedData = MutableLiveData<List<TopRated>>()
     val postPopularData = MutableLiveData<List<Popular>>()
     val postUpcomingData = MutableLiveData<List<Upcoming>>()
+    val postNowPlayingData = MutableLiveData<List<NowPlaying>>()
     val messageData = MutableLiveData<String>()
     val showProgressBar = MutableLiveData<Boolean>()
 
@@ -47,14 +49,14 @@ class MovieVM(private val movieUseCase: MovieUseCase): BaseViewModel() {
         )
     }
 
-    fun getUpcoming() {
+    fun getNowPlaying() {
         showProgressBar.value = true
         compositeDisposable.add(
-            movieUseCase.getUpcoming(Constants.API_KEY, Constants.LANG, 1)
+            movieUseCase.getNowPlaying(Constants.API_KEY, Constants.LANG, 1)
                 .compose(RxUtils.applySingleAsync())
                 .subscribe({ result ->
                     if (result.isNotEmpty()) {
-                        postUpcomingData.value = result
+                        postNowPlayingData.value = result
                     } else {
                         messageData.value = "Data Kosong"
                     }
