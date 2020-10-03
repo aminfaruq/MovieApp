@@ -32,13 +32,13 @@ class GenreMoviesAdapter: RecyclerView.Adapter<GenreMoviesAdapter.ViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val marginLeft = dpToPx(8)
-        val marginTop = dpToPx(8)
-        val marginRight = dpToPx(8)
-        val marginBottom = dpToPx(8)
+        val marginLeft = dpToPx(6)
+        val marginTop = dpToPx(6)
+        val marginRight = dpToPx(6)
+        val marginBottom = dpToPx(6)
 
         val newLayoutParams = FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
 

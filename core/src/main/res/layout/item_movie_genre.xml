@@ -2,38 +2,29 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="152dp"
-    android:layout_height="91dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    app:cardCornerRadius="6dp"
-    android:layout_marginStart="5dp">
+    app:cardCornerRadius="7dp"
+    android:foreground="?attr/selectableItemBackground">
 
    <androidx.constraintlayout.widget.ConstraintLayout
        android:layout_width="match_parent"
-       android:layout_height="match_parent">
-
-       <ImageView
-           android:id="@+id/background_genre"
-           android:layout_width="0dp"
-           android:layout_height="0dp"
-           android:background="#484848"
-           app:layout_constraintBottom_toBottomOf="parent"
-           app:layout_constraintEnd_toEndOf="parent"
-           app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintTop_toTopOf="parent" />
+       android:layout_height="match_parent"
+       android:padding="16dp"
+       android:background="#323232">
 
        <TextView
            android:id="@+id/tv_genre_name_item"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:fontFamily="@font/poppins_semibold"
-           android:textColor="@android:color/white"
-           android:textSize="18sp"
            android:elevation="2dp"
+           android:textColor="#BABABA"
+           android:textSize="16sp"
            app:layout_constraintBottom_toBottomOf="parent"
-           app:layout_constraintEnd_toEndOf="@+id/background_genre"
-           app:layout_constraintStart_toStartOf="@+id/background_genre"
-           app:layout_constraintTop_toTopOf="@+id/background_genre"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
            tools:text="Comedy" />
        
    </androidx.constraintlayout.widget.ConstraintLayout>
