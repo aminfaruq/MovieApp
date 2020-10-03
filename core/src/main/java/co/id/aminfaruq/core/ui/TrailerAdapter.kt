@@ -47,6 +47,7 @@ class TrailerAdapter : RecyclerView.Adapter<TrailerAdapter.ViewHolder>() {
                 })
 
                 tv_name_trailer.text = data.name
+                tv_type_name.text = data.type
             }
         }
     }
