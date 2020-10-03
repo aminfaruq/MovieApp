@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.id.aminfaruq.core.domain.model.Discover
+import co.id.aminfaruq.core.domain.model.Upcoming
 import co.id.aminfaruq.core.ui.DiscoverAdapter
 import co.id.aminfaruq.core.ui.PeopleAdapter
 import co.id.aminfaruq.core.ui.TopRatedAdapter
@@ -99,14 +100,18 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun loadUi(){
+    private fun loadUi() {
         val topRatedAdapter = TopRatedAdapter()
         val discoverAdapter = DiscoverAdapter(object : DiscoverAdapter.OnItemClick {
             override fun onClick(item: Discover) {
-                item.id?.let { openDetailActivity(context!!, it.toString()) }
+                openDetailActivity(context!!, item.id.toString())
             }
         })
-        val upcomingAdapter = UpcomingAdapter()
+        val upcomingAdapter = UpcomingAdapter(object : UpcomingAdapter.OnItemClick {
+            override fun onClick(item: Upcoming) {
+                openDetailActivity(context!!, item.id.toString())
+            }
+        })
         val actorAdapter = PeopleAdapter()
 
 

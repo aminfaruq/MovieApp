@@ -12,7 +12,7 @@ import coil.load
 import kotlinx.android.synthetic.main.item_movie_watchlist.view.*
 import java.util.*
 
-class TopRatedMovieAdapter: RecyclerView.Adapter<TopRatedMovieAdapter.ViewHolder>() {
+class TopRatedMovieAdapter(val onItemClick: OnItemClick): RecyclerView.Adapter<TopRatedMovieAdapter.ViewHolder>() {
 
     private var topRatedData = ArrayList<TopRated>()
 
@@ -38,7 +38,7 @@ class TopRatedMovieAdapter: RecyclerView.Adapter<TopRatedMovieAdapter.ViewHolder
     override fun getItemCount(): Int = topRatedData.size
 
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view){
         @SuppressLint("SetTextI18n")
         fun bind(data : TopRated) {
             with(itemView) {
@@ -46,7 +46,15 @@ class TopRatedMovieAdapter: RecyclerView.Adapter<TopRatedMovieAdapter.ViewHolder
                 img_movie.load(Constants.URL_IMAGE + data.poster_path)
                 tv_name_movie.text = data.title
                 tv_date_time.text = " ${data.release_date} . ${data.original_language}"
+
+                view.setOnClickListener {
+                    onItemClick.onClick(data)
+                }
             }
         }
+    }
+
+    interface OnItemClick{
+        fun onClick(item : TopRated)
     }
 }

@@ -11,7 +11,8 @@ import co.id.aminfaruq.core.utils.Constants
 import coil.load
 import kotlinx.android.synthetic.main.item_movie_watchlist.view.*
 
-class PopularAdapter : RecyclerView.Adapter<PopularAdapter.ViewHolder>() {
+class PopularAdapter (val onItemClick: OnItemClick): RecyclerView.Adapter<PopularAdapter.ViewHolder>() {
+
     private var popularData = ArrayList<Popular>()
 
     fun setPopularData(list: List<Popular>?) {
@@ -34,7 +35,7 @@ class PopularAdapter : RecyclerView.Adapter<PopularAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = popularData.size
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view){
 
         @SuppressLint("SetTextI18n")
         fun bind(data : Popular) {
@@ -44,7 +45,14 @@ class PopularAdapter : RecyclerView.Adapter<PopularAdapter.ViewHolder>() {
                 tv_name_movie.text = data.title
                 tv_date_time.text = " ${data.release_date} . ${data.original_language}"
 
+                view.setOnClickListener {
+                    onItemClick.onClick(data)
+                }
             }
         }
+    }
+
+    interface OnItemClick{
+        fun onClick(item : Popular)
     }
 }

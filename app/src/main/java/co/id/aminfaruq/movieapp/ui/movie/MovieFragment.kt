@@ -10,13 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import co.id.aminfaruq.core.domain.model.NowPlaying
+import co.id.aminfaruq.core.domain.model.Popular
+import co.id.aminfaruq.core.domain.model.TopRated
 import co.id.aminfaruq.core.ui.*
 import co.id.aminfaruq.movieapp.R
+import co.id.aminfaruq.movieapp.utils.openDetailActivity
 import kotlinx.android.synthetic.main.fragment_movie.*
 import kotlinx.android.synthetic.main.layout_genre.*
+import kotlinx.android.synthetic.main.layout_nowplaying_movie.*
 import kotlinx.android.synthetic.main.layout_popular_movie.*
 import kotlinx.android.synthetic.main.layout_top_rated_movie.*
-import kotlinx.android.synthetic.main.layout_nowplaying_movie.*
 import org.koin.android.ext.android.inject
 
 class MovieFragment : Fragment() {
@@ -44,10 +48,26 @@ class MovieFragment : Fragment() {
 
 
     private fun loadUi() {
-        val popularMovieAdapter = PopularAdapter()
+        val popularMovieAdapter = PopularAdapter(object : PopularAdapter.OnItemClick {
+            override fun onClick(item: Popular) {
+                openDetailActivity(context!!, item.id.toString())
+            }
+        })
+
+        val nowPlayingAdapter = NowPlayingAdapter(object : NowPlayingAdapter.OnItemClick {
+            override fun onClick(item: NowPlaying) {
+                openDetailActivity(context!!, item.id.toString())
+            }
+        })
+
+        val topRatedMovieAdapter = TopRatedMovieAdapter(object : TopRatedMovieAdapter.OnItemClick{
+            override fun onClick(item: TopRated) {
+                openDetailActivity(context!! , item.id.toString())
+            }
+        })
+
+
         val topRatedAdapter = TopRatedAdapter()
-        val topRatedMovieAdapter = TopRatedMovieAdapter()
-        val nowPlayingAdapter = NowPlayingAdapter()
         val genreMoviesAdapter = GenreMoviesAdapter()
 
         with(viewModel) {
