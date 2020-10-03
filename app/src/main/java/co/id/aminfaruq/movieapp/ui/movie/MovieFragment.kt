@@ -42,10 +42,6 @@ class MovieFragment : Fragment() {
         loadUi()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
 
     private fun loadUi() {
         val popularMovieAdapter = PopularAdapter()

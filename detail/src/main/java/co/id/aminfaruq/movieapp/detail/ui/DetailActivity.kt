@@ -2,6 +2,7 @@ package co.id.aminfaruq.movieapp.detail.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.layout_rated_detail.*
 import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity(), View.OnClickListener {
 
     private val viewModel: DetailVM by inject()
 
@@ -31,6 +32,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         loadKoinModules(detailInject)
+        btn_back_form_detail.setOnClickListener(this)
 
         val data = intent.getStringExtra(BUNDLE_KEY)
         viewModel.getDetailMovie(data.toString())
@@ -41,9 +43,6 @@ class DetailActivity : AppCompatActivity() {
         val trailerAdapter = TrailerAdapter()
         val creditsAdapter = CreditsAdapter()
 
-        btn_back_form_detail.setOnClickListener {
-            finish()
-        }
 
         with(viewModel) {
             postDetailMovieData.observe(this@DetailActivity, Observer { data ->
@@ -99,5 +98,19 @@ class DetailActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        finish()
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.btn_back_form_detail -> {
+                onBackPressed()
+            }
+        }
+    }
+
 
 }
