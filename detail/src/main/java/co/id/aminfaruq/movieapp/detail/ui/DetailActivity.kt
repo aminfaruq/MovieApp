@@ -13,6 +13,7 @@ import co.id.aminfaruq.movieapp.detail.R
 import co.id.aminfaruq.movieapp.detail.di.detailInject
 import co.id.aminfaruq.movieapp.utils.BUNDLE_KEY
 import coil.load
+import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.layout_clip.*
 import kotlinx.android.synthetic.main.layout_credits.*
 import kotlinx.android.synthetic.main.layout_information.*
@@ -39,6 +40,10 @@ class DetailActivity : AppCompatActivity() {
         val genresAdapter = GenresAdapter()
         val trailerAdapter = TrailerAdapter()
         val creditsAdapter = CreditsAdapter()
+
+        btn_back_form_detail.setOnClickListener {
+            finish()
+        }
 
         with(viewModel) {
             postDetailMovieData.observe(this@DetailActivity, Observer { data ->
@@ -94,6 +99,5 @@ class DetailActivity : AppCompatActivity() {
         }
 
     }
-
 
 }
