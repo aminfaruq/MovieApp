@@ -1,18 +1,21 @@
 package co.id.aminfaruq.core.ui
 
 import android.content.Context
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import co.id.aminfaruq.core.R
 import co.id.aminfaruq.core.domain.model.Genre
 import kotlinx.android.synthetic.main.item_genres_detail.view.*
+import kotlinx.android.synthetic.main.item_movie_genre.view.*
 
 class GenreMoviesAdapter: RecyclerView.Adapter<GenreMoviesAdapter.ViewHolder>() {
 
     private val genreMovieData = ArrayList<Genre>()
+
+    private lateinit var context: Context
 
     fun setGenreMovieData(list: List<Genre>?) {
         if (list == null) return
@@ -21,32 +24,47 @@ class GenreMoviesAdapter: RecyclerView.Adapter<GenreMoviesAdapter.ViewHolder>() 
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenreMoviesAdapter.ViewHolder =
-        ViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_genres_detail, parent, false)
-        )
-
-    override fun onBindViewHolder(holder: GenreMoviesAdapter.ViewHolder, position: Int) {
-        val data = genreMovieData[position]
-        holder.bind(data)
-
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_movie_genre, parent, false)
+        context = parent.context
+        return ViewHolder(inflater)
     }
 
-//    private fun dpToPx(dp: Int): Int {
-//        val px = dp *
-//        return px.toInt()
-//    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val marginLeft = dpToPx(8)
+        val marginTop = dpToPx(8)
+        val marginRight = dpToPx(8)
+        val marginBottom = dpToPx(8)
+
+        val newLayoutParams = FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+//        android:layout_width="152dp"
+//        android:layout_height="91dp"
+
+        newLayoutParams.setMargins(marginLeft, marginTop, marginRight, marginBottom)
+        holder.itemView.layoutParams = newLayoutParams
+        val data = genreMovieData[position]
+        holder.bind(data)
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        val px = dp * context.resources.displayMetrics.density
+        return px.toInt()
+    }
 
     override fun getItemCount(): Int = genreMovieData.size
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         fun bind(data: Genre) {
             with(itemView) {
-                tv_genres_name.text = data.name
+                tv_genre_name_item.text = data.name
             }
         }
     }
 
 }
+
