@@ -1,7 +1,7 @@
 package co.id.aminfaruq.core.ui.grouphie
 
 import co.id.aminfaruq.core.R
-import co.id.aminfaruq.core.data.source.remote.response.similar.SimilarItem
+import co.id.aminfaruq.core.domain.model.SimilarMovie
 import co.id.aminfaruq.core.utils.Constants
 import coil.load
 import com.xwray.groupie.kotlinandroidextensions.Item
@@ -9,7 +9,7 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.item_similiar.view.*
 
 
-class SimilarItemView(val data: SimilarItem) : Item() {
+class SimilarItemView(val data: SimilarMovie) : Item() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
 

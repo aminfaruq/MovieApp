@@ -15,6 +15,7 @@
         android:background="#323232">
 
         <ImageView
+            android:scaleType="center"
             android:id="@+id/img_backdrop_similiar"
             android:layout_width="match_parent"
             android:layout_height="155dp"
@@ -24,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:maxLines="1"
             android:id="@+id/tv_title_similiar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

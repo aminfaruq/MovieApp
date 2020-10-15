@@ -134,7 +134,6 @@ class HomeFragment : Fragment() {
 
             messageData.observe(viewLifecycleOwner, Observer { messageInfo ->
                 Toast.makeText(context, messageInfo, Toast.LENGTH_SHORT).show()
-                Log.e("HomeFragment", messageInfo.toString())
             })
 
             showProgressbar.observe(viewLifecycleOwner, Observer {

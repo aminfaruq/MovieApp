@@ -14,12 +14,18 @@ import timber.log.Timber
 
 class DetailVM(private val detailUseCase: DetailUseCase) : BaseViewModel() {
 
+    object Loading
+    object LastPage
+    object DataNotFound
     val postDetailMovieData = MutableLiveData<Detail>()
     val postTrailerMovieData = MutableLiveData<List<Trailer>>()
     val postCreditsMoviesData = MutableLiveData<List<Credits>>()
     val postSimilarMovie = MutableLiveData<List<SimilarMovie>>()
     val showProgressbar = MutableLiveData<Boolean>()
     val messageData = MutableLiveData<String>()
+    val loadingState = MutableLiveData<Loading>()
+    val lastPageState = MutableLiveData<LastPage>()
+    val dataNotFoundState = MutableLiveData<DataNotFound>()
 
     fun getDetailMovie(idMovie: String) {
         showProgressbar.value = true
@@ -73,17 +79,20 @@ class DetailVM(private val detailUseCase: DetailUseCase) : BaseViewModel() {
     }
 
     fun getSimilarMovie(idMovie: String, page: Int) {
-        showProgressbar.value = true
+//        showProgressbar.value = true
         compositeDisposable.add(
             detailUseCase.getSimilarMovie(idMovie, Constants.API_KEY, Constants.LANG, page)
                 .compose(RxUtils.applySingleAsync())
                 .subscribe({ result ->
                     if (result.isNotEmpty()){
                         postSimilarMovie.value = result
-                        showProgressbar.value = false
+                        //showProgressbar.value = false
                     }else {
-                        messageData.value = "Tidak ada data"
-                        Timber.e("${R.string.error}")
+                       if (page == 1){
+                           dataNotFoundState.value = DataNotFound
+                       }else{
+                           lastPageState.value = LastPage
+                       }
                     }
                 } , this::onError)
         )

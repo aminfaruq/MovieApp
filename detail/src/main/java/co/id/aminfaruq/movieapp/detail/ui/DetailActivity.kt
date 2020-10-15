@@ -3,6 +3,7 @@ package co.id.aminfaruq.movieapp.detail.ui
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,7 +11,9 @@ import co.id.aminfaruq.core.ui.CreditsAdapter
 import co.id.aminfaruq.core.ui.GenresAdapter
 import co.id.aminfaruq.core.ui.TrailerAdapter
 import co.id.aminfaruq.core.ui.grouphie.LoadmoreItemView
+import co.id.aminfaruq.core.ui.grouphie.SimilarItemView
 import co.id.aminfaruq.core.utils.Constants
+import co.id.aminfaruq.core.utils.PaginationScrollListener
 import co.id.aminfaruq.movieapp.detail.R
 import co.id.aminfaruq.movieapp.detail.di.detailInject
 import co.id.aminfaruq.movieapp.utils.BUNDLE_KEY
@@ -23,12 +26,14 @@ import kotlinx.android.synthetic.main.layout_credits.*
 import kotlinx.android.synthetic.main.layout_information.*
 import kotlinx.android.synthetic.main.layout_overview.*
 import kotlinx.android.synthetic.main.layout_rated_detail.*
+import kotlinx.android.synthetic.main.layout_similar.*
 import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 
 class DetailActivity : AppCompatActivity(), View.OnClickListener {
 
     private val viewModel: DetailVM by inject()
+    private lateinit var idMovie: String
 
     private val similarItemView = GroupAdapter<ViewHolder>()
 
@@ -46,9 +51,11 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         btn_back_form_detail.setOnClickListener(this)
 
         val data = intent.getStringExtra(BUNDLE_KEY)
+        idMovie = data.toString()
         viewModel.getDetailMovie(data.toString())
         viewModel.getTrailerMovie(data.toString())
         viewModel.getCredit(data.toString())
+        viewModel.getSimilarMovie(data.toString(), page)
 
         val genresAdapter = GenresAdapter()
         val trailerAdapter = TrailerAdapter()
@@ -76,8 +83,46 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
                 creditsAdapter.setCreditsData(it)
             })
 
-            postSimilarMovie.observe(this@DetailActivity , Observer {
+            postSimilarMovie.observe(this@DetailActivity, Observer { similarState ->
+                if (isLoadMore) {
+                    //    similarItemView.remove(loadmoreItemView)
+                    isLoadMore = false
+                }
 
+                if (page == 1) {
+                    similarItemView.clear()
+                }
+
+                similarState.map {
+                    similarItemView.add(SimilarItemView(it))
+                }
+
+            })
+
+            loadingState.observe(this@DetailActivity, Observer {
+                if (isLoadMore) {
+                    //add loading indicator
+                    //  similarItemView.add(loadmoreItemView)
+                }
+            })
+
+            lastPageState.observe(this@DetailActivity, Observer {
+                if (isLoadMore) {
+                    // similarItemView.remove(loadmoreItemView)
+                    isLoadMore = false
+                    if (!isLastPage) {
+                        Toast.makeText(
+                            this@DetailActivity,
+                            "Telah meraih halaman terakhir",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        isLastPage = true
+                    }
+                }
+            })
+
+            dataNotFoundState.observe(this@DetailActivity, Observer {
+                similarItemView.clear()
             })
 
             showProgressbar.observe(this@DetailActivity, Observer {
@@ -110,6 +155,29 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
             layoutManager =
                 LinearLayoutManager(this@DetailActivity, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
+        }
+
+        with(rv_similar_movie) {
+            val linearLayout =
+                LinearLayoutManager(this@DetailActivity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = similarItemView
+            layoutManager = linearLayout
+            addOnScrollListener(object : PaginationScrollListener(linearLayout) {
+                override fun isLastPage(): Boolean {
+                    return isLastPage
+                }
+
+                override fun isLoading(): Boolean {
+                    return isLoadMore
+                }
+
+                override fun loadMoreItems() {
+                    isLoadMore = true
+                    page++
+
+                    viewModel.getSimilarMovie(idMovie, page)
+                }
+            })
         }
 
 
