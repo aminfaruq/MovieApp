@@ -19,11 +19,17 @@ interface DetailRepository {
         language: String,
     ): Single<List<Trailer>>
 
-
     fun getDetailCredits(
         movie_id: String,
         api_key: String,
     ): Single<List<Credits>>
+
+    fun getSimilarMovie(
+        movie_id: String,
+        api_key: String,
+        language: String,
+        page: Int
+    )
 
 
 }

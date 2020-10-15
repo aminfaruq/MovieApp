@@ -74,7 +74,7 @@ interface ApiService {
     fun detailCredits(
         @Path("movie_id") movie_id: String,
         @Query("api_key") api_key: String
-    ) : Single<ResponseCredits>
+    ): Single<ResponseCredits>
 
     @GET("genre/movie/list")
     fun genres(
@@ -88,6 +88,14 @@ interface ApiService {
         @Query("language") language: String,
         @Query("page") page: Int
     ): Single<ResponseNowPlaying>
+
+    @GET("movie/{movie_id}/similar")
+    fun getSimilarMovie(
+        @Path("movie_id") movie_id: String,
+        @Query("api_key") api_key: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    )
 
 }
 

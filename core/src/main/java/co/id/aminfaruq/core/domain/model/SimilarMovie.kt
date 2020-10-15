@@ -1,6 +1,6 @@
-package co.id.aminfaruq.core.data.source.remote.response.similar
+package co.id.aminfaruq.core.domain.model
 
-data class SimilarItem(
+data class SimilarMovie (
     val adult: Boolean?,
     val backdrop_path: String?,
     val genre_ids: List<Int>,

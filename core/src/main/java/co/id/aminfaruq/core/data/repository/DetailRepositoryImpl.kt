@@ -41,4 +41,8 @@ class DetailRepositoryImpl(
             itemCreditsMapper.mapToListDomain(it.cast)
         }
     }
+
+    override fun getSimilarMovie(movie_id: String, api_key: String, language: String, page: Int) {
+        TODO("Not yet implemented")
+    }
 }

@@ -104,4 +104,5 @@ val mapperModule = module {
     single { CreditsMapper() }
     single { NowPlayingMapper() }
     single { GenreMapper() }
+    single { SimilarMapper() }
 }
