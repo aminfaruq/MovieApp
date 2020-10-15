@@ -1,3 +1,5 @@
 <resources>
 
+    <string name="more_like_this">More Like This</string>
+    <string name="popularity">Popularity</string>
 </resources>
