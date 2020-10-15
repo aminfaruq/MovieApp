@@ -9,11 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import co.id.aminfaruq.core.ui.CreditsAdapter
 import co.id.aminfaruq.core.ui.GenresAdapter
 import co.id.aminfaruq.core.ui.TrailerAdapter
+import co.id.aminfaruq.core.ui.grouphie.LoadmoreItemView
 import co.id.aminfaruq.core.utils.Constants
 import co.id.aminfaruq.movieapp.detail.R
 import co.id.aminfaruq.movieapp.detail.di.detailInject
 import co.id.aminfaruq.movieapp.utils.BUNDLE_KEY
 import coil.load
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.layout_clip.*
 import kotlinx.android.synthetic.main.layout_credits.*
@@ -26,6 +29,14 @@ import org.koin.core.context.loadKoinModules
 class DetailActivity : AppCompatActivity(), View.OnClickListener {
 
     private val viewModel: DetailVM by inject()
+
+    private val similarItemView = GroupAdapter<ViewHolder>()
+
+    private var page = 1
+    private var isLoadMore = false
+    private var isLastPage = false
+
+    private var loadmoreItemView = LoadmoreItemView()
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +76,10 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
                 creditsAdapter.setCreditsData(it)
             })
 
+            postSimilarMovie.observe(this@DetailActivity , Observer {
+
+            })
+
             showProgressbar.observe(this@DetailActivity, Observer {
 
             })
@@ -96,6 +111,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
                 LinearLayoutManager(this@DetailActivity, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
         }
+
 
     }
 

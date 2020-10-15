@@ -9,6 +9,8 @@ import co.id.aminfaruq.core.domain.usecase.home.HomeUseCase
 import co.id.aminfaruq.core.ui.BaseViewModel
 import co.id.aminfaruq.core.utils.Constants
 import co.id.aminfaruq.core.utils.RxUtils
+import co.id.aminfaruq.movieapp.R
+import timber.log.Timber
 
 class HomeVM(private val homeUseCase: HomeUseCase) : BaseViewModel() {
 
@@ -27,8 +29,10 @@ class HomeVM(private val homeUseCase: HomeUseCase) : BaseViewModel() {
                 .subscribe({ result ->
                     if (result.isNotEmpty()) {
                         postTopRatedData.value = result
+                        showProgressbar.value = false
                     } else {
                         messageData.value = "Tidak ada data"
+                        Timber.e("${R.string.error}")
                     }
                 }, this::onError)
         )
@@ -49,8 +53,10 @@ class HomeVM(private val homeUseCase: HomeUseCase) : BaseViewModel() {
                 .subscribe({ result ->
                     if (result.isNotEmpty()) {
                         postDiscoverData.value = result
+                        showProgressbar.value = false
                     } else {
                         messageData.value = "Tidak ada data"
+                        Timber.e("${R.string.error}")
                     }
                 }, this::onError)
         )
@@ -64,8 +70,10 @@ class HomeVM(private val homeUseCase: HomeUseCase) : BaseViewModel() {
                 .subscribe({ result ->
                     if (result.isNotEmpty()) {
                         postUpcomingData.value = result
+                        showProgressbar.value = false
                     } else {
                         messageData.value = "Tidak ada data"
+                        Timber.e("${R.string.error}")
                     }
                 }, this::onError)
         )
@@ -79,8 +87,10 @@ class HomeVM(private val homeUseCase: HomeUseCase) : BaseViewModel() {
                 .subscribe({ result ->
                     if (result.isNotEmpty()) {
                         postPeopleData.value = result
+                        showProgressbar.value = false
                     } else {
                         messageData.value = "Tidak ada data"
+                        Timber.e("${R.string.error}")
                     }
                 }, this::onError)
         )

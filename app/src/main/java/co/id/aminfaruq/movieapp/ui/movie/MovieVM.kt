@@ -6,6 +6,8 @@ import co.id.aminfaruq.core.domain.usecase.movie.MovieUseCase
 import co.id.aminfaruq.core.ui.BaseViewModel
 import co.id.aminfaruq.core.utils.Constants
 import co.id.aminfaruq.core.utils.RxUtils
+import co.id.aminfaruq.movieapp.R
+import timber.log.Timber
 
 class MovieVM(private val movieUseCase: MovieUseCase): BaseViewModel() {
 
@@ -24,8 +26,10 @@ class MovieVM(private val movieUseCase: MovieUseCase): BaseViewModel() {
                 .subscribe({ results ->
                     if (results.isNotEmpty()) {
                         postTopRatedData.value = results
+                        showProgressBar.value = false
                     } else {
                         messageData.value = "Data Kosong"
+                        Timber.e("${R.string.error}")
                     }
                 }, this::onError)
         )
@@ -39,8 +43,10 @@ class MovieVM(private val movieUseCase: MovieUseCase): BaseViewModel() {
                 .subscribe({ result ->
                     if (result.isNotEmpty()) {
                         postPopularData.value = result
+                        showProgressBar.value = false
                     } else {
                         messageData.value = "Data Kosong"
+                        Timber.e("${R.string.error}")
                     }
                 }, this::onError)
         )
@@ -54,8 +60,10 @@ class MovieVM(private val movieUseCase: MovieUseCase): BaseViewModel() {
                 .subscribe({ result ->
                     if (result.isNotEmpty()) {
                         postNowPlayingData.value = result
+                        showProgressBar.value = false
                     } else {
                         messageData.value = "Data Kosong"
+                        Timber.e("${R.string.error}")
                     }
                 }, this::onError)
         )
@@ -69,8 +77,10 @@ class MovieVM(private val movieUseCase: MovieUseCase): BaseViewModel() {
                 .subscribe({ result ->
                     if (result.isNotEmpty()) {
                         postGenreData.value = result
+                        showProgressBar.value = false
                     } else {
                         messageData.value = "Data Kosong"
+                        Timber.e("${R.string.error}")
                     }
                 }, this::onError)
         )

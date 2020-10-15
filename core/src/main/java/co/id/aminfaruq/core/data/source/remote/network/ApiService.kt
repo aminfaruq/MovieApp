@@ -7,6 +7,7 @@ import co.id.aminfaruq.core.data.source.remote.response.genre.ResponseGenre
 import co.id.aminfaruq.core.data.source.remote.response.nowPlaying.ResponseNowPlaying
 import co.id.aminfaruq.core.data.source.remote.response.people.ResponsePeople
 import co.id.aminfaruq.core.data.source.remote.response.popular.ResponsePopular
+import co.id.aminfaruq.core.data.source.remote.response.similar.ResponseSimilar
 import co.id.aminfaruq.core.data.source.remote.response.topRated.ResponseTopRated
 import co.id.aminfaruq.core.data.source.remote.response.trailer.ResponseTrailer
 import co.id.aminfaruq.core.data.source.remote.response.upcoming.ResponseUpcoming
@@ -95,7 +96,7 @@ interface ApiService {
         @Query("api_key") api_key: String,
         @Query("language") language: String,
         @Query("page") page: Int
-    )
+    ): Single<ResponseSimilar>
 
 }
 

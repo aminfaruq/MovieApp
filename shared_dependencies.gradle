@@ -44,15 +44,17 @@ dependencies {
     implementation "net.zetetic:android-database-sqlcipher:4.4.0"
     implementation "androidx.sqlite:sqlite:2.1.0"
 
-    implementation 'com.xwray:groupie:2.8.0'
-    implementation 'com.xwray:groupie-kotlin-android-extensions:2.3.0'
 
     implementation 'com.github.Johnyoat:non-swipe-view-pager:1.0.0'
 
     //adapter
-    implementation 'com.xwray:groupie:2.8.0'
+    implementation 'com.xwray:groupie:2.3.0'
     implementation 'com.xwray:groupie-kotlin-android-extensions:2.3.0'
 
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
+
+    // Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
 
 }
