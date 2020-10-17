@@ -8,7 +8,6 @@ class DiscoverMapper : BaseMapper<DiscoverItem , Discover> {
         return Discover(
             model.adult,
             model.backdrop_path,
-            model.genre_ids,
             model.id,
             model.original_language,
             model.original_title,
@@ -27,7 +26,6 @@ class DiscoverMapper : BaseMapper<DiscoverItem , Discover> {
         return DiscoverItem(
             domain.adult,
             domain.backdrop_path,
-            domain.genre_ids,
             domain.id,
             domain.original_language,
             domain.original_title,

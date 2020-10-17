@@ -1,5 +1,6 @@
 package co.id.aminfaruq.core.domain.usecase.home
 
+import co.id.aminfaruq.core.domain.model.Discover
 import co.id.aminfaruq.core.domain.repository.HomeRepository
 
 class HomeIteractor(private val homeRepository: HomeRepository) : HomeUseCase {
@@ -35,4 +36,10 @@ class HomeIteractor(private val homeRepository: HomeRepository) : HomeUseCase {
         language: String,
         page: Int
     ) = homeRepository.getPeoplePopular(api_key, language, page)
+
+    override fun saveDiscovery(discover: Discover) = homeRepository.saveDiscovery(discover)
+
+    override fun removeDiscover(id: Int) = homeRepository.removeDiscover(id)
+
+    override fun checkDiscover(id: Int) = homeRepository.checkDiscover(id)
 }

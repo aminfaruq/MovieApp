@@ -1,14 +1,13 @@
 package co.id.aminfaruq.core.data.source.local.entity
 
 import androidx.room.Entity
-import androidx.room.Ignore
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "discoverHome")
-data class DiscoverEntity (
+data class DiscoverEntity(
     val adult: Boolean?,
     val backdrop_path: String?,
-    @Ignore
-    val genre_ids: List<Int>,
+    @PrimaryKey
     val id: Int?,
     val original_language: String?,
     val original_title: String?,

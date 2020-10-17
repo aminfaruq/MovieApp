@@ -33,4 +33,10 @@ interface HomeRepository {
         language: String,
         page: Int
     ): Single<List<People>>
+
+    fun saveDiscovery(discover: Discover)
+
+    fun removeDiscover(id : Int)
+
+    fun checkDiscover(id : Int)
 }

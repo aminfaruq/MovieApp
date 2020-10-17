@@ -78,6 +78,9 @@ val repositoryModule = module {
             get(),
             get(),
             get(),
+            get(),
+            get(),
+            get(),
             get()
         ) as HomeRepository
 
