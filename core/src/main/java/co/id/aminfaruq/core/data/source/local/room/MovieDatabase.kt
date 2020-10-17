@@ -1,4 +1,6 @@
 package co.id.aminfaruq.core.data.source.local.room
 
-class MovieDatabase {
+import androidx.room.Database
+
+abstract class MovieDatabase {
 }
