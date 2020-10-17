@@ -1,9 +1,11 @@
 package co.id.aminfaruq.core.di
 
+import androidx.room.Room
 import co.id.aminfaruq.core.data.mapper.*
 import co.id.aminfaruq.core.data.repository.DetailRepositoryImpl
 import co.id.aminfaruq.core.data.repository.HomeRepositoryImpl
 import co.id.aminfaruq.core.data.repository.MovieRepositoryImpl
+import co.id.aminfaruq.core.data.source.local.room.MovieDatabase
 import co.id.aminfaruq.core.data.source.remote.network.ApiService
 import co.id.aminfaruq.core.domain.repository.DetailRepository
 import co.id.aminfaruq.core.domain.repository.HomeRepository
@@ -12,6 +14,7 @@ import co.id.aminfaruq.core.utils.Constants
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -22,6 +25,15 @@ import java.util.concurrent.TimeUnit
 
 val databaseModule = module {
     single { getExecutor() }
+    factory { get<MovieDatabase>().homeDao() }
+    factory { get<MovieDatabase>().movieDao() }
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            MovieDatabase::class.java, "Movie.db"
+        ).fallbackToDestructiveMigration()
+            .build()
+    }
 
 }
 
