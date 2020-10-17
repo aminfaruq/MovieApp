@@ -3,8 +3,8 @@ package co.id.aminfaruq.core.data.source.local.entity
 import androidx.room.Entity
 import androidx.room.Ignore
 
-@Entity(tableName = "discoverHome")
-data class DiscoverEntity (
+@Entity(tableName = "upcomingHome")
+data class UpcomingEntity (
     val adult: Boolean?,
     val backdrop_path: String?,
     @Ignore

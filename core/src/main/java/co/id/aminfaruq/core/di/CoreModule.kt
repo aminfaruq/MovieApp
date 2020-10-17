@@ -2,6 +2,7 @@ package co.id.aminfaruq.core.di
 
 import androidx.room.Room
 import co.id.aminfaruq.core.data.mapper.*
+import co.id.aminfaruq.core.data.mapper.entityMapper.DiscoverEntityMapper
 import co.id.aminfaruq.core.data.repository.DetailRepositoryImpl
 import co.id.aminfaruq.core.data.repository.HomeRepositoryImpl
 import co.id.aminfaruq.core.data.repository.MovieRepositoryImpl
@@ -118,4 +119,8 @@ val mapperModule = module {
     single { NowPlayingMapper() }
     single { GenreMapper() }
     single { SimilarMapper() }
+}
+
+val entityMapperModule = module {
+    single { DiscoverEntityMapper() }
 }

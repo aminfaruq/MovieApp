@@ -1,10 +1,7 @@
 package co.id.aminfaruq.movieapp
 
 import android.app.Application
-import co.id.aminfaruq.core.di.databaseModule
-import co.id.aminfaruq.core.di.mapperModule
-import co.id.aminfaruq.core.di.networkModule
-import co.id.aminfaruq.core.di.repositoryModule
+import co.id.aminfaruq.core.di.*
 import co.id.aminfaruq.movieapp.di.useCaseModule
 import co.id.aminfaruq.movieapp.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -27,7 +24,8 @@ class MyApplication : Application() {
                     repositoryModule,
                     useCaseModule,
                     viewModelModule,
-                    mapperModule
+                    mapperModule,
+                    entityMapperModule
                 )
             )
         }
