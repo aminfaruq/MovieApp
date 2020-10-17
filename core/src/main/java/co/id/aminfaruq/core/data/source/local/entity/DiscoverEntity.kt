@@ -1,8 +1,13 @@
 package co.id.aminfaruq.core.data.source.local.entity
 
+import androidx.room.Entity
+import androidx.room.Ignore
+
+@Entity(tableName = "discover")
 data class DiscoverEntity (
     val adult: Boolean?,
     val backdrop_path: String?,
+    @Ignore
     val genre_ids: List<Int>,
     val id: Int?,
     val original_language: String?,
