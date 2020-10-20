@@ -25,15 +25,16 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:maxLines="1"
             android:id="@+id/tv_title_similiar"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="10dp"
+            android:maxLines="1"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_top_rated_watchlist_similiar"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_backdrop_similiar"
