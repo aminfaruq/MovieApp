@@ -19,7 +19,7 @@ import co.id.aminfaruq.movieapp.detail.di.detailInject
 import co.id.aminfaruq.movieapp.utils.BUNDLE_KEY
 import coil.load
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
+//import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.layout_clip.*
 import kotlinx.android.synthetic.main.layout_credits.*
@@ -35,7 +35,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
     private val viewModel: DetailVM by inject()
     private lateinit var idMovie: String
 
-    private val similarItemView = GroupAdapter<ViewHolder>()
+//    private val similarItemView = GroupAdapter<ViewHolder>()
 
     private var page = 1
     private var isLoadMore = false
@@ -90,11 +90,11 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
                 if (page == 1) {
-                    similarItemView.clear()
+//                    similarItemView.clear()
                 }
 
                 similarState.map {
-                    similarItemView.add(SimilarItemView(it))
+//                    similarItemView.add(SimilarItemView(it))
                 }
 
             })
@@ -122,7 +122,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
             })
 
             dataNotFoundState.observe(this@DetailActivity, Observer {
-                similarItemView.clear()
+//                similarItemView.clear()
             })
 
             showProgressbar.observe(this@DetailActivity, Observer {
@@ -160,7 +160,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         with(rv_similar_movie) {
             val linearLayout =
                 LinearLayoutManager(this@DetailActivity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = similarItemView
+//            adapter = similarItemView
             layoutManager = linearLayout
             addOnScrollListener(object : PaginationScrollListener(linearLayout) {
                 override fun isLastPage(): Boolean {
