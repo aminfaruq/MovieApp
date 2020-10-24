@@ -1,5 +1,6 @@
 package co.id.aminfaruq.core.domain.repository
 
+import co.id.aminfaruq.core.data.source.local.entity.DiscoverEntity
 import co.id.aminfaruq.core.domain.model.*
 import io.reactivex.Single
 
@@ -38,5 +39,7 @@ interface HomeRepository {
 
     fun removeDiscover(id : Int)
 
-    fun checkDiscover(id : Int)
+    fun checkDiscover(id : Int)  :  Single<List<DiscoverEntity>>
+
+    fun mappingToObject(result : List<DiscoverEntity>) : List<Discover>
 }

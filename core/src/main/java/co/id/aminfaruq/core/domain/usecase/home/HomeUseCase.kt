@@ -1,5 +1,6 @@
 package co.id.aminfaruq.core.domain.usecase.home
 
+import co.id.aminfaruq.core.data.source.local.entity.DiscoverEntity
 import co.id.aminfaruq.core.domain.model.Discover
 import co.id.aminfaruq.core.domain.model.People
 import co.id.aminfaruq.core.domain.model.TopRated
@@ -40,5 +41,8 @@ interface HomeUseCase {
 
     fun removeDiscover(id : Int)
 
-    fun checkDiscover(id : Int)
+    fun checkDiscover(id : Int) :  Single<List<DiscoverEntity>>
+
+    fun mappingToObject(result : List<DiscoverEntity>) : List<Discover>
+
 }

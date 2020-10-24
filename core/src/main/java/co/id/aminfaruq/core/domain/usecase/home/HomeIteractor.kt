@@ -1,5 +1,6 @@
 package co.id.aminfaruq.core.domain.usecase.home
 
+import co.id.aminfaruq.core.data.source.local.entity.DiscoverEntity
 import co.id.aminfaruq.core.domain.model.Discover
 import co.id.aminfaruq.core.domain.repository.HomeRepository
 
@@ -42,4 +43,8 @@ class HomeIteractor(private val homeRepository: HomeRepository) : HomeUseCase {
     override fun removeDiscover(id: Int) = homeRepository.removeDiscover(id)
 
     override fun checkDiscover(id: Int) = homeRepository.checkDiscover(id)
+
+    override fun mappingToObject(result: List<DiscoverEntity>) =
+        homeRepository.mappingToObject(result)
+
 }

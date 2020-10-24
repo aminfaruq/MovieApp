@@ -6,9 +6,9 @@ import co.id.aminfaruq.core.domain.model.Discover
 class DiscoverMapper : BaseMapper<DiscoverItem , Discover> {
     override fun mapToDomain(model: DiscoverItem): Discover {
         return Discover(
+            model.id,
             model.adult,
             model.backdrop_path,
-            model.id,
             model.original_language,
             model.original_title,
             model.overview,
@@ -24,9 +24,9 @@ class DiscoverMapper : BaseMapper<DiscoverItem , Discover> {
 
     override fun mapToModel(domain: Discover): DiscoverItem {
         return DiscoverItem(
+            domain.id,
             domain.adult,
             domain.backdrop_path,
-            domain.id,
             domain.original_language,
             domain.original_title,
             domain.overview,

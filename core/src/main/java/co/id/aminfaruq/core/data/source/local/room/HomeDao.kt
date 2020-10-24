@@ -19,7 +19,7 @@ interface HomeDao {
     fun removeDiscover(idDiscover: Int)
 
     @Query("SELECT * FROM discoverHome WHERE id=:idDiscover")
-    fun getFavDiscoverById(idDiscover: Int): Single<List<Discover>>
+    fun getFavDiscoverById(idDiscover: Int): Single<List<DiscoverEntity>>
 
     @Query("SELECT * FROM discoverHome ORDER BY id ASC")
     fun getFavDiscover(): LiveData<List<Discover>>

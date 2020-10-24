@@ -1,9 +1,9 @@
 package co.id.aminfaruq.core.domain.model
 
 data class Discover(
+    val id: Int?,
     val adult: Boolean?,
     val backdrop_path: String?,
-    val id: Int?,
     val original_language: String?,
     val original_title: String?,
     val overview: String?,

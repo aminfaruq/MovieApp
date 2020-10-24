@@ -1,5 +1,8 @@
 package co.id.aminfaruq.core.ui.grouphie
 
+import android.content.Context
+import android.widget.ImageButton
+import androidx.core.content.ContextCompat
 import co.id.aminfaruq.core.R
 import co.id.aminfaruq.core.domain.model.SimilarMovie
 import co.id.aminfaruq.core.utils.Constants
@@ -23,4 +26,5 @@ class SimilarItemView(val data: SimilarMovie) : Item() {
     }
 
     override fun getLayout(): Int = R.layout.item_similiar
+
 }

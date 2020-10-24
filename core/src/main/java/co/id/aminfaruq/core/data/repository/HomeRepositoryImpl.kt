@@ -5,6 +5,7 @@ import co.id.aminfaruq.core.data.mapper.PeopleMapper
 import co.id.aminfaruq.core.data.mapper.TopRatedMapper
 import co.id.aminfaruq.core.data.mapper.UpcomingMapper
 import co.id.aminfaruq.core.data.mapper.entityMapper.DiscoverEntityMapper
+import co.id.aminfaruq.core.data.source.local.entity.DiscoverEntity
 import co.id.aminfaruq.core.data.source.local.room.HomeDao
 import co.id.aminfaruq.core.data.source.remote.network.ApiService
 import co.id.aminfaruq.core.domain.model.Discover
@@ -101,8 +102,12 @@ class HomeRepositoryImpl(
         executor.execute { homeDao.removeDiscover(id) }
     }
 
-    override fun checkDiscover(id: Int) {
-        executor.execute { homeDao.getFavDiscoverById(id) }
+    override fun checkDiscover(id: Int):  Single<List<DiscoverEntity>> {
+        return homeDao.getFavDiscoverById(id)
+    }
+
+    override fun mappingToObject(result: List<DiscoverEntity>): List<Discover> {
+        return itemDiscoverEntityMapper.mapToListDomain(result)
     }
 
 }

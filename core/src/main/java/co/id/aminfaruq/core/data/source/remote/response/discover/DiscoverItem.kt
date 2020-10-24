@@ -1,9 +1,9 @@
 package co.id.aminfaruq.core.data.source.remote.response.discover
 
 data class DiscoverItem(
+    val id: Int?,
     val adult: Boolean?,
     val backdrop_path: String?,
-    val id: Int?,
     val original_language: String?,
     val original_title: String?,
     val overview: String?,

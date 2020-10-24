@@ -90,6 +90,7 @@
             tools:text="2019 13+ 1h 34m" />
 
         <ImageButton
+            android:id="@+id/btn_discover_watchlist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_btn_watchlist"
