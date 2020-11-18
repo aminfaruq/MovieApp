@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Movie App</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_movies">Movies</string>
+    <string name="tab_tv_shows">Streaming &amp; TV Show</string>
+    <string name="title_detail">Detail</string>
+    <string name="error">Error Detected</string>
 </resources>
