@@ -23,6 +23,8 @@ public struct GenreModel: Equatable {
 public enum NetworkError: Swift.Error, Equatable, LocalizedError {
     case connectivity
     case decodeError
+    case unauthorized
+    case notFound
     case invalidData(statusCode: Int)
 }
 
@@ -47,7 +49,17 @@ final class RemoteGenreListLoader {
                 return .error(NetworkError.connectivity)
             })
             .flatMap { (data, response) in
-                return .error(NetworkError.invalidData(statusCode: response.statusCode))
+                
+                switch response.statusCode {
+                    case 200:
+                        return .error(NetworkError.decodeError)
+                    case 401:
+                        return .error(NetworkError.unauthorized)
+                    case 404:
+                        return .error(NetworkError.notFound)
+                    default:
+                        return .error(NetworkError.invalidData(statusCode: response.statusCode))
+                }
             }
     }
 }
@@ -94,6 +106,42 @@ final class RemoteGenreListLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_loadGenres_deliversErrorNotFound() {
+        let (sut, spy) = makeSUT()
+        spy.stub = .just(makeResponse(statusCode: 404))
+        
+        let exp = expectation(description: "wait from response")
+        sut.loadGenres()
+            .subscribe(
+                onFailure: { error in
+                    let receivedError = error as? NetworkError
+                    XCTAssertEqual(receivedError, .notFound)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_loadGenres_deliversErrorUnautorized() {
+        let (sut, spy) = makeSUT()
+        spy.stub = .just(makeResponse(statusCode: 401))
+        
+        let exp = expectation(description: "wait from response")
+        sut.loadGenres()
+            .subscribe(
+                onFailure: { error in
+                    let receivedError = error as? NetworkError
+                    XCTAssertEqual(receivedError, .unauthorized)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     func test_loadGenres_deliversErrorInvalidData() {
         let (sut, spy) = makeSUT()
         
@@ -115,6 +163,25 @@ final class RemoteGenreListLoaderTests: XCTestCase {
             
             wait(for: [exp], timeout: 1.0)
         }
+    }
+    
+    func test_loadGenres_deliversDecodeErrorOn200() {
+        let (sut, spy) = makeSUT()
+        let invalidJSON = "invalid-json".data(using: .utf8)!
+        spy.stub = .just(makeResponse(statusCode: 200, data: invalidJSON))
+        
+        let exp = expectation(description: "wait from response")
+        sut.loadGenres()
+            .subscribe(
+                onFailure: { error in
+                    let receivedError = error as? NetworkError
+                    XCTAssertEqual(receivedError, .decodeError)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
     }
     
     //MARK: Helpers
