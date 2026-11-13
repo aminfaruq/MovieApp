@@ -16,6 +16,12 @@ public protocol HTTPClient {
     func get(from url: URL, apiKey: String) -> Single<Result>
 }
 
+public extension HTTPClient {
+    func get(from url: URL) -> Single<Result> {
+        get(from: url, apiKey: APIConfig.readAccessToken)
+    }
+}
+
 public final class URLSessionHTTPClient: HTTPClient {
     
     private let session: URLSession

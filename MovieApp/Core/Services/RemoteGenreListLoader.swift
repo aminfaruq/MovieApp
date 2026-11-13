@@ -28,7 +28,7 @@ public final class RemoteGenreListLoader: GenreListLoader {
             .appending(queryItems: [
                 URLQueryItem(name: "language", value: "en-US")
             ])
-        return client.get(from: requestedURL, apiKey: APIConfig.readAccessToken)
+        return client.get(from: requestedURL)
             .catch({ _ in
                 return .error(NetworkError.connectivity)
             })
