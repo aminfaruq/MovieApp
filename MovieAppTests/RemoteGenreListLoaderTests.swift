@@ -150,16 +150,16 @@ final class RemoteGenreListLoaderTests: XCTestCase {
     
     func test_loadGenres_deliversGenresOn200() {
         let (sut, spy) = makeSUT()
-        let genresJSON = [makeGenre(id: 1).json, makeGenre(id: 1).json]
-        let genresModel = [makeGenre(id: 1).model, makeGenre(id: 1).model]
-        let validJSON = makeGenres(genresJSON)
+        let genre1 = makeGenre(id: 28, name: "Action")
+        let genre2 = makeGenre(id: 12, name: "Adventure")
+        let validJSON = makeGenres([genre1.json, genre2.json])
         spy.stub = .just(makeResponse(statusCode: 200, data: validJSON))
         
         let exp = expectation(description: "wait from response")
         sut.loadGenres()
             .subscribe(
                 onSuccess: { result in
-                    XCTAssertEqual(result, genresModel)
+                    XCTAssertEqual(result, [genre1.model, genre2.model])
                     exp.fulfill()
                 }
             )
