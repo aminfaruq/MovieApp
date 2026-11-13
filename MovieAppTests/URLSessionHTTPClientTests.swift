@@ -31,10 +31,12 @@ final class URLSessionHTTPClient {
                     return
                 }
                 
-                guard let _ = response as? HTTPURLResponse else {
+                guard let data = data, let response = response as? HTTPURLResponse else {
                     single(.failure(UnexpectedValueRepresentation()))
                     return
                 }
+                
+                single(.success((data, response)))
             }
             
             task.resume()
@@ -114,6 +116,29 @@ final class URLSessionHTTPClientTests: XCTestCase {
             .subscribe(
                 onFailure: { error in
                     XCTAssertTrue(error is UnexpectedValueRepresentation)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_getFromURL_deliversResultsOnSuccess() {
+        let (data, response) = makeResponse(statusCode: 200)
+        
+        URLProtocolStub.stub = { request in
+            return (data, response)
+        }
+        
+        let exp = expectation(description: "wait from response")
+
+        makeSUT().get(from: anyURL(), apiKey: makeApiKey())
+            .subscribe(
+                onSuccess: { (receivedData, receivedResponse) in
+                    XCTAssertEqual(receivedData, data)
+                    XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
+                    XCTAssertEqual(receivedResponse.url, response.url)
                     exp.fulfill()
                 }
             )
