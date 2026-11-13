@@ -28,7 +28,11 @@ public enum NetworkError: Swift.Error, Equatable, LocalizedError {
     case invalidData(statusCode: Int)
 }
 
-final class RemoteGenreListLoader {
+public protocol GenreListLoader {
+    func loadGenres() -> Single<[GenreModel]>
+}
+
+public final class RemoteGenreListLoader: GenreListLoader {
     
     private let client: HTTPClient
     
@@ -36,7 +40,7 @@ final class RemoteGenreListLoader {
         self.client = client
     }
     
-    func loadGenres() -> Single<[GenreModel]> {
+    public func loadGenres() -> Single<[GenreModel]> {
         let requestedURL = APIConfig.baseURL
             .appending(path: "genre")
             .appending(path: "movie")
