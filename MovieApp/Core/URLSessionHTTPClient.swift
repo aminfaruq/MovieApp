@@ -10,7 +10,13 @@ import RxSwift
 
 public struct UnexpectedValueRepresentation: Error {}
 
-public final class URLSessionHTTPClient {
+public protocol HTTPClient {
+    typealias Result = (Data, HTTPURLResponse)
+    
+    func get(from url: URL, apiKey: String) -> Single<Result>
+}
+
+public final class URLSessionHTTPClient: HTTPClient {
     
     private let session: URLSession
     
@@ -18,7 +24,7 @@ public final class URLSessionHTTPClient {
         self.session = session
     }
     
-    public func get(from url: URL, apiKey: String) -> Single<(Data, HTTPURLResponse)> {
+    public func get(from url: URL, apiKey: String) -> Single<HTTPClient.Result> {
         var request = URLRequest(url: url)
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
