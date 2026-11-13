@@ -36,3 +36,7 @@ func anyData() -> Data {
     Data()
 }
 
+func makeApiKey() -> String {
+    let apiKey = "YOUR_TMDB_V4_READ_ACCESS_TOKEN"
+    return apiKey
+}

@@ -24,7 +24,10 @@ final class URLSessionHTTPClient {
         return Single.create { [session] single in
             
             let task = session.dataTask(with: request) { data, response, error in
-                
+                if let error {
+                    single(.failure(error))
+                    return
+                }
                 
             }
             
@@ -63,6 +66,29 @@ final class URLSessionHTTPClientTests: XCTestCase {
         
         makeSUT().get(from: url, apiKey: apiKey)
             .subscribe()
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_getFromURL_deliversErrorOnFailure() {
+        let expectedError = anyError()
+        
+        URLProtocolStub.stub = { request in
+            throw expectedError
+        }
+        
+        let exp = expectation(description: "wait from response")
+
+        makeSUT().get(from: anyURL(), apiKey: makeApiKey())
+            .subscribe(
+                onFailure: { error in
+                    let receivedError = error as NSError
+                    XCTAssertEqual(receivedError.domain, expectedError.domain)
+                    XCTAssertEqual(receivedError.code, expectedError.code)
+                    exp.fulfill()
+                }
+            )
             .disposed(by: disposeBag)
         
         wait(for: [exp], timeout: 1.0)
