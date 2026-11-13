@@ -22,10 +22,8 @@ public struct GenreModel: Equatable {
 
 public enum NetworkError: Swift.Error, Equatable, LocalizedError {
     case connectivity
-    case clientError(statusCode: Int)
-    case serverError(statusCode: Int)
-    case invalidData
     case decodeError
+    case invalidData(statusCode: Int)
 }
 
 final class RemoteGenreListLoader {
@@ -49,7 +47,7 @@ final class RemoteGenreListLoader {
                 return .error(NetworkError.connectivity)
             })
             .flatMap { (data, response) in
-                return .never()
+                return .error(NetworkError.invalidData(statusCode: response.statusCode))
             }
     }
 }
@@ -94,6 +92,29 @@ final class RemoteGenreListLoaderTests: XCTestCase {
             .disposed(by: disposeBag)
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_loadGenres_deliversErrorInvalidData() {
+        let (sut, spy) = makeSUT()
+        
+        let samples = [300, 400, 500, 599]
+        
+        samples.forEach { code in
+            spy.stub = .just(makeResponse(statusCode: code))
+            
+            let exp = expectation(description: "wait from response")
+            sut.loadGenres()
+                .subscribe(
+                    onFailure: { error in
+                        let receivedError = error as? NetworkError
+                        XCTAssertEqual(receivedError, .invalidData(statusCode: code))
+                        exp.fulfill()
+                    }
+                )
+                .disposed(by: disposeBag)
+            
+            wait(for: [exp], timeout: 1.0)
+        }
     }
     
     //MARK: Helpers
