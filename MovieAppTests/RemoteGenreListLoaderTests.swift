@@ -20,14 +20,6 @@ public struct GenreModel: Equatable {
     }
 }
 
-public enum NetworkError: Swift.Error, Equatable, LocalizedError {
-    case connectivity
-    case decodeError
-    case unauthorized
-    case notFound
-    case invalidData(statusCode: Int)
-}
-
 public protocol GenreListLoader {
     func loadGenres() -> Single<[GenreModel]>
 }
