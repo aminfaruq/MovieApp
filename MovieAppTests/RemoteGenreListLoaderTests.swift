@@ -10,16 +10,6 @@ import Foundation
 import XCTest
 import MovieApp
 
-public struct GenreModel: Equatable {
-    public let id: Int
-    public let name: String
-    
-    public init(id: Int, name: String) {
-        self.id = id
-        self.name = name
-    }
-}
-
 public protocol GenreListLoader {
     func loadGenres() -> Single<[GenreModel]>
 }
