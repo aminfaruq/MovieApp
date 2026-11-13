@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8380B08B30A6F73900601577 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8380B08A30A6F73900601577 /* RxSwift */; };
+		8380B08D30A6F73900601577 /* RxTest in Frameworks */ = {isa = PBXBuildFile; productRef = 8380B08C30A6F73900601577 /* RxTest */; };
+		8380B09030A6F75800601577 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8380B08F30A6F75800601577 /* Kingfisher */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		8380B07030A6F5FF00601577 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -53,6 +59,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8380B09030A6F75800601577 /* Kingfisher in Frameworks */,
+				8380B08B30A6F73900601577 /* RxSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8380B08D30A6F73900601577 /* RxTest in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +114,8 @@
 			);
 			name = MovieApp;
 			packageProductDependencies = (
+				8380B08A30A6F73900601577 /* RxSwift */,
+				8380B08F30A6F75800601577 /* Kingfisher */,
 			);
 			productName = MovieApp;
 			productReference = 8380B05030A6F31600601577 /* MovieApp.app */;
@@ -128,6 +139,7 @@
 			);
 			name = MovieAppTests;
 			packageProductDependencies = (
+				8380B08C30A6F73900601577 /* RxTest */,
 			);
 			productName = MovieAppTests;
 			productReference = 8380B06C30A6F5FF00601577 /* MovieAppTests.xctest */;
@@ -161,6 +173,10 @@
 			);
 			mainGroup = 8380B04730A6F31600601577;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8380B08930A6F73800601577 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				8380B08E30A6F75800601577 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8380B05130A6F31600601577 /* Products */;
 			projectDirPath = "";
@@ -489,6 +505,43 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8380B08930A6F73800601577 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.10.2;
+			};
+		};
+		8380B08E30A6F75800601577 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8380B08A30A6F73900601577 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8380B08930A6F73800601577 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		8380B08C30A6F73900601577 /* RxTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8380B08930A6F73800601577 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxTest;
+		};
+		8380B08F30A6F75800601577 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8380B08E30A6F75800601577 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8380B04830A6F31600601577 /* Project object */;
 }
