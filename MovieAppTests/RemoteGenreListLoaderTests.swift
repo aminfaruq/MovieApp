@@ -206,29 +206,4 @@ final class RemoteGenreListLoaderTests: XCTestCase {
         
         return (model, json)
     }
-    
-   
-    
-    private class HTTPClientSpy: HTTPClient {
-        
-        enum Message: Equatable {
-            case get(URL, apiKey: String)
-        }
-        
-        var stub: Single<HTTPClient.Result> = .never()
-        private(set) var messages = [Message]()
-        private(set) var loadCallCount = 0
-        private(set) var requestedURLs = [URL]()
-                
-        func get(from url: URL, apiKey: String) -> Single<HTTPClient.Result> {
-            loadCallCount += 1
-            messages.append(.get(url, apiKey: apiKey))
-            requestedURLs.append(url)
-            return stub
-        }
-    }
-}
-
-private func anyId() -> Int {
-    Int.random(in: 1...20)
 }
