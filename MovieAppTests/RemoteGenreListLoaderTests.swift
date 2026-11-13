@@ -20,6 +20,14 @@ public struct GenreModel: Equatable {
     }
 }
 
+public enum NetworkError: Swift.Error, Equatable, LocalizedError {
+    case connectivity
+    case clientError(statusCode: Int)
+    case serverError(statusCode: Int)
+    case invalidData
+    case decodeError
+}
+
 final class RemoteGenreListLoader {
     
     private let client: HTTPClient
@@ -37,6 +45,9 @@ final class RemoteGenreListLoader {
                 URLQueryItem(name: "language", value: "en-US")
             ])
         return client.get(from: requestedURL, apiKey: APIConfig.readAccessToken)
+            .catch({ _ in
+                return .error(NetworkError.connectivity)
+            })
             .flatMap { (data, response) in
                 return .never()
             }
@@ -67,6 +78,24 @@ final class RemoteGenreListLoaderTests: XCTestCase {
         XCTAssertEqual(spy.messages, [.get(expectedURL, apiKey: APIConfig.readAccessToken)])
     }
     
+    func test_loadGenres_deliversErrorConnectivity() {
+        let (sut, spy) = makeSUT()
+        spy.stub = .error(anyError())
+        
+        let exp = expectation(description: "wait from response")
+        sut.loadGenres()
+            .subscribe(
+                onFailure: { error in
+                    let receivedError = error as? NetworkError
+                    XCTAssertEqual(receivedError, .connectivity)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     //MARK: Helpers
     private func makeSUT(
         file: StaticString = #filePath,
@@ -88,7 +117,7 @@ final class RemoteGenreListLoaderTests: XCTestCase {
             case get(URL, apiKey: String)
         }
         
-        private var stub: Single<HTTPClient.Result> = .never()
+        var stub: Single<HTTPClient.Result> = .never()
         private(set) var messages = [Message]()
         private(set) var loadCallCount = 0
         private(set) var requestedURLs = [URL]()
