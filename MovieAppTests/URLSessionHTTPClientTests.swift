@@ -8,45 +8,7 @@
 import RxSwift
 import XCTest
 import Foundation
-
-struct UnexpectedValueRepresentation: Error {}
-
-final class URLSessionHTTPClient {
-    
-    private let session: URLSession
-    
-    init (session: URLSession = .shared) {
-        self.session = session
-    }
-    
-    func get(from url: URL, apiKey: String) -> Single<(Data, HTTPURLResponse)> {
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        return Single.create { [session] single in
-            
-            let task = session.dataTask(with: request) { data, response, error in
-                if let error {
-                    single(.failure(error))
-                    return
-                }
-                
-                guard let data = data, let response = response as? HTTPURLResponse else {
-                    single(.failure(UnexpectedValueRepresentation()))
-                    return
-                }
-                
-                single(.success((data, response)))
-            }
-            
-            task.resume()
-            
-            return Disposables.create {
-                task.cancel()
-            }
-        }
-    }
-}
+import MovieApp
 
 final class URLSessionHTTPClientTests: XCTestCase {
     
