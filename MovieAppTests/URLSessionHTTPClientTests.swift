@@ -9,6 +9,8 @@ import RxSwift
 import XCTest
 import Foundation
 
+struct UnexpectedValueRepresentation: Error {}
+
 final class URLSessionHTTPClient {
     
     private let session: URLSession
@@ -29,6 +31,10 @@ final class URLSessionHTTPClient {
                     return
                 }
                 
+                guard let _ = response as? HTTPURLResponse else {
+                    single(.failure(UnexpectedValueRepresentation()))
+                    return
+                }
             }
             
             task.resume()
@@ -86,6 +92,28 @@ final class URLSessionHTTPClientTests: XCTestCase {
                     let receivedError = error as NSError
                     XCTAssertEqual(receivedError.domain, expectedError.domain)
                     XCTAssertEqual(receivedError.code, expectedError.code)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_getFromURL_deliversUnexpectedValueRepresentation() {
+        let nonHTTPURLResponse = URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+        let data = "any-data".data(using: .utf8)!
+        
+        URLProtocolStub.stub = { request in
+            return (data, nonHTTPURLResponse)
+        }
+        
+        let exp = expectation(description: "wait from response")
+
+        makeSUT().get(from: anyURL(), apiKey: makeApiKey())
+            .subscribe(
+                onFailure: { error in
+                    XCTAssertTrue(error is UnexpectedValueRepresentation)
                     exp.fulfill()
                 }
             )
