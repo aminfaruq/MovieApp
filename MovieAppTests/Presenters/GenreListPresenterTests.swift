@@ -11,67 +11,6 @@ import RxTest
 import Foundation
 import MovieApp
 
-public protocol GenreListViewProtocol: AnyObject {
-    func display(isLoading: Bool)
-    func display(genres: [GenreModel])
-    func display(showErrorMessage: String)
-}
-
-public protocol GenreListRouterProtocol: AnyObject {
-    static func createModule() -> UIViewController
-    
-    func navigateToMovieList(view: GenreListViewProtocol?, id: Int)
-}
-
-public protocol GenreListPresenterProtocol: AnyObject {
-    var view: GenreListViewProtocol? { get set }
-    var interactor: GenreListInteractorProtocol? { get set }
-    var router: GenreListRouterProtocol? { get set }
-    
-    func viewDidLoad()
-    func didSelectGenre(id: Int)
-}
-
-public final class GenreListPresenter: GenreListPresenterProtocol {
-    public weak var view: GenreListViewProtocol?
-    public var interactor: GenreListInteractorProtocol?
-    public var router: GenreListRouterProtocol?
-    
-    private var scheduler: SchedulerType
-    
-    public init(scheduler: SchedulerType = MainScheduler.instance) {
-        self.scheduler = scheduler
-    }
-    
-    private let disposeBag = DisposeBag()
-    
-    public func viewDidLoad() {
-        view?.display(isLoading: true)
-        
-        interactor?.fetchGenres()
-            .observe(on: scheduler)
-            .subscribe(
-                onSuccess: { [weak self] result in
-                    guard let self = self else { return }
-                    
-                    view?.display(isLoading: false)
-                    view?.display(genres: result)
-                },
-                onFailure: { [weak self] error in
-                    guard let self = self else { return }
-                    
-                    view?.display(isLoading: false)
-                    view?.display(showErrorMessage: error.localizedDescription)
-                }
-            )
-            .disposed(by: disposeBag)
-    }
-    
-    public func didSelectGenre(id: Int) {
-        router?.navigateToMovieList(view: view, id: id)
-    }
-}
-
 final class GenreListPresenterTests: XCTestCase {
     
     func test_init_doesNotMessagesUponCreation() {
