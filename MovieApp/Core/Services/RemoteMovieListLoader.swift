@@ -8,7 +8,7 @@ import Foundation
 import RxSwift
 
 public protocol MovieListLoader {
-    func loadMovies(withGenres: Int, page: Int) -> Single<PaginatedResponseMovie>
+    func loadMovies(withGenres: Int, page: Int) -> Single<PaginatedResponseMovieModel>
 }
 
 public final class RemoteMovieListLoader: MovieListLoader {
@@ -19,7 +19,7 @@ public final class RemoteMovieListLoader: MovieListLoader {
         self.client = client
     }
     
-    public func loadMovies(withGenres: Int, page: Int) -> Single<PaginatedResponseMovie> {
+    public func loadMovies(withGenres: Int, page: Int) -> Single<PaginatedResponseMovieModel> {
         let requestedURL = APIConfig.baseURL
             .appending(path: "discover")
             .appending(path: "movie")
@@ -55,7 +55,7 @@ public final class RemoteMovieListLoader: MovieListLoader {
         private let total_pages: Int
         private let total_results: Int
         
-        func toModel() -> PaginatedResponseMovie {
+        func toModel() -> PaginatedResponseMovieModel {
             .init(
                 page: page,
                 totalPages: total_pages,

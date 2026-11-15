@@ -179,7 +179,7 @@ final class RemoteMovieListLoaderTests: XCTestCase {
         total_results: Int = 10000,
     ) -> (
         json: [String: Any],
-        model: PaginatedResponseMovie
+        model: PaginatedResponseMovieModel
     ) {
         let json: [String: Any] = [
             "page" : page,
@@ -187,7 +187,7 @@ final class RemoteMovieListLoaderTests: XCTestCase {
             "total_pages" : total_pages,
             "total_results" : total_results
         ]
-        let model = PaginatedResponseMovie(
+        let model = PaginatedResponseMovieModel(
             page: page,
             totalPages: total_pages,
             totalResults: total_results,

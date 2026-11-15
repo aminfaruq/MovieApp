@@ -6,7 +6,7 @@
 //
 import Foundation
 
-public struct PaginatedResponseMovie: Equatable {
+public struct PaginatedResponseMovieModel: Equatable {
     public let page: Int
     public let totalPages: Int
     public let totalResults: Int
