@@ -54,8 +54,20 @@ final class RemoteMovieDetailLoader {
                 URLQueryItem(name: "page", value: "\(page)")
             ])
         return client.get(from: requestedURL)
+            .catch({ _ in
+                return .error(NetworkError.connectivity)
+            })
             .flatMap { (data, response) in
-                return .never()
+                switch response.statusCode {
+                    case 200:
+                        return .error(NetworkError.decodeError)
+                    case 401:
+                        return .error(NetworkError.unauthorized)
+                    case 404:
+                        return .error(NetworkError.notFound)
+                    default:
+                        return .error(NetworkError.invalidData(statusCode: response.statusCode))
+                }
             }
     }
 }
@@ -258,6 +270,102 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
             .disposed(by: disposeBag)
         
         XCTAssertEqual(spy.messages, [.get(expectedURL, apiKey: APIConfig.readAccessToken)])
+    }
+    
+    func test_loadReviews_deliversErrorConnectivity() {
+        let (sut, spy) = makeSUT()
+        spy.stub = .error(anyError())
+        
+        let exp = expectation(description: "wait from response")
+        sut.loadReviews(id: 1, page: 1)
+            .subscribe(
+                onFailure: { error in
+                    let receivedError = error as? NetworkError
+                    XCTAssertEqual(receivedError, .connectivity)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_loadReviews_deliversErrorNotFound() {
+        let (sut, spy) = makeSUT()
+        spy.stub = .just(makeResponse(statusCode: 404))
+        
+        let exp = expectation(description: "wait from response")
+        sut.loadReviews(id: 1, page: 1)
+            .subscribe(
+                onFailure: { error in
+                    let receivedError = error as? NetworkError
+                    XCTAssertEqual(receivedError, .notFound)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_loadReviews_deliversErrorUnautorized() {
+        let (sut, spy) = makeSUT()
+        spy.stub = .just(makeResponse(statusCode: 401))
+        
+        let exp = expectation(description: "wait from response")
+        sut.loadReviews(id: 1, page: 1)
+            .subscribe(
+                onFailure: { error in
+                    let receivedError = error as? NetworkError
+                    XCTAssertEqual(receivedError, .unauthorized)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_loadReviews_deliversErrorInvalidData() {
+        let (sut, spy) = makeSUT()
+        
+        let samples = [300, 400, 500, 599]
+        
+        samples.forEach { code in
+            spy.stub = .just(makeResponse(statusCode: code))
+            
+            let exp = expectation(description: "wait from response")
+            sut.loadReviews(id: 1, page: 1)
+                .subscribe(
+                    onFailure: { error in
+                        let receivedError = error as? NetworkError
+                        XCTAssertEqual(receivedError, .invalidData(statusCode: code))
+                        exp.fulfill()
+                    }
+                )
+                .disposed(by: disposeBag)
+            
+            wait(for: [exp], timeout: 1.0)
+        }
+    }
+    
+    func test_loadReviews_deliversDecodeErrorOn200() {
+        let (sut, spy) = makeSUT()
+        let invalidJSON = "invalid-json".data(using: .utf8)!
+        spy.stub = .just(makeResponse(statusCode: 200, data: invalidJSON))
+        
+        let exp = expectation(description: "wait from response")
+        sut.loadReviews(id: 1, page: 1)
+            .subscribe(
+                onFailure: { error in
+                    let receivedError = error as? NetworkError
+                    XCTAssertEqual(receivedError, .decodeError)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
     }
     
     //MARK: Helpers
