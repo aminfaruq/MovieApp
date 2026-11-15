@@ -140,7 +140,7 @@ extension RemoteMovieDetailLoader {
             .init(
                 id: id,
                 username: author_details.username,
-                rating: "\(author_details.rating)",
+                rating: "\(author_details.rating ?? 0)",
                 content: content
             )
         }
@@ -148,7 +148,7 @@ extension RemoteMovieDetailLoader {
     
     private struct RemoteAuthorDetailDTO: Decodable {
         let username: String
-        let rating: Double
+        let rating: Int?
     }
 }
 
@@ -543,7 +543,7 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
     private func makeReview(
         id: String = "an-id",
         username: String = "username",
-        rating: Double = 9.9,
+        rating: Int = 9,
         content: String = "a content",
     ) -> (
         json: [String: Any],
