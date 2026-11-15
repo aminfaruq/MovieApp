@@ -12,7 +12,7 @@ public struct MovieDetailModel: Equatable {
     public let title: String
     public let tagline: String
     public let overview: String
-    public let releaseData: String
+    public let releaseDate: String
     public let runtime: String
     public let voteAverage: String
     public let genres: [GenreModel]
@@ -24,7 +24,7 @@ public struct MovieDetailModel: Equatable {
         title: String,
         tagline: String,
         overview: String,
-        releaseData: String,
+        releaseDate: String,
         runtime: String,
         voteAverage: String,
         genres: [GenreModel],
@@ -35,7 +35,7 @@ public struct MovieDetailModel: Equatable {
         self.title = title
         self.tagline = tagline
         self.overview = overview
-        self.releaseData = releaseData
+        self.releaseDate =         releaseDate
         self.runtime = runtime
         self.voteAverage = voteAverage
         self.genres = genres
