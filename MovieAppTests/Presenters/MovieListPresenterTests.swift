@@ -44,17 +44,19 @@ final class MovieListPresenter {
     private var currentPage = 1
     private var hasMore = true
     private var isLoadingMore = false
+    private var movies = [MovieModel]()
     private let disposeBag = DisposeBag()
     
     public func viewDidLoad() {
         view?.display(isLoading: true)
         
-        interactor?.fetchMovies(withGenres: genreId, page: 1)
+        interactor?.fetchMovies(withGenres: genreId, page: currentPage)
             .observe(on: scheduler)
             .subscribe(
                 onSuccess: { [weak self] response in
                     guard let self = self else { return }
                     hasMore = response.hasMore
+                    movies = response.results
                     view?.display(isLoading: false)
                     view?.display(movies: response.results)
                 },
@@ -84,7 +86,9 @@ final class MovieListPresenter {
                     hasMore = response.hasMore
                     currentPage = response.page
                     isLoadingMore = false
+                    movies.append(contentsOf: response.results)
                     view?.display(isPaginationLoading: false)
+                    view?.display(movies: movies)
                 },
                 onFailure: { [weak self] error in
                     guard let self = self else { return }
@@ -243,6 +247,47 @@ final class MovieListPresenterTests: XCTestCase {
             .fetchMovies(withGenres: id, page: 1),
             .fetchMovies(withGenres: id, page: 2)
         ])
+    }
+    
+    func test_didLoadMore_appendingNextPage() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        let movie1 = makeMovie()
+        let movie2 = makeMovie()
+        
+        spy.interactorStub = .just(makePage(model: [movie1], page: 1, total_pages: 2))
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        spy.interactorStub = .just(makePage(model: [movie2], page: 2, total_pages: 2))
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+        
+
+        XCTAssertEqual(spy.interactorCallCount, 2)
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovies(withGenres: id, page: 1),
+            .fetchMovies(withGenres: id, page: 2)
+        ])
+        XCTAssertTrue(spy.viewMessage.contains(.display(movies: [movie1, movie2])))
+    }
+    
+    func test_didLoadMore_retryAfterFailure() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        
+        spy.interactorStub = .just(makePage(model: [makeMovie()], page: 1, total_pages: 3))
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        spy.interactorStub = .error(anyError())
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+        
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+
+        XCTAssertEqual(spy.interactorCallCount, 3)
     }
        
     //MARK: Helpers
