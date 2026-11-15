@@ -23,10 +23,19 @@ public protocol GenreListRouterProtocol: AnyObject {
     func navigateToMovieList(view: GenreListViewProtocol?, id: Int)
 }
 
-final class GenreListPresenter {
-    weak var view: GenreListViewProtocol?
-    var interactor: GenreListInteractorProtocol?
-    var router: GenreListRouterProtocol?
+public protocol GenreListPresenterProtocol: AnyObject {
+    var view: GenreListViewProtocol? { get set }
+    var interactor: GenreListInteractorProtocol? { get set }
+    var router: GenreListRouterProtocol? { get set }
+    
+    func viewDidLoad()
+    func didSelectGenre(id: Int)
+}
+
+public final class GenreListPresenter: GenreListPresenterProtocol {
+    public weak var view: GenreListViewProtocol?
+    public var interactor: GenreListInteractorProtocol?
+    public var router: GenreListRouterProtocol?
     
     private var scheduler: SchedulerType
     
@@ -36,7 +45,7 @@ final class GenreListPresenter {
     
     private let disposeBag = DisposeBag()
     
-    func viewDidLoad() {
+    public func viewDidLoad() {
         view?.display(isLoading: true)
         
         interactor?.fetchGenres()
@@ -58,7 +67,7 @@ final class GenreListPresenter {
             .disposed(by: disposeBag)
     }
     
-    func didSelectGenre(id: Int) {
+    public func didSelectGenre(id: Int) {
         router?.navigateToMovieList(view: view, id: id)
     }
 }
