@@ -7,7 +7,11 @@
 import Foundation
 import RxSwift
 
-public final class RemoteMovieListLoader {
+public protocol MovieListLoader {
+    func loadMovies(withGenres: Int, page: Int) -> Single<PaginatedResponseMovie>
+}
+
+public final class RemoteMovieListLoader: MovieListLoader {
     
     private let client: HTTPClient
     
