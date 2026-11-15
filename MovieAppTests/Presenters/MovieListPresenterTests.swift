@@ -298,7 +298,7 @@ final class MovieListPresenterTests: XCTestCase {
         XCTAssertEqual(spy.interactorCallCount, 3)
     }
     
-    func test_didPullToRefresh_resetPageAndHasMoreWhenRefresh() {
+    func test_didPullToRefresh_resetCurrentPageWhenRefresh() {
         let id = anyId()
         let (sut, spy, scheduler) = makeSUT(id: id)
         
