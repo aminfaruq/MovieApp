@@ -7,6 +7,7 @@
 import MovieApp
 import XCTest
 import RxSwift
+import RxTest
 
 extension XCTestCase {
     func trackForMemoryLeaks(
@@ -64,3 +65,8 @@ class HTTPClientSpy: HTTPClient {
     }
 }
 
+extension TestScheduler {
+    func advanceBy(_ ticks: VirtualTime) {
+        advanceTo(clock + ticks)
+    }
+}
