@@ -42,7 +42,7 @@ public final class GenreListPresenter: GenreListPresenterProtocol {
             .disposed(by: disposeBag)
     }
     
-    public func didSelectGenre(id: Int) {
-        router?.navigateToMovieList(view: view, id: id)
+    public func didSelectGenre(genre: GenreModel) {
+        router?.navigateToMovieList(view: view, genre: genre)
     }
 }

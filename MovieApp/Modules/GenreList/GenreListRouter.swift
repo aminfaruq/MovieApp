@@ -24,7 +24,7 @@ final class GenreListRouter: GenreListRouterProtocol {
         return navigationController
     }
     
-    func navigateToMovieList(view: (any GenreListViewProtocol)?, id: Int) {
+    func navigateToMovieList(view: (any GenreListViewProtocol)?, genre: GenreModel) {
         
     }
     

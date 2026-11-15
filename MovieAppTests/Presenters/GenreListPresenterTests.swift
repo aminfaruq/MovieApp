@@ -52,12 +52,12 @@ final class GenreListPresenterTests: XCTestCase {
         ])
     }
     
-    func test_didSelectGenre_bringsIdToNavigate() {
+    func test_didSelectGenre_bringsGenreModel() {
         let (sut, spy, _) = makeSUT()
         
-        sut.didSelectGenre(id: 10)
+        sut.didSelectGenre(genre: GenreModel(id: 20, name: "anunaki"))
         
-        XCTAssertEqual(spy.loadRouterId, 10)
+        XCTAssertEqual(spy.routerMessages, [.observe(id: 20, title: "anunaki")])
     }
     
     func test_view_shouldHaveBeenDeallocatedWhenReleased() {
@@ -132,14 +132,19 @@ final class GenreListPresenterTests: XCTestCase {
         }
         
         //MARK: - Router
-        var loadRouterId = 0
+        enum RouterMessage: Equatable {
+            case observe(id: Int, title: String)
+        }
+        private(set) var routerMessages = [RouterMessage]()
+        
         static func createModule() -> UIViewController {
             UIViewController()
         }
         
-        func navigateToMovieList(view: (any GenreListViewProtocol)?, id: Int) {
-            loadRouterId = id
+        func navigateToMovieList(view: (any GenreListViewProtocol)?, genre: GenreModel) {
+            routerMessages.append(.observe(id: genre.id, title: genre.name))
         }
+        
     }
 
 }

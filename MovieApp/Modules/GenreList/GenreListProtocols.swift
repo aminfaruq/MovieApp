@@ -15,7 +15,7 @@ public protocol GenreListViewProtocol: AnyObject {
 public protocol GenreListRouterProtocol: AnyObject {
     static func createModule() -> UIViewController
     
-    func navigateToMovieList(view: GenreListViewProtocol?, id: Int)
+    func navigateToMovieList(view: GenreListViewProtocol?, genre: GenreModel)
 }
 
 public protocol GenreListPresenterProtocol: AnyObject {
@@ -24,5 +24,5 @@ public protocol GenreListPresenterProtocol: AnyObject {
     var router: GenreListRouterProtocol? { get set }
     
     func viewDidLoad()
-    func didSelectGenre(id: Int)
+    func didSelectGenre(genre: GenreModel)
 }
