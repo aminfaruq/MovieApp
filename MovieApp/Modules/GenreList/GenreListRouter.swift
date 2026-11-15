@@ -25,7 +25,10 @@ final class GenreListRouter: GenreListRouterProtocol {
     }
     
     func navigateToMovieList(view: (any GenreListViewProtocol)?, genre: GenreModel) {
+        guard let sourceView = view as? UIViewController else { return }
         
+        let view = MovieListRouter.createModule(genre: genre)
+        sourceView.navigationController?.pushViewController(view, animated: true)
     }
     
 }
