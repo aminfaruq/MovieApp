@@ -33,19 +33,8 @@ public final class RemoteGenreListLoader: GenreListLoader {
                 return .error(NetworkError.connectivity)
             })
             .flatMap { (data, response) in
-                
-                switch response.statusCode {
-                    case 200:
-                        guard let root = try? JSONDecoder().decode(RootDTO.self, from: data) else {
-                            return .error(NetworkError.decodeError)
-                        }
-                        return .just(root.genres.map { $0.toModel() })
-                    case 401:
-                        return .error(NetworkError.unauthorized)
-                    case 404:
-                        return .error(NetworkError.notFound)
-                    default:
-                        return .error(NetworkError.invalidData(statusCode: response.statusCode))
+                mapResponse(data: data, response: response) { (root: RootDTO) in
+                    root.genres.map { $0.toModel() }
                 }
             }
     }

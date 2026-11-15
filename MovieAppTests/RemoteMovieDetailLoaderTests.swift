@@ -29,18 +29,8 @@ final class RemoteMovieDetailLoader {
                 return .error(NetworkError.connectivity)
             })
             .flatMap { (data, response) in
-                switch response.statusCode {
-                    case 200:
-                        guard let root = try? JSONDecoder().decode(RootMovieDTO.self, from: data) else {
-                            return .error(NetworkError.decodeError)
-                        }
-                        return .just(root.toModel())
-                    case 401:
-                        return .error(NetworkError.unauthorized)
-                    case 404:
-                        return .error(NetworkError.notFound)
-                    default:
-                        return .error(NetworkError.invalidData(statusCode: response.statusCode))
+                mapResponse(data: data, response: response) { (root: RootMovieDTO) in
+                    root.toModel()
                 }
             }
     }
@@ -58,18 +48,8 @@ final class RemoteMovieDetailLoader {
                 return .error(NetworkError.connectivity)
             })
             .flatMap { (data, response) in
-                switch response.statusCode {
-                    case 200:
-                        guard let root = try? JSONDecoder().decode(RootReviewDTO.self, from: data) else {
-                            return .error(NetworkError.decodeError)
-                        }
-                        return .just(root.toModel())
-                    case 401:
-                        return .error(NetworkError.unauthorized)
-                    case 404:
-                        return .error(NetworkError.notFound)
-                    default:
-                        return .error(NetworkError.invalidData(statusCode: response.statusCode))
+                mapResponse(data: data, response: response) { (root: RootReviewDTO) in
+                    root.toModel()
                 }
             }
     }
