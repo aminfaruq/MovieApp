@@ -24,7 +24,7 @@ public protocol GenreListRouterProtocol: AnyObject {
 }
 
 final class GenreListPresenter {
-    var view: GenreListViewProtocol?
+    weak var view: GenreListViewProtocol?
     var interactor: GenreListInteractorProtocol?
     var router: GenreListRouterProtocol?
     
@@ -110,6 +110,18 @@ final class GenreListPresenterTests: XCTestCase {
         sut.didSelectGenre(id: 10)
         
         XCTAssertEqual(spy.loadRouterId, 10)
+    }
+    
+    func test_view_shouldHaveBeenDeallocatedWhenReleased() {
+        let (sut, _, _) = makeSUT()
+        
+        do {
+            let tempView = ViewSpy()
+            sut.view = tempView
+            XCTAssertNotNil(sut.view)
+        }
+        
+        XCTAssertNil(sut.view)
     }
     
     //MARK: Helpers
