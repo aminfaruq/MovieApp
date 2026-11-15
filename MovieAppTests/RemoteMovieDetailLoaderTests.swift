@@ -60,7 +60,10 @@ final class RemoteMovieDetailLoader {
             .flatMap { (data, response) in
                 switch response.statusCode {
                     case 200:
-                        return .error(NetworkError.decodeError)
+                        guard let root = try? JSONDecoder().decode(RootReviewDTO.self, from: data) else {
+                            return .error(NetworkError.decodeError)
+                        }
+                        return .just(root.toModel())
                     case 401:
                         return .error(NetworkError.unauthorized)
                     case 404:
@@ -108,6 +111,44 @@ extension RemoteMovieDetailLoader {
         func toModel() -> GenreModel {
             .init(id: id, name: name)
         }
+    }
+    
+    private struct RootReviewDTO: Decodable {
+        private let id: Int
+        private let page: Int
+        private let total_pages: Int
+        private let total_results: Int
+        private let results: [RemoteReviewDTO]
+        
+        func toModel() -> PaginatedResponseMovieReviewModel {
+            .init(
+                id: id,
+                page: page,
+                totalPages: total_pages,
+                totalResults: total_results,
+                results: results.map { $0.toModel() }
+            )
+        }
+    }
+    
+    private struct RemoteReviewDTO: Decodable {
+        private let id: String
+        private let content: String
+        private let author_details: RemoteAuthorDetailDTO
+        
+        func toModel() -> MovieReviewModel {
+            .init(
+                id: id,
+                username: author_details.username,
+                rating: "\(author_details.rating)",
+                content: content
+            )
+        }
+    }
+    
+    private struct RemoteAuthorDetailDTO: Decodable {
+        let username: String
+        let rating: Double
     }
 }
 
@@ -368,6 +409,34 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    @MainActor
+    func test_loadReviews_deliversResultsOn200StatusCode() {
+        let (sut, spy) = makeSUT()
+        let resultsJSON = [makeReview(id: "1").json, makeReview(id: "2").json]
+        let resultsModel = [makeReview(id: "1").model, makeReview(id: "2").model]
+        let page = makePageReviews(resultsJson: resultsJSON, resultsModel: resultsModel)
+        let validJSON = try! JSONSerialization.data(withJSONObject: page.json)
+        
+        spy.stub = .just(makeResponse(statusCode: 200, data: validJSON))
+
+        let exp = expectation(description: "wait from response")
+        sut.loadReviews(id: 1, page: 1)
+            .subscribe(
+                onSuccess: { result in
+                    XCTAssertEqual(result, page.model)
+                    XCTAssertEqual(result.results, page.model.results)
+                    XCTAssertEqual(result.results.first?.id, page.model.results.first?.id)
+                    XCTAssertEqual(result.results.first?.username, page.model.results.first?.username)
+                    XCTAssertEqual(result.results.first?.content, page.model.results.first?.content)
+                    XCTAssertEqual(result.results.first?.rating, page.model.results.first?.rating)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     //MARK: Helpers
     private func makeSUT(
         file: StaticString = #filePath,
@@ -440,5 +509,64 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
         let model = GenreModel(id: id, name: name)
         
         return (model, json)
+    }
+    
+    private func makePageReviews(
+        id: Int = anyId(),
+        page: Int = 1,
+        total_pages: Int = 1,
+        total_results: Int = 1,
+        resultsJson: [[String: Any]],
+        resultsModel: [MovieReviewModel]
+    ) -> (
+        model: PaginatedResponseMovieReviewModel,
+        json: [String: Any]
+    ) {
+        let json: [String: Any] = [
+            "id" : id,
+            "page" : page,
+            "results": resultsJson,
+            "total_pages": total_pages,
+            "total_results": total_results,
+        ]
+        
+        let model = PaginatedResponseMovieReviewModel(
+            id: id,
+            page: page,
+            totalPages: total_pages,
+            totalResults: total_results,
+            results: resultsModel)
+        
+        return (model, json)
+    }
+    
+    private func makeReview(
+        id: String = "an-id",
+        username: String = "username",
+        rating: Double = 9.9,
+        content: String = "a content",
+    ) -> (
+        json: [String: Any],
+        model: MovieReviewModel
+    ){
+        let authorDetailJSON: [String: Any] = [
+            "username": username,
+            "rating": rating
+        ]
+        
+        let json: [String: Any] = [
+            "id": id,
+            "content": content,
+            "author_details": authorDetailJSON
+        ]
+        
+        let model = MovieReviewModel(
+            id: id,
+            username: username,
+            rating: "\(rating)",
+            content: content
+        )
+        
+        return (json, model)
     }
 }
