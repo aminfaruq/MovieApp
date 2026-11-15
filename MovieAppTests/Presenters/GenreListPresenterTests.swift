@@ -57,6 +57,10 @@ final class GenreListPresenter {
             )
             .disposed(by: disposeBag)
     }
+    
+    func didSelectGenre(id: Int) {
+        router?.navigateToMovieList(view: view, id: id)
+    }
 }
 
 final class GenreListPresenterTests: XCTestCase {
@@ -98,6 +102,14 @@ final class GenreListPresenterTests: XCTestCase {
             .display(isLoading: false),
             .display(genres: genres)
         ])
+    }
+    
+    func test_didSelectGenre_bringsIdToNavigate() {
+        let (sut, spy, _) = makeSUT()
+        
+        sut.didSelectGenre(id: 10)
+        
+        XCTAssertEqual(spy.loadRouterId, 10)
     }
     
     //MARK: Helpers
