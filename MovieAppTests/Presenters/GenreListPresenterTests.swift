@@ -33,6 +33,24 @@ final class GenreListPresenter {
     public init(scheduler: SchedulerType = MainScheduler.instance) {
         self.scheduler = scheduler
     }
+    
+    private let disposeBag = DisposeBag()
+    
+    func viewDidLoad() {
+        view?.display(isLoading: true)
+        
+        interactor?.fetchGenres()
+            .observe(on: scheduler)
+            .subscribe(
+                onFailure: { [weak self] error in
+                    guard let self = self else { return }
+                    
+                    view?.display(isLoading: false)
+                    view?.display(showErrorMessage: error.localizedDescription)
+                }
+            )
+            .disposed(by: disposeBag)
+    }
 }
 
 final class GenreListPresenterTests: XCTestCase {
@@ -42,6 +60,22 @@ final class GenreListPresenterTests: XCTestCase {
         
         XCTAssertEqual(spy.interactorCallCount, 0)
         XCTAssertEqual(spy.viewMessage, [])
+    }
+    
+    func test_viewDidLoad_deliversErrorOnFailure() {
+        let (sut, spy, scheduler) = makeSUT()
+        let expectedError = anyError()
+        spy.interactorStub = .error(expectedError)
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertEqual(spy.interactorCallCount, 1)
+        XCTAssertEqual(spy.viewMessage, [
+            .display(isLoading: true),
+            .display(isLoading: false),
+            .display(showErrorMessage: expectedError.localizedDescription)
+        ])
     }
     
     //MARK: Helpers
