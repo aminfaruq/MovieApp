@@ -44,6 +44,20 @@ final class RemoteMovieDetailLoader {
                 }
             }
     }
+    
+    func loadReviews(id: Int, page: Int) -> Single<PaginatedResponseMovieReviewModel> {
+        let requestedURL = APIConfig.baseURL
+            .appending(path: "movie")
+            .appending(path: "\(id)")
+            .appending(path: "reviews")
+            .appending(queryItems: [
+                URLQueryItem(name: "page", value: "\(page)")
+            ])
+        return client.get(from: requestedURL)
+            .flatMap { (data, response) in
+                return .never()
+            }
+    }
 }
 
 extension RemoteMovieDetailLoader {
@@ -97,6 +111,7 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
         XCTAssertEqual(spy.messages, [])
     }
     
+    // MARK: - Load Movie
     func test_loadMovie_requestedFromURL() {
         let url = APIConfig.baseURL
         let (sut, spy) = makeSUT()
@@ -230,6 +245,19 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
             .disposed(by: disposeBag)
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    // MARK: - Load Review
+    func test_loadReviews_requestedFromURL() {
+        let url = APIConfig.baseURL
+        let (sut, spy) = makeSUT()
+        let expectedURL = URL(string: url.absoluteString + "/movie/693134/reviews?page=1")!
+        
+        sut.loadReviews(id: 693134, page: 1)
+            .subscribe()
+            .disposed(by: disposeBag)
+        
+        XCTAssertEqual(spy.messages, [.get(expectedURL, apiKey: APIConfig.readAccessToken)])
     }
     
     //MARK: Helpers
