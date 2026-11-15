@@ -13,4 +13,19 @@ public enum NetworkError: Swift.Error, Equatable, LocalizedError {
     case unauthorized
     case notFound
     case invalidData(statusCode: Int)
+    
+    public var errorDescription: String? {
+        switch self {
+            case .connectivity:
+                "failed to connect, please check your connection"
+            case .decodeError:
+                "failed to decode from server"
+            case .unauthorized:
+                "expired"
+            case .notFound:
+                "not found"
+            case .invalidData(let statusCode):
+                "invalid data with \(statusCode)"
+        }
+    }
 }
