@@ -14,4 +14,8 @@ final class DIFactory {
     static func createGenreListLoader() -> GenreListLoader {
         return RemoteGenreListLoader(client: createClient())
     }
+    
+    static func createMovieListLoader() -> MovieListLoader {
+        return RemoteMovieListLoader(client: createClient())
+    }
 }
