@@ -26,7 +26,7 @@ public protocol MovieListRouterProtocol: AnyObject {
 }
 
 final class MovieListPresenter {
-    var view: MovieListViewProtocol?
+    weak var view: MovieListViewProtocol?
     var interactor: MovieListInteractorProtocol?
     var router: MovieListRouterProtocol?
     
@@ -332,6 +332,18 @@ final class MovieListPresenterTests: XCTestCase {
         sut.didSelectMovie(id: id)
         
         XCTAssertEqual(spy.loadRouterId, id)
+    }
+    
+    func test_view_shouldHaveBeenDeallocatedWhenReleased() {
+        let (sut, _, _) = makeSUT()
+        
+        do {
+            let tempView = ViewSpy()
+            sut.view = tempView
+            XCTAssertNotNil(sut.view)
+        }
+        
+        XCTAssertNil(sut.view)
     }
        
     //MARK: Helpers
