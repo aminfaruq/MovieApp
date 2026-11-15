@@ -10,15 +10,18 @@ import Kingfisher
 
 class MovieCell: UITableViewCell {
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var releaseDateLabel: UILabel!
-    @IBOutlet weak var ratingLabel: UILabel!
-    @IBOutlet weak var overviewLabel: UILabel!
-    @IBOutlet weak var posterImageView: UIImageView!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var releaseDateLabel: UILabel!
+    @IBOutlet private weak var ratingLabel: UILabel!
+    @IBOutlet private weak var overviewLabel: UILabel!
+    @IBOutlet private weak var posterImageView: UIImageView!
+    
+    static let identifier = "MovieCell"
     
     override func awakeFromNib() {
         super.awakeFromNib()
         posterImageView.kf.cancelDownloadTask()
+        posterImageView.layer.cornerRadius = 8
         posterImageView.image = nil
     }
     
