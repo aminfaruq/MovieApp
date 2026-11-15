@@ -34,7 +34,10 @@ final class RemoteMovieListLoader {
             .flatMap { (data, response) in
                 switch response.statusCode {
                     case 200:
-                        return .error(NetworkError.decodeError)
+                        guard let root = try? JSONDecoder().decode(RootDTO.self, from: data) else {
+                            return .error(NetworkError.decodeError)
+                        }
+                        return .just(root.toModel())
                     case 401:
                         return .error(NetworkError.unauthorized)
                     case 404:
@@ -43,6 +46,42 @@ final class RemoteMovieListLoader {
                         return .error(NetworkError.invalidData(statusCode: response.statusCode))
                 }
             }
+    }
+    
+    private struct RootDTO: Decodable {
+        private let page: Int
+        private let results: [RemoteMovieDTO]
+        private let total_pages: Int
+        private let total_results: Int
+        
+        func toModel() -> PaginatedResponseMovie {
+            .init(
+                page: page,
+                totalPages: total_pages,
+                totalResults: total_results,
+                results: results.map { $0.toModel() }
+            )
+        }
+    }
+    
+    private struct RemoteMovieDTO: Decodable {
+        private let id: Int
+        private let title: String
+        private let overview: String
+        private let poster_path: String
+        private let release_date: String
+        private let vote_average: Double
+        
+        func toModel() -> MovieModel {
+            .init(
+                id: id,
+                title: title,
+                overview: overview,
+                posterPath: URL(string: APIConfig.imageBaseURL + poster_path) ?? URL(string: "about:blank")!,
+                releaseDate: release_date,
+                voteAverage: "\(vote_average)"
+            )
+        }
     }
 }
 
@@ -166,6 +205,32 @@ final class RemoteMovieListLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    @MainActor
+    func test_loadMovies_deliversMoviesOn200StatusCode() {
+        let (sut, spy) = makeSUT()
+        let moviesJSON = [makeMovie(id: 1).json, makeMovie(id: 2).json]
+        let moviesModel = [makeMovie(id: 1).model, makeMovie(id: 2).model]
+        let makePage = makePage(json: moviesJSON, model: moviesModel)
+        let validJSON = try! JSONSerialization.data(withJSONObject: makePage.json)
+        
+        spy.stub = .just(makeResponse(statusCode: 200, data: validJSON))
+        
+        let exp = expectation(description: "wait from response")
+        sut.loadMovies(withGenres: 1, page: 1)
+            .subscribe(
+                onSuccess: { page in
+                    XCTAssertEqual(page, makePage.model)
+                    XCTAssertEqual(page.results, moviesModel)
+                    XCTAssertEqual(page.totalPages, makePage.model.totalPages)
+                    XCTAssertEqual(page.totalResults, makePage.model.totalResults)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     //MARK: Helpers
     private func makeSUT(
         file: StaticString = #filePath,
@@ -179,6 +244,64 @@ final class RemoteMovieListLoaderTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(spy, file: file, line: line)
         return (sut, spy)
+    }
+    
+    private func makePage(
+        json: [[String: Any]],
+        model: [MovieModel],
+        page: Int = 1,
+        total_pages: Int = 500,
+        total_results: Int = 10000,
+    ) -> (
+        json: [String: Any],
+        model: PaginatedResponseMovie
+    ) {
+        let json: [String: Any] = [
+            "page" : page,
+            "results" : json,
+            "total_pages" : total_pages,
+            "total_results" : total_results
+        ]
+        let model = PaginatedResponseMovie(
+            page: page,
+            totalPages: total_pages,
+            totalResults: total_results,
+            results: model
+        )
+        
+        return (json, model)
+    }
+    
+    private func makeMovie(
+        id: Int = 1,
+        title: String = "a title",
+        overview: String = "lorem ipsum lorem ipsum",
+        posterPath: String = anyURL().absoluteString,
+        releaseDate: String = "2024-12-19",
+        voteAverage: Double = 7.8
+    ) -> (
+        json: [String: Any],
+        model: MovieModel
+    ) {
+        let model = MovieModel(
+            id: id,
+            title: title,
+            overview: overview,
+            posterPath: URL(string: APIConfig.imageBaseURL + posterPath)!,
+            releaseDate: releaseDate,
+            voteAverage: "\(voteAverage)"
+        )
+        
+        let json: [String: Any] = [
+            "id" : id,
+            "title" : title,
+            "overview" : overview,
+            "poster_path" : posterPath,
+            "release_date" : releaseDate,
+            "vote_average" : voteAverage,
+        ]
+        
+        return (json, model)
     }
     
 }
