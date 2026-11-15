@@ -8,7 +8,13 @@
 import Foundation
 import RxSwift
 
-public final class RemoteMovieDetailLoader {
+public protocol MovieDetailLoader {
+    func loadMovie(id: Int) -> Single<MovieDetailModel>
+    func loadReviews(id: Int, page: Int) -> Single<PaginatedResponseMovieReviewModel>
+    func loadTrailers(id: Int) -> Single<[TrailerModel]>
+}
+
+public final class RemoteMovieDetailLoader: MovieDetailLoader {
     
     private let client: HTTPClient
     
