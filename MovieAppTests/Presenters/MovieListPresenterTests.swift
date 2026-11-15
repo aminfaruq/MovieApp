@@ -30,10 +30,39 @@ final class MovieListPresenter {
     var interactor: MovieListInteractorProtocol?
     var router: MovieListRouterProtocol?
     
+    private var genreId: Int
     private var scheduler: SchedulerType
     
-    public init(scheduler: SchedulerType = MainScheduler.instance) {
+    public init(
+        genreId: Int,
+        scheduler: SchedulerType = MainScheduler.instance
+    ) {
         self.scheduler = scheduler
+        self.genreId = genreId
+    }
+    
+    private let disposeBag = DisposeBag()
+    
+    public func viewDidLoad() {
+        view?.display(isLoading: true)
+        
+        interactor?.fetchMovies(withGenres: genreId, page: 1)
+            .observe(on: scheduler)
+            .subscribe(
+                onSuccess: { [weak self] page in
+                    guard let self = self else { return }
+                    
+                    view?.display(isLoading: false)
+                    view?.display(movies: page.results)
+                },
+                onFailure: { [weak self] error in
+                    guard let self = self else { return }
+                    
+                    view?.display(isLoading: false)
+                    view?.display(showErrorMessage: error.localizedDescription)
+                }
+            )
+            .disposed(by: disposeBag)
     }
 }
 
@@ -46,9 +75,53 @@ final class MovieListPresenterTests: XCTestCase {
         XCTAssertEqual(spy.loadRouterId, 0)
         XCTAssertEqual(spy.viewMessage, [])
     }
+    
+    func test_viewDidLoad_deliversErrorOnFailure() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        
+        let expectedError = anyError()
+        spy.interactorStub = .error(expectedError)
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertEqual(spy.interactorCallCount, 1)
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovies(withGenres: id, page: 1)
+        ])
+        XCTAssertEqual(spy.viewMessage, [
+            .display(isLoading: true),
+            .display(isLoading: false),
+            .display(showErrorMessage: expectedError.localizedDescription)
+        ])
+    }
+    
+    func test_viewDidLoad_deliversResultOnSuccess() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        
+        let movie = makeMovie()
+        let page = makePage(model: [movie], page: 1, total_pages: 1)
+        spy.interactorStub = .just(page)
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertEqual(spy.interactorCallCount, 1)
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovies(withGenres: id, page: 1)
+        ])
+        XCTAssertEqual(spy.viewMessage, [
+            .display(isLoading: true),
+            .display(isLoading: false),
+            .display(movies: [movie])
+        ])
+    }
    
     //MARK: Helpers
     private func makeSUT(
+        id: Int = anyId(),
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> (
@@ -57,7 +130,7 @@ final class MovieListPresenterTests: XCTestCase {
         scheduler: TestScheduler
     ) {
         let scheduler = TestScheduler(initialClock: 0)
-        let sut = MovieListPresenter(scheduler: scheduler)
+        let sut = MovieListPresenter(genreId: id, scheduler: scheduler)
         let spy = ViewSpy()
         
         sut.view = spy
@@ -68,6 +141,42 @@ final class MovieListPresenterTests: XCTestCase {
         trackForMemoryLeaks(spy, file: file, line: line)
         
         return (sut, spy, scheduler)
+    }
+    
+    private func makePage(
+        model: [MovieModel],
+        page: Int,
+        total_pages: Int,
+        total_results: Int = 1,
+    ) -> PaginatedResponseMovieModel {
+        let model = PaginatedResponseMovieModel(
+            page: page,
+            totalPages: total_pages,
+            totalResults: total_results,
+            results: model
+        )
+        
+        return model
+    }
+    
+    private func makeMovie(
+        id: Int = 1,
+        title: String = "a title",
+        overview: String = "lorem ipsum lorem ipsum",
+        posterPath: String = anyURL().absoluteString,
+        releaseDate: String = "2024-12-19",
+        voteAverage: Double = 7.8
+    ) -> MovieModel {
+        let model = MovieModel(
+            id: id,
+            title: title,
+            overview: overview,
+            posterPath: URL(string: APIConfig.imageBaseURL + posterPath)!,
+            releaseDate: releaseDate,
+            voteAverage: "\(voteAverage)"
+        )
+            
+        return model
     }
     
     private class ViewSpy: MovieListViewProtocol, MovieListInteractorProtocol, MovieListRouterProtocol {
