@@ -31,18 +31,18 @@ public struct PaginatedResponseMovieReviewModel: Equatable {
 
 public struct MovieReviewModel: Equatable {
     public let id: String
-    public let userName: String
+    public let username: String
     public let rating: String
     public let content: String
     
     public init(
         id: String,
-        userName: String,
+        username: String,
         rating: String,
         content: String
     ) {
         self.id = id
-        self.userName = userName
+        self.username = username
         self.rating = rating
         self.content = content
     }
