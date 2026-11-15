@@ -42,6 +42,12 @@ final class GenreListPresenter {
         interactor?.fetchGenres()
             .observe(on: scheduler)
             .subscribe(
+                onSuccess: { [weak self] result in
+                    guard let self = self else { return }
+                    
+                    view?.display(isLoading: false)
+                    view?.display(genres: result)
+                },
                 onFailure: { [weak self] error in
                     guard let self = self else { return }
                     
@@ -78,6 +84,22 @@ final class GenreListPresenterTests: XCTestCase {
         ])
     }
     
+    func test_viewDidLoad_deliversResultsOnSuccess() {
+        let (sut, spy, scheduler) = makeSUT()
+        let genres = [makeGenre(), makeGenre()]
+        spy.interactorStub = .just(genres)
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertEqual(spy.interactorCallCount, 1)
+        XCTAssertEqual(spy.viewMessage, [
+            .display(isLoading: true),
+            .display(isLoading: false),
+            .display(genres: genres)
+        ])
+    }
+    
     //MARK: Helpers
     private func makeSUT(
         file: StaticString = #filePath,
@@ -99,6 +121,10 @@ final class GenreListPresenterTests: XCTestCase {
         trackForMemoryLeaks(spy, file: file, line: line)
         
         return (sut, spy, scheduler)
+    }
+    
+    private func makeGenre(id: Int = anyId(), name: String = "a-name") -> GenreModel {
+        .init(id: id, name: name)
     }
     
     private class ViewSpy: GenreListViewProtocol, GenreListInteractorProtocol, GenreListRouterProtocol {
