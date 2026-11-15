@@ -48,26 +48,7 @@ final class MovieListPresenter {
     private let disposeBag = DisposeBag()
     
     public func viewDidLoad() {
-        view?.display(isLoading: true)
-        
-        interactor?.fetchMovies(withGenres: genreId, page: currentPage)
-            .observe(on: scheduler)
-            .subscribe(
-                onSuccess: { [weak self] response in
-                    guard let self = self else { return }
-                    hasMore = response.hasMore
-                    movies = response.results
-                    view?.display(isLoading: false)
-                    view?.display(movies: response.results)
-                },
-                onFailure: { [weak self] error in
-                    guard let self = self else { return }
-                    
-                    view?.display(isLoading: false)
-                    view?.display(showErrorMessage: error.localizedDescription)
-                }
-            )
-            .disposed(by: disposeBag)
+        loadInitialRequest()
     }
     
     public func didLoadMore() {
@@ -95,6 +76,34 @@ final class MovieListPresenter {
                     
                     isLoadingMore = false
                     view?.display(isPaginationLoading: false)
+                    view?.display(showErrorMessage: error.localizedDescription)
+                }
+            )
+            .disposed(by: disposeBag)
+    }
+    
+    public func didPullToRefresh() {
+        loadInitialRequest()
+    }
+    
+    private func loadInitialRequest() {
+        currentPage = 1
+        view?.display(isLoading: true)
+        
+        interactor?.fetchMovies(withGenres: genreId, page: currentPage)
+            .observe(on: scheduler)
+            .subscribe(
+                onSuccess: { [weak self] response in
+                    guard let self = self else { return }
+                    hasMore = response.hasMore
+                    movies = response.results
+                    view?.display(isLoading: false)
+                    view?.display(movies: response.results)
+                },
+                onFailure: { [weak self] error in
+                    guard let self = self else { return }
+                    
+                    view?.display(isLoading: false)
                     view?.display(showErrorMessage: error.localizedDescription)
                 }
             )
@@ -273,8 +282,7 @@ final class MovieListPresenterTests: XCTestCase {
     }
     
     func test_didLoadMore_retryAfterFailure() {
-        let id = anyId()
-        let (sut, spy, scheduler) = makeSUT(id: id)
+        let (sut, spy, scheduler) = makeSUT()
         
         spy.interactorStub = .just(makePage(model: [makeMovie()], page: 1, total_pages: 3))
         sut.viewDidLoad()
@@ -288,6 +296,29 @@ final class MovieListPresenterTests: XCTestCase {
         scheduler.advanceBy(10)
 
         XCTAssertEqual(spy.interactorCallCount, 3)
+    }
+    
+    func test_didPullToRefresh_resetPageAndHasMoreWhenRefresh() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        
+        spy.interactorStub = .just(makePage(model: [makeMovie()], page: 1, total_pages: 3))
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        spy.interactorStub = .just(makePage(model: [makeMovie()], page: 2, total_pages: 3))
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+        
+        sut.didPullToRefresh()
+        scheduler.advanceBy(10)
+
+        XCTAssertEqual(spy.interactorCallCount, 3)
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovies(withGenres: id, page: 1),
+            .fetchMovies(withGenres: id, page: 2),
+            .fetchMovies(withGenres: id, page: 1)
+        ])
     }
        
     //MARK: Helpers
