@@ -74,7 +74,7 @@ extension GenreListViewController: GenreListViewProtocol {
     
     func display(showErrorMessage: String) {
         let alert = UIAlertController(title: "Alert", message: showErrorMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("retry", comment: "Default action"), style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
             self.presenter?.viewDidLoad()
         }))
