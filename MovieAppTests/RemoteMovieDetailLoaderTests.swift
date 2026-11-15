@@ -69,7 +69,7 @@ final class RemoteMovieDetailLoader {
             })
             .flatMap { (data, response) in
                 mapResponse(data: data, response: response) { (root: RootTrailerDTO) in
-                    return []
+                    root.results.map { $0.toModel() }
                 }
             }
     }
@@ -151,7 +151,31 @@ extension RemoteMovieDetailLoader {
         let rating: Int?
     }
     
-    private struct RootTrailerDTO: Decodable {}
+    private struct RootTrailerDTO: Decodable {
+        let results: [RemoteTrailerDTO]
+    }
+    
+    private struct RemoteTrailerDTO: Decodable {
+        private let id: String
+        private let name: String
+        private let key: String
+        private let site: String
+        private let size: Int
+        private let type: String
+        private let official: Bool
+        
+        func toModel() -> TrailerModel {
+            .init(
+                id: id,
+                name: name,
+                key: key,
+                site: site,
+                size: size,
+                type: type,
+                official: official
+            )
+        }
+    }
 }
 
 final class RemoteMovieDetailLoaderTests: XCTestCase {
@@ -549,6 +573,27 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    @MainActor
+    func test_loadTrailers_deliversResultsOn200StatusCode() {
+        let (sut, spy) = makeSUT()
+        let trailer = makeTrailer()
+        let validJSON = makeTrailers([trailer.json])
+        
+        spy.stub = .just(makeResponse(statusCode: 200, data: validJSON))
+        
+        let exp = expectation(description: "wait from response")
+        sut.loadTrailers(id: 693134)
+            .subscribe(
+                onSuccess: { result in
+                    XCTAssertEqual(result, [trailer.model])
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     //MARK: Helpers
     private func makeSUT(
         file: StaticString = #filePath,
@@ -680,5 +725,44 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
         )
         
         return (json, model)
+    }
+    
+    private func makeTrailers(_ results: [[String: Any]]) -> Data {
+        let json: [String: Any] = [
+            "results": results
+        ]
+        return try! JSONSerialization.data(withJSONObject: json)
+    }
+    
+    private func makeTrailer(
+        id: String = "65a8b2104b0c63012f6e1a2b",
+        name: String =  "Official Trailer",
+        key: String = "Way9Dexny3w",
+        site: String = "YouTube",
+        size: Int = 1080,
+        type: String = "Trailer",
+        official: Bool = true
+    ) -> (model: TrailerModel, json: [String: Any]) {
+        let model = TrailerModel(
+            id: id,
+            name: name,
+            key: key,
+            site: site,
+            size: size,
+            type: type,
+            official: official
+        )
+        
+        let json: [String: Any] = [
+            "id": id,
+            "name": name,
+            "key": key,
+            "site": site,
+            "size": size,
+            "type": type,
+            "official": official
+        ]
+        
+        return (model, json)
     }
 }
