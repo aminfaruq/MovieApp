@@ -12,6 +12,11 @@ public struct PaginatedResponseMovieModel: Equatable {
     public let totalResults: Int
     public let results: [MovieModel]
     
+    var hasMore: Bool {
+        let maxAllowedPage = min(totalPages, 500)
+        return page < maxAllowedPage
+    }
+    
     public init(page: Int, totalPages: Int, totalResults: Int, results: [MovieModel]) {
         self.page = page
         self.totalPages = totalPages
