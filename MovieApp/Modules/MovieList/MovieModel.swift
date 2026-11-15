@@ -12,7 +12,7 @@ public struct PaginatedResponseMovieModel: Equatable {
     public let totalResults: Int
     public let results: [MovieModel]
     
-    var hasMore: Bool {
+    public var hasMore: Bool {
         let maxAllowedPage = min(totalPages, 500)
         return page < maxAllowedPage
     }
