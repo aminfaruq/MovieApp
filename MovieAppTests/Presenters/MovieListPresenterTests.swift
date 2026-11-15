@@ -25,10 +25,21 @@ public protocol MovieListRouterProtocol: AnyObject {
     func navigateToDetail(view: MovieListViewProtocol?, id: Int)
 }
 
-final class MovieListPresenter {
-    weak var view: MovieListViewProtocol?
-    var interactor: MovieListInteractorProtocol?
-    var router: MovieListRouterProtocol?
+public protocol MovieListPresenterProtocol: AnyObject {
+    var view: MovieListViewProtocol? { get set }
+    var interactor: MovieListInteractorProtocol? { get set }
+    var router: MovieListRouterProtocol? { get set }
+    
+    func viewDidLoad()
+    func didLoadMore()
+    func didPullToRefresh()
+    func didSelectMovie(id: Int)
+}
+
+public final class MovieListPresenter: MovieListPresenterProtocol {
+    public weak var view: MovieListViewProtocol?
+    public var interactor: MovieListInteractorProtocol?
+    public var router: MovieListRouterProtocol?
     
     private var genreId: Int
     private var scheduler: SchedulerType
