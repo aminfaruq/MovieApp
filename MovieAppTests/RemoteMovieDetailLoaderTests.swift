@@ -53,6 +53,21 @@ final class RemoteMovieDetailLoader {
                 }
             }
     }
+    
+    func loadTrailers(id: Int) -> Single<[TrailerModel]> {
+        let requestedURL = APIConfig.baseURL
+            .appending(path: "movie")
+            .appending(path: "\(id)")
+            .appending(path: "videos")
+            .appending(queryItems: [
+                URLQueryItem(name: "language", value: "en-US")
+            ])
+        
+        return client.get(from: requestedURL)
+            .flatMap { (data, response) in
+                return .never()
+            }
+    }
 }
 
 extension RemoteMovieDetailLoader {
@@ -415,6 +430,19 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
             .disposed(by: disposeBag)
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    //MARK: Trailer
+    func test_loadTrailers_requestedFromURL() {
+        let url = APIConfig.baseURL
+        let (sut, spy) = makeSUT()
+        let expectedURL = URL(string: url.absoluteString + "/movie/693134/videos?language=en-US")!
+        
+        sut.loadTrailers(id: 693134)
+            .subscribe()
+            .disposed(by: disposeBag)
+        
+        XCTAssertEqual(spy.messages, [.get(expectedURL, apiKey: APIConfig.readAccessToken)])
     }
     
     //MARK: Helpers
