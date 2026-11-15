@@ -11,7 +11,7 @@ public protocol MovieListInteractorProtocol: AnyObject {
     func fetchMovies(withGenres: Int, page: Int) -> Single<PaginatedResponseMovieModel>
 }
 
-public final class MovieListInteractor {
+public final class MovieListInteractor: MovieListInteractorProtocol{
     
     private let loader: MovieListLoader
     
