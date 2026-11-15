@@ -86,6 +86,10 @@ final class MovieListPresenter {
         loadInitialRequest()
     }
     
+    public func didSelectMovie(id: Int) {
+        router?.navigateToDetail(view: view, id: id)
+    }
+    
     private func loadInitialRequest() {
         currentPage = 1
         view?.display(isLoading: true)
@@ -319,6 +323,15 @@ final class MovieListPresenterTests: XCTestCase {
             .fetchMovies(withGenres: id, page: 2),
             .fetchMovies(withGenres: id, page: 1)
         ])
+    }
+    
+    func test_didSelectMovie_navigateToDetail() {
+        let (sut, spy, _) = makeSUT()
+        
+        let id = anyId()
+        sut.didSelectMovie(id: id)
+        
+        XCTAssertEqual(spy.loadRouterId, id)
     }
        
     //MARK: Helpers
