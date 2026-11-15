@@ -31,7 +31,10 @@ final class RemoteMovieDetailLoader {
             .flatMap { (data, response) in
                 switch response.statusCode {
                     case 200:
-                        return .error(NetworkError.decodeError)
+                        guard let root = try? JSONDecoder().decode(RootMovieDTO.self, from: data) else {
+                            return .error(NetworkError.decodeError)
+                        }
+                        return .just(root.toModel())
                     case 401:
                         return .error(NetworkError.unauthorized)
                     case 404:
@@ -40,6 +43,45 @@ final class RemoteMovieDetailLoader {
                         return .error(NetworkError.invalidData(statusCode: response.statusCode))
                 }
             }
+    }
+}
+
+extension RemoteMovieDetailLoader {
+    private struct RootMovieDTO: Decodable {
+        private let id: Int
+        private let title: String
+        private let tagline: String
+        private let overview: String
+        private let release_date: String
+        private let runtime: Int
+        private let vote_average: Double
+        private let genres: [RemoteGenreDTO]
+        private let poster_path: String
+        private let backdrop_path: String
+        
+        func toModel() -> MovieDetailModel {
+            .init(
+                id: id,
+                title: title,
+                tagline: tagline,
+                overview: overview,
+                releaseDate: "\(release_date)",
+                runtime: "\(runtime)",
+                voteAverage: "\(vote_average)",
+                genres: genres.map { $0.toModel() },
+                posterPath: URL(string: APIConfig.imageBaseURL + poster_path) ?? URL(string: "about:blank")!,
+                backdropPath: URL(string: APIConfig.imageBaseURL + backdrop_path) ?? URL(string: "about:blank")!
+            )
+        }
+    }
+    
+    private struct RemoteGenreDTO: Decodable {
+        private let id: Int
+        private let name: String
+        
+        func toModel() -> GenreModel {
+            .init(id: id, name: name)
+        }
     }
 }
 
@@ -163,6 +205,33 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_loadMovie_deliversResultsOn200StatusCode() {
+        let (sut, spy) = makeSUT()
+        let movie = makeMovie(genresJSON: [makeGenre(id: 1).json], genresModel: [makeGenre(id: 1).model])
+        let validJSON = try! JSONSerialization.data(withJSONObject: movie.json)
+        spy.stub = .just(makeResponse(statusCode: 200, data: validJSON))
+        
+        let exp = expectation(description: "wait from response")
+        sut.loadMovie(id: 1)
+            .subscribe(
+                onSuccess: { result in
+                    XCTAssertEqual(result.id, movie.model.id)
+                    XCTAssertEqual(result.backdropPath, movie.model.backdropPath)
+                    XCTAssertEqual(result.posterPath, movie.model.posterPath)
+                    XCTAssertEqual(result.tagline, movie.model.tagline)
+                    XCTAssertEqual(result.overview, movie.model.overview)
+                    XCTAssertEqual(result.releaseDate, movie.model.releaseDate)
+                    XCTAssertEqual(result.runtime, movie.model.runtime)
+                    XCTAssertEqual(result.voteAverage, movie.model.voteAverage)
+                    XCTAssertEqual(result.genres, movie.model.genres)
+                    exp.fulfill()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     //MARK: Helpers
     private func makeSUT(
         file: StaticString = #filePath,
@@ -176,5 +245,64 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(spy, file: file, line: line)
         return (sut, spy)
+    }
+    
+    private func makeMovie(
+        id: Int = 1,
+        title: String = "a-title",
+        tagline: String = "a-tagline",
+        overview: String = "a-overview",
+        releaseDate: String = "a-releaseDate",
+        runtime: Int = 459,
+        voteAverage: Double = 9.9,
+        posterPath: String = "a-posterPath",
+        backdropPath: String = "a-backdropPath",
+        genresJSON: [[String: Any]],
+        genresModel: [GenreModel]
+    ) -> (
+        json: [String: Any],
+        model: MovieDetailModel
+    ) {
+        let model = MovieDetailModel(
+            id: id,
+            title: title,
+            tagline: tagline,
+            overview: overview,
+            releaseDate: releaseDate,
+            runtime: "\(runtime)",
+            voteAverage: "\(voteAverage)",
+            genres: genresModel,
+            posterPath: URL(string: APIConfig.imageBaseURL + posterPath)!,
+            backdropPath: URL(string: APIConfig.imageBaseURL + backdropPath)!
+        )
+        
+        let json: [String: Any] = [
+            "id": id,
+            "title": title,
+            "tagline": tagline,
+            "overview": overview,
+            "release_date": releaseDate,
+            "runtime": runtime,
+            "vote_average": voteAverage,
+            "genres": genresJSON,
+            "poster_path": posterPath,
+            "backdrop_path": backdropPath
+        ]
+        
+        return (json, model)
+    }
+    
+    private func makeGenre(
+        id: Int = anyId(),
+        name: String = "adventure"
+    ) -> (model: GenreModel, json: [String: Any]) {
+        let json: [String: Any] = [
+            "id" : id,
+            "name" : name
+        ]
+        
+        let model = GenreModel(id: id, name: name)
+        
+        return (model, json)
     }
 }
