@@ -41,6 +41,7 @@ final class MovieListPresenter {
         self.genreId = genreId
     }
     
+    private var currentPage = 1
     private let disposeBag = DisposeBag()
     
     public func viewDidLoad() {
@@ -59,6 +60,29 @@ final class MovieListPresenter {
                     guard let self = self else { return }
                     
                     view?.display(isLoading: false)
+                    view?.display(showErrorMessage: error.localizedDescription)
+                }
+            )
+            .disposed(by: disposeBag)
+    }
+    
+    public func didLoadMore() {
+        let nextPage = currentPage + 1
+        view?.display(isPaginationLoading: true)
+        
+        interactor?.fetchMovies(withGenres: genreId, page: nextPage)
+            .observe(on: scheduler)
+            .subscribe(
+                onSuccess: { [weak self] response in
+                    guard let self = self else { return }
+                    
+                    currentPage = response.page
+                    view?.display(isPaginationLoading: false)
+                },
+                onFailure: { [weak self] error in
+                    guard let self = self else { return }
+                    
+                    view?.display(isPaginationLoading: false)
                     view?.display(showErrorMessage: error.localizedDescription)
                 }
             )
@@ -118,6 +142,34 @@ final class MovieListPresenterTests: XCTestCase {
             .display(movies: [movie])
         ])
     }
+    
+    func test_didLoadMore_requestNextPage() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        
+        let movie = makeMovie()
+        spy.interactorStub = .just(makePage(model: [movie], page: 1, total_pages: 3))
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        spy.interactorStub = .just(makePage(model: [movie], page: 2, total_pages: 3))
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+        
+        spy.interactorStub = .just(makePage(model: [movie], page: 3, total_pages: 3))
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+
+        XCTAssertEqual(spy.interactorCallCount, 3)
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovies(withGenres: id, page: 1),
+            .fetchMovies(withGenres: id, page: 2),
+            .fetchMovies(withGenres: id, page: 3)
+        ])
+        XCTAssertTrue(spy.viewMessage.contains(.display(isPaginationLoading: true)))
+        XCTAssertTrue(spy.viewMessage.contains(.display(isPaginationLoading: false)))
+    }
+    
    
     //MARK: Helpers
     private func makeSUT(
