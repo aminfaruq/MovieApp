@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GenreListViewController" customModule="MovieApp" customModuleProvider="target">
+            <connections>
+                <outlet property="activityIndicatorView" destination="43G-90-odc" id="pcB-rA-ngN"/>
+                <outlet property="tableView" destination="KLl-ip-tae" id="5O6-xO-xa3"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="KLl-ip-tae">
+                    <rect key="frame" x="0.0" y="182" width="393" height="602"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a movie genre to explore" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BS8-jW-0EI">
+                    <rect key="frame" x="16" y="149" width="361" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="43G-90-odc">
+                    <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                </activityIndicatorView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Genres" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bnX-6A-KgD">
+                    <rect key="frame" x="16" y="106" width="361" height="39"/>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="32"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="43G-90-odc" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="AVT-WC-0re"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="KLl-ip-tae" secondAttribute="trailing" id="D3H-qZ-CrB"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="KLl-ip-tae" secondAttribute="bottom" id="Fww-2H-rmu"/>
+                <constraint firstItem="BS8-jW-0EI" firstAttribute="top" secondItem="bnX-6A-KgD" secondAttribute="bottom" constant="4" id="H84-AB-MYK"/>
+                <constraint firstItem="bnX-6A-KgD" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="-12" id="LcH-EZ-cYb"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="bnX-6A-KgD" secondAttribute="trailing" constant="16" id="Lyb-cc-Klu"/>
+                <constraint firstItem="KLl-ip-tae" firstAttribute="top" secondItem="BS8-jW-0EI" secondAttribute="bottom" constant="12" id="Z1b-y1-aFx"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="BS8-jW-0EI" secondAttribute="trailing" constant="16" id="d4P-he-3v5"/>
+                <constraint firstItem="BS8-jW-0EI" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="rFM-OY-oMx"/>
+                <constraint firstItem="43G-90-odc" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="stz-mI-NCE"/>
+                <constraint firstItem="KLl-ip-tae" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="tOX-Wd-eSj"/>
+                <constraint firstItem="bnX-6A-KgD" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="xwU-rS-WQQ"/>
+            </constraints>
+            <point key="canvasLocation" x="138" y="154"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

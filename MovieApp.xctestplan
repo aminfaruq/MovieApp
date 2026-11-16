@@ -9,12 +9,22 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:MovieApp.xcodeproj",
+          "identifier" : "8380B04F30A6F31600601577",
+          "name" : "MovieApp"
+        }
+      ]
+    },
     "performanceAntipatternCheckerEnabled" : true,
     "targetForVariableExpansion" : {
       "containerPath" : "container:MovieApp.xcodeproj",
       "identifier" : "8380B04F30A6F31600601577",
       "name" : "MovieApp"
-    }
+    },
+    "testExecutionOrdering" : "random"
   },
   "testTargets" : [
     {

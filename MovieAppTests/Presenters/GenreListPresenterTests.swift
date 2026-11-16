@@ -1,0 +1,150 @@
+//
+//  GenreListPresenterTests.swift
+//  MovieApp
+//
+//  Created by Amin faruq on 15/11/26.
+//
+
+import XCTest
+import RxSwift
+import RxTest
+import Foundation
+import MovieApp
+
+final class GenreListPresenterTests: XCTestCase {
+    
+    func test_init_doesNotMessagesUponCreation() {
+        let (_, spy, _) = makeSUT()
+        
+        XCTAssertEqual(spy.interactorCallCount, 0)
+        XCTAssertEqual(spy.viewMessage, [])
+    }
+    
+    func test_viewDidLoad_deliversErrorOnFailure() {
+        let (sut, spy, scheduler) = makeSUT()
+        let expectedError = anyError()
+        spy.interactorStub = .error(expectedError)
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertEqual(spy.interactorCallCount, 1)
+        XCTAssertEqual(spy.viewMessage, [
+            .display(isLoading: true),
+            .display(isLoading: false),
+            .display(showErrorMessage: expectedError.localizedDescription)
+        ])
+    }
+    
+    func test_viewDidLoad_deliversResultsOnSuccess() {
+        let (sut, spy, scheduler) = makeSUT()
+        let genres = [makeGenre(), makeGenre()]
+        spy.interactorStub = .just(genres)
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertEqual(spy.interactorCallCount, 1)
+        XCTAssertEqual(spy.viewMessage, [
+            .display(isLoading: true),
+            .display(isLoading: false),
+            .display(genres: genres)
+        ])
+    }
+    
+    func test_didSelectGenre_bringsGenreModel() {
+        let (sut, spy, _) = makeSUT()
+        
+        sut.didSelectGenre(genre: GenreModel(id: 20, name: "anunaki"))
+        
+        XCTAssertEqual(spy.routerMessages, [.observe(id: 20, title: "anunaki")])
+    }
+    
+    func test_view_shouldHaveBeenDeallocatedWhenReleased() {
+        let (sut, _, _) = makeSUT()
+        
+        do {
+            let tempView = ViewSpy()
+            sut.view = tempView
+            XCTAssertNotNil(sut.view)
+        }
+        
+        XCTAssertNil(sut.view)
+    }
+    
+    //MARK: Helpers
+    private func makeSUT(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> (
+        sut: GenreListPresenter,
+        spy: ViewSpy,
+        scheduler: TestScheduler
+    ) {
+        let scheduler = TestScheduler(initialClock: 0)
+        let sut = GenreListPresenter(scheduler: scheduler)
+        let spy = ViewSpy()
+        
+        sut.view = spy
+        sut.interactor = spy
+        sut.router = spy
+        
+        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(spy, file: file, line: line)
+        
+        return (sut, spy, scheduler)
+    }
+    
+    private func makeGenre(id: Int = anyId(), name: String = "a-name") -> GenreModel {
+        .init(id: id, name: name)
+    }
+    
+    private class ViewSpy: GenreListViewProtocol, GenreListInteractorProtocol, GenreListRouterProtocol {
+    
+        //MARK: - View
+        enum ViewMessage: Equatable {
+            case display(isLoading: Bool)
+            case display(genres: [GenreModel])
+            case display(showErrorMessage: String)
+        }
+        private(set) var viewMessage = [ViewMessage]()
+        
+        func display(isLoading: Bool) {
+            viewMessage.append(.display(isLoading: isLoading))
+        }
+        
+        func display(genres: [GenreModel]) {
+            viewMessage.append(.display(genres: genres))
+        }
+        
+        func display(showErrorMessage: String) {
+            viewMessage.append(.display(showErrorMessage: showErrorMessage))
+        }
+        
+        //MARK: - Interactor
+        private(set) var interactorCallCount = 0
+        var interactorStub: Single<[GenreModel]> = .never()
+        
+        
+        func fetchGenres() -> Single<[GenreModel]> {
+            interactorCallCount += 1
+            return interactorStub
+        }
+        
+        //MARK: - Router
+        enum RouterMessage: Equatable {
+            case observe(id: Int, title: String)
+        }
+        private(set) var routerMessages = [RouterMessage]()
+        
+        static func createModule() -> UIViewController {
+            UIViewController()
+        }
+        
+        func navigateToMovieList(view: (any GenreListViewProtocol)?, genre: GenreModel) {
+            routerMessages.append(.observe(id: genre.id, title: genre.name))
+        }
+        
+    }
+
+}

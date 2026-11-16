@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		837432A730AAE08900243158 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 837432A630AAE08900243158 /* SnapKit */; };
 		8380B08B30A6F73900601577 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8380B08A30A6F73900601577 /* RxSwift */; };
 		8380B08D30A6F73900601577 /* RxTest in Frameworks */ = {isa = PBXBuildFile; productRef = 8380B08C30A6F73900601577 /* RxTest */; };
 		8380B09030A6F75800601577 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8380B08F30A6F75800601577 /* Kingfisher */; };
@@ -59,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				837432A730AAE08900243158 /* SnapKit in Frameworks */,
 				8380B09030A6F75800601577 /* Kingfisher in Frameworks */,
 				8380B08B30A6F73900601577 /* RxSwift in Frameworks */,
 			);
@@ -116,6 +118,7 @@
 			packageProductDependencies = (
 				8380B08A30A6F73900601577 /* RxSwift */,
 				8380B08F30A6F75800601577 /* Kingfisher */,
+				837432A630AAE08900243158 /* SnapKit */,
 			);
 			productName = MovieApp;
 			productReference = 8380B05030A6F31600601577 /* MovieApp.app */;
@@ -176,6 +179,7 @@
 			packageReferences = (
 				8380B08930A6F73800601577 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				8380B08E30A6F75800601577 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				837432A530AAE08900243158 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8380B05130A6F31600601577 /* Products */;
@@ -507,6 +511,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		837432A530AAE08900243158 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		8380B08930A6F73800601577 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
@@ -526,6 +538,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		837432A630AAE08900243158 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 837432A530AAE08900243158 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
 		8380B08A30A6F73900601577 /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8380B08930A6F73800601577 /* XCRemoteSwiftPackageReference "RxSwift" */;

@@ -4,34 +4,69 @@
 //
 //  Created by Amin faruq on 13/11/26.
 //
-
+import MovieApp
 import XCTest
+import RxSwift
+import RxTest
 
-final class MovieAppTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-        // XCTest Documentation
-        // https://developer.apple.com/documentation/xctest
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
+extension XCTestCase {
+    func trackForMemoryLeaks(
+        _ instance: AnyObject,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Should have been deallocated. Pottential memory leaks", file: file, line: line)
         }
     }
+}
 
+func makeResponse(statusCode: Int, data: Data = Data(), headers: [String: String]? = [:]) -> (Data, HTTPURLResponse) {
+    let response = HTTPURLResponse(url: anyURL(), statusCode: statusCode, httpVersion: nil, headerFields: headers)!
+    return (data, response)
+}
+
+func anyURL() -> URL {
+    return URL(string: "http://any-url.com")!
+}
+
+func anyError() -> NSError {
+    return NSError(domain: "an error", code: 404)
+}
+
+func anyData() -> Data {
+    Data()
+}
+
+func anyId() -> Int {
+    Int.random(in: 1...20)
+}
+
+func makeApiKey() -> String {
+    let apiKey = "YOUR_TMDB_V4_READ_ACCESS_TOKEN"
+    return apiKey
+}
+
+class HTTPClientSpy: HTTPClient {
+    enum Message: Equatable {
+        case get(URL, apiKey: String)
+    }
+    
+    var stub: Single<HTTPClient.Result> = .never()
+    private(set) var messages = [Message]()
+    private(set) var loadCallCount = 0
+    private(set) var requestedURLs = [URL]()
+            
+    func get(from url: URL, apiKey: String) -> Single<HTTPClient.Result> {
+        loadCallCount += 1
+        messages.append(.get(url, apiKey: apiKey))
+        requestedURLs.append(url)
+        return stub
+    }
+}
+
+extension TestScheduler {
+    func advanceBy(_ ticks: VirtualTime) {
+        advanceTo(clock + ticks)
+    }
 }
