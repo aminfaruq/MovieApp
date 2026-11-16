@@ -38,6 +38,7 @@ final class MovieDetailPresenter {
     
     private var currentPage = 1
     private var hasMore = true
+    private var isLoadingMore = false
 
     private let disposeBag = DisposeBag()
     
@@ -48,9 +49,10 @@ final class MovieDetailPresenter {
     }
     
     func didLoadMore() {
-        guard hasMore else { return }
+        guard hasMore, !isLoadingMore else { return }
         
         let nextPage = currentPage + 1
+        isLoadingMore = true
         view?.display(isPaginationLoading: true)
         
         interactor?.fetchReviews(id: id, page: nextPage)
@@ -58,6 +60,7 @@ final class MovieDetailPresenter {
             .subscribe(
                 onSuccess: { [weak self] response in
                     guard let self = self else { return }
+                    isLoadingMore = false
                     currentPage = response.page
                     view?.display(isPaginationLoading: false)
 
@@ -299,6 +302,30 @@ final class MovieDetailPresenterTests: XCTestCase {
             .fetchMovie(id: id),
             .fetchTrailers(id: id),
             .fetchReviews(id: id, page: 1)
+        ])
+    }
+    
+    func test_didLoadMore_ignoresRequestWhenDuplicated() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        
+        let review = makeReview()
+        spy.loadReviewsStub = .just(makePageReviews(page: 1, total_pages: 3, resultsModel: [review]))
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        spy.loadReviewsStub = .never()
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+        
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovie(id: id),
+            .fetchTrailers(id: id),
+            .fetchReviews(id: id, page: 1),
+            .fetchReviews(id: id, page: 2)
         ])
     }
         
