@@ -70,6 +70,7 @@ final class MovieDetailPresenter {
                 },
                 onFailure: { [weak self] error in
                     guard let self = self else { return }
+                    isLoadingMore = false
                     view?.display(isPaginationLoading: false)
                 }
             )
@@ -378,6 +379,24 @@ final class MovieDetailPresenterTests: XCTestCase {
             .fetchReviews(id: id, page: 2)
         ])
         XCTAssertTrue(spy.viewMessage.contains(.display(reviews: [review1, review2])))
+    }
+    
+    func test_didLoadMore_retryAfterFailure() {
+        let (sut, spy, scheduler) = makeSUT()
+        
+        spy.loadReviewsStub = .just(makePageReviews(page: 1, total_pages: 3, resultsModel: [makeReview()]))
+
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        spy.loadReviewsStub = .error(anyError())
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+        
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+
+        XCTAssertEqual(spy.interactorCallCount, 5)
     }
         
     //MARK: Helpers
