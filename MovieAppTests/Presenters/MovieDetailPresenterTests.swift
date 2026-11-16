@@ -62,6 +62,7 @@ final class MovieDetailPresenter {
                     guard let self = self else { return }
                     isLoadingMore = false
                     currentPage = response.page
+                    hasMore = response.hasMore
                     view?.display(isPaginationLoading: false)
 
                 },
@@ -315,6 +316,30 @@ final class MovieDetailPresenterTests: XCTestCase {
         scheduler.advanceBy(10)
         
         spy.loadReviewsStub = .never()
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+        
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovie(id: id),
+            .fetchTrailers(id: id),
+            .fetchReviews(id: id, page: 1),
+            .fetchReviews(id: id, page: 2)
+        ])
+    }
+    
+    func test_didLoadMore_stopAtLastPage() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        
+        let review = makeReview()
+        spy.loadReviewsStub = .just(makePageReviews(page: 1, total_pages: 2, resultsModel: [review]))
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        spy.loadReviewsStub = .just(makePageReviews(page: 2, total_pages: 2, resultsModel: [review]))
         sut.didLoadMore()
         scheduler.advanceBy(10)
         
