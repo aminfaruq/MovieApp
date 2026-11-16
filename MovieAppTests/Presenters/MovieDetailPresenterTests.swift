@@ -69,6 +69,14 @@ final class MovieDetailPresenter {
         interactor?.fetchTrailers(id: id)
             .observe(on: scheduler)
             .subscribe(
+                onSuccess: { [weak self]  results in
+                    guard let self = self else { return }
+                    
+                    let trailer = results.first { $0.site == "YouTube" && $0.type == "Trailer" }
+                    let url = trailer.flatMap { URL(string: "\(APIConfig.youtubeEmbedBaseURL)/\($0.key)") }
+                    view?.display(trailerURL: url)
+                },
+                
                 onFailure: { [weak self] error in
                     guard let self = self else { return }
                     
@@ -130,7 +138,6 @@ final class MovieDetailPresenterTests: XCTestCase {
         ])
     }
     
-    
     func test_viewDidLoad_deliversTrailerOnError() {
         let id = anyId()
         let (sut, spy, scheduler) = makeSUT(id: id)
@@ -145,6 +152,27 @@ final class MovieDetailPresenterTests: XCTestCase {
             .fetchTrailers(id: id)
         ])
         XCTAssertTrue(spy.viewMessage.contains(.display(trailer: nil)))
+    }
+    
+    func test_viewDidLoad_deliversTrailerOnSuccess() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        
+        let key = "Way9Dexny3w"
+        let expectedURL = URL(string: "https://www.youtube.com/embed/\(key)")!
+        let youtubeTrailer = makeTrailer(key: key, site: "youtube", type: "trailer")
+        let nonYoutubeTrailer = makeTrailer()
+        let trailers = [youtubeTrailer, nonYoutubeTrailer]
+        spy.loadTrailersStub = .just(trailers)
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovie(id: id),
+            .fetchTrailers(id: id)
+        ])
+        XCTAssertTrue(spy.viewMessage.contains(.display(trailer: expectedURL)))
     }
     
     //MARK: Helpers
@@ -195,6 +223,27 @@ final class MovieDetailPresenterTests: XCTestCase {
             backdropPath: URL(string: APIConfig.imageBaseURL + backdropPath)!
         )
         
+        return model
+    }
+    
+    private func makeTrailer(
+        id: String = "65a8b2104b0c63012f6e1a2b",
+        name: String =  "Official Trailer",
+        key: String = "Way9Dexny3w",
+        site: String = "YouTube",
+        size: Int = 1080,
+        type: String = "Trailer",
+        official: Bool = true
+    ) -> TrailerModel {
+        let model = TrailerModel(
+            id: id,
+            name: name,
+            key: key,
+            site: site,
+            size: size,
+            type: type,
+            official: official
+        )
         return model
     }
     
