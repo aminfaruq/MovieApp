@@ -108,6 +108,7 @@
                 <outlet property="overviewLabel" destination="CZ6-Rn-IB9" id="Pyh-zR-Hio"/>
                 <outlet property="ratingLabel" destination="1W2-cm-Y4M" id="027-cT-Tvx"/>
                 <outlet property="releaseDateLabel" destination="bfn-EC-5wb" id="FCY-Ca-jwy"/>
+                <outlet property="stackView" destination="dRq-yx-cBC" id="TjL-yn-KnW"/>
                 <outlet property="taglineLabel" destination="MbG-Vc-q9b" id="tSo-Qs-BsF"/>
                 <outlet property="titleLabel" destination="cXY-M5-izn" id="ibk-06-b9J"/>
             </connections>
