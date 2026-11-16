@@ -40,9 +40,10 @@ final class MovieDetailPresenter {
     
     func viewDidLoad() {
         loadMovieDetail()
+        loadTrailer()
     }
     
-    func loadMovieDetail() {
+    private func loadMovieDetail() {
         view?.display(isLoading: true)
         
         interactor?.fetchMovie(id: id)
@@ -59,6 +60,19 @@ final class MovieDetailPresenter {
                     
                     view?.display(isLoading: false)
                     view?.display(showErrorMessage: error.localizedDescription)
+                }
+            )
+            .disposed(by: disposeBag)
+    }
+    
+    private func loadTrailer() {
+        interactor?.fetchTrailers(id: id)
+            .observe(on: scheduler)
+            .subscribe(
+                onFailure: { [weak self] error in
+                    guard let self = self else { return }
+                    
+                    view?.display(trailerURL: nil)
                 }
             )
             .disposed(by: disposeBag)
@@ -85,7 +99,8 @@ final class MovieDetailPresenterTests: XCTestCase {
         scheduler.advanceBy(10)
         
         XCTAssertEqual(spy.interactorMessage, [
-            .fetchMovie(id: id)
+            .fetchMovie(id: id),
+            .fetchTrailers(id: id)
         ])
         XCTAssertEqual(spy.viewMessage, [
             .display(isLoading: true),
@@ -105,13 +120,31 @@ final class MovieDetailPresenterTests: XCTestCase {
         scheduler.advanceBy(10)
         
         XCTAssertEqual(spy.interactorMessage, [
-            .fetchMovie(id: id)
+            .fetchMovie(id: id),
+            .fetchTrailers(id: id)
         ])
         XCTAssertEqual(spy.viewMessage, [
             .display(isLoading: true),
             .display(isLoading: false),
             .display(movie: movie)
         ])
+    }
+    
+    
+    func test_viewDidLoad_deliversTrailerOnError() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        
+        spy.loadTrailersStub = .error(anyError())
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovie(id: id),
+            .fetchTrailers(id: id)
+        ])
+        XCTAssertTrue(spy.viewMessage.contains(.display(trailer: nil)))
     }
     
     //MARK: Helpers
