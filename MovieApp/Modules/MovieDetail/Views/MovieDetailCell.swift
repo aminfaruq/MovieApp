@@ -26,6 +26,8 @@ class MovieDetailCell: UITableViewCell {
         // Initialization code
         backdropImageView.kf.cancelDownloadTask()
         backdropImageView.image = nil
+        stackView.distribution = .fillProportionally
+        stackView.spacing = 4
     }
     
     func configure(model: MovieDetailModel) {
@@ -69,6 +71,7 @@ class MovieDetailCell: UITableViewCell {
         label.text = title
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.textColor = .label
+        label.textAlignment = .center
         
         container.addSubview(label)
         label.snp.makeConstraints { make in
