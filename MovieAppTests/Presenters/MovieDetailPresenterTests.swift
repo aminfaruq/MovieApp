@@ -22,7 +22,7 @@ public protocol MovieDetailViewProtocol: AnyObject {
 
 
 final class MovieDetailPresenter {
-    var view: MovieDetailViewProtocol?
+    weak var view: MovieDetailViewProtocol?
     var interactor: MovieDetailInteractorProtocol?
     
     private let id: Int
@@ -399,6 +399,18 @@ final class MovieDetailPresenterTests: XCTestCase {
         XCTAssertEqual(spy.interactorCallCount, 5)
     }
         
+    func test_view_shouldHaveBeenDeallocatedWhenReleased() {
+        let (sut, _, _) = makeSUT()
+        
+        do {
+            let tempView = ViewSpy()
+            sut.view = tempView
+            XCTAssertNotNil(sut.view)
+        }
+        
+        XCTAssertNil(sut.view)
+    }
+    
     //MARK: Helpers
     private func makeSUT(
         id: Int = anyId(),
