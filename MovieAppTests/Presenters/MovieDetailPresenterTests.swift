@@ -15,7 +15,7 @@ public protocol MovieDetailViewProtocol: AnyObject {
     func display(isLoading: Bool)
     func display(movie: MovieDetailModel)
     func display(trailerURL: URL?)
-    func display(review: MovieReviewModel)
+    func display(reviews: [MovieReviewModel])
     func display(isPaginationLoading: Bool)
     func display(showErrorMessage: String)
 }
@@ -94,6 +94,11 @@ final class MovieDetailPresenter {
         interactor?.fetchReviews(id: id, page: currentPage)
             .observe(on: scheduler)
             .subscribe(
+                onSuccess: { [weak self] response in
+                    guard let self = self else { return }
+                    
+                    view?.display(reviews: response.results)
+                },
                 onFailure: {  [weak self] error in
                     guard let self = self else { return }
 
@@ -208,6 +213,19 @@ final class MovieDetailPresenterTests: XCTestCase {
         XCTAssertTrue(spy.viewMessage.contains(.display(showErrorMessage: expectedError.localizedDescription)))
     }
     
+    func test_viewDidLoad_deliversReviewsOnSuccess() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        let reviews = [makeReview(), makeReview()]
+        let page = makePageReviews(page: 1, total_pages: 1, resultsModel: reviews)
+        spy.loadReviewsStub = .just(page)
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertTrue(spy.viewMessage.contains(.display(reviews: reviews)))
+    }
+    
     //MARK: Helpers
     private func makeSUT(
         id: Int = anyId(),
@@ -280,6 +298,41 @@ final class MovieDetailPresenterTests: XCTestCase {
         return model
     }
     
+    private func makePageReviews(
+        id: Int = anyId(),
+        page: Int ,
+        total_pages: Int,
+        total_results: Int = 1,
+        resultsModel: [MovieReviewModel]
+    ) -> PaginatedResponseMovieReviewModel {
+        
+        
+        let model = PaginatedResponseMovieReviewModel(
+            id: id,
+            page: page,
+            totalPages: total_pages,
+            totalResults: total_results,
+            results: resultsModel)
+        
+        return model
+    }
+    
+    private func makeReview(
+        id: String = "an-id",
+        username: String = "username",
+        rating: Int = 9,
+        content: String = "a content",
+    ) -> MovieReviewModel {
+        let model = MovieReviewModel(
+            id: id,
+            username: username,
+            rating: "\(rating)",
+            content: content
+        )
+        
+        return model
+    }
+    
     private func makeGenre(id: Int = anyId(), name: String = "a-name") -> GenreModel {
         .init(id: id, name: name)
     }
@@ -292,7 +345,7 @@ final class MovieDetailPresenterTests: XCTestCase {
             case display(isLoading: Bool)
             case display(movie: MovieDetailModel)
             case display(trailer: URL?)
-            case display(review: MovieReviewModel)
+            case display(reviews: [MovieReviewModel])
             case display(isPaginationLoading: Bool)
             case display(showErrorMessage: String)
         }
@@ -311,8 +364,8 @@ final class MovieDetailPresenterTests: XCTestCase {
             viewMessage.append(.display(trailer: trailerURL))
         }
         
-        func display(review: MovieReviewModel) {
-            viewMessage.append(.display(review: review))
+        func display(reviews: [MovieReviewModel]) {
+            viewMessage.append(.display(reviews: reviews))
         }
         
         func display(isPaginationLoading: Bool) {
