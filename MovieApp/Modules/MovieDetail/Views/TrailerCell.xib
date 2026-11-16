@@ -42,6 +42,9 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="webView" destination="xf7-bv-ee3" id="ToK-cA-vBf"/>
+            </connections>
             <point key="canvasLocation" x="-160" y="154"/>
         </tableViewCell>
     </objects>

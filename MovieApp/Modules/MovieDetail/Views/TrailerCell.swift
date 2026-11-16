@@ -6,18 +6,17 @@
 //
 
 import UIKit
+import WebKit
 
 class TrailerCell: UITableViewCell {
-
+    @IBOutlet private weak var webView: WKWebView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
     
+    func configure(url: URL) {
+        webView.load(URLRequest(url: url))
+    }
 }
