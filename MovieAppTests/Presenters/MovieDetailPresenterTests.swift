@@ -14,9 +14,10 @@ import Foundation
 public protocol MovieDetailViewProtocol: AnyObject {
     func display(isLoading: Bool)
     func display(movie: MovieDetailModel)
-    func display(trailer: TrailerModel)
+    func display(trailerURL: URL?)
     func display(review: MovieReviewModel)
     func display(isPaginationLoading: Bool)
+    func display(showErrorMessage: String)
 }
 
 
@@ -75,9 +76,10 @@ final class MovieDetailPresenterTests: XCTestCase {
         enum ViewMessage: Equatable {
             case display(isLoading: Bool)
             case display(movie: MovieDetailModel)
-            case display(trailer: TrailerModel)
+            case display(trailer: URL?)
             case display(review: MovieReviewModel)
             case display(isPaginationLoading: Bool)
+            case display(showErrorMessage: String)
         }
         
         private(set) var viewMessage = [ViewMessage]()
@@ -90,8 +92,8 @@ final class MovieDetailPresenterTests: XCTestCase {
             viewMessage.append(.display(movie: movie))
         }
         
-        func display(trailer: TrailerModel) {
-            viewMessage.append(.display(trailer: trailer))
+        func display(trailerURL: URL?) {
+            viewMessage.append(.display(trailer: trailerURL))
         }
         
         func display(review: MovieReviewModel) {
@@ -100,6 +102,10 @@ final class MovieDetailPresenterTests: XCTestCase {
         
         func display(isPaginationLoading: Bool) {
             viewMessage.append(.display(isPaginationLoading: isPaginationLoading))
+        }
+        
+        func display(showErrorMessage: String) {
+            viewMessage.append(.display(showErrorMessage: showErrorMessage))
         }
         
         //MARK: - Interactor
