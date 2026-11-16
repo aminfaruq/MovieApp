@@ -93,8 +93,11 @@ public final class MovieDetailPresenter: MovieDetailPresenterProtocol {
                     guard let self = self else { return }
                     
                     let trailer = results.first { $0.site == "YouTube" && $0.type == "Trailer" }
+                    ?? results.first { $0.site == "YouTube" && $0.type == "Teaser" }
+                    ?? results.first { $0.site == "YouTube" }
+                    
                     let url = trailer.flatMap { URL(string: "\(APIConfig.youtubeEmbedBaseURL)/\($0.key)") }
-                    view?.display(trailerURL: url)
+                    self.view?.display(trailerURL: url)
                 },
                 
                 onFailure: { [weak self] error in
