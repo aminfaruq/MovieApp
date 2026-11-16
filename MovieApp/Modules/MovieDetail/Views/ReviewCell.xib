@@ -29,8 +29,9 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fzl-fc-7m6">
-                        <rect key="frame" x="249" y="18" width="12" height="12"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="fzl-fc-7m6">
+                        <rect key="frame" x="249" y="17.666666666666668" width="12" height="11.666666666666668"/>
+                        <color key="tintColor" systemColor="systemOrangeColor"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="12" id="q3y-B8-hjX"/>
                             <constraint firstAttribute="height" constant="12" id="r56-hg-L4D"/>
@@ -58,12 +59,21 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="ratingLabel" destination="JqC-rj-ktj" id="9zm-Zc-i9Z"/>
+                <outlet property="reviewLabel" destination="WpU-h9-guR" id="8V9-8N-Piz"/>
+                <outlet property="usernameLabel" destination="LdS-A8-Z96" id="FDP-LF-jHG"/>
+            </connections>
             <point key="canvasLocation" x="-160.30534351145039" y="163.73239436619718"/>
         </tableViewCell>
     </objects>
     <resources>
+        <image name="star" catalog="system" width="128" height="116"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.55294117647058827" blue="0.15686274509803921" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
