@@ -39,6 +39,7 @@ final class MovieDetailPresenter {
     private var currentPage = 1
     private var hasMore = true
     private var isLoadingMore = false
+    private var reviews = [MovieReviewModel]()
 
     private let disposeBag = DisposeBag()
     
@@ -64,7 +65,8 @@ final class MovieDetailPresenter {
                     currentPage = response.page
                     hasMore = response.hasMore
                     view?.display(isPaginationLoading: false)
-
+                    reviews.append(contentsOf: response.results)
+                    view?.display(reviews: reviews)
                 },
                 onFailure: { [weak self] error in
                     guard let self = self else { return }
@@ -125,6 +127,7 @@ final class MovieDetailPresenter {
                 onSuccess: { [weak self] response in
                     guard let self = self else { return }
                     hasMore = response.hasMore
+                    reviews = response.results
                     view?.display(reviews: response.results)
                 },
                 onFailure: {  [weak self] error in
@@ -352,6 +355,29 @@ final class MovieDetailPresenterTests: XCTestCase {
             .fetchReviews(id: id, page: 1),
             .fetchReviews(id: id, page: 2)
         ])
+    }
+    
+    func test_didLoadMore_appendingNextPage() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        let review1 = makeReview(id: "abc")
+        let review2 = makeReview(id: "cba")
+        
+        spy.loadReviewsStub = .just(makePageReviews(page: 1, total_pages: 2, resultsModel: [review1]))
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        spy.loadReviewsStub = .just(makePageReviews(page: 2, total_pages: 2, resultsModel: [review2]))
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovie(id: id),
+            .fetchTrailers(id: id),
+            .fetchReviews(id: id, page: 1),
+            .fetchReviews(id: id, page: 2)
+        ])
+        XCTAssertTrue(spy.viewMessage.contains(.display(reviews: [review1, review2])))
     }
         
     //MARK: Helpers
