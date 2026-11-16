@@ -36,11 +36,14 @@ final class MovieDetailPresenter {
         self.scheduler = scheduler
     }
     
+    private var currentPage = 1
+
     private let disposeBag = DisposeBag()
     
     func viewDidLoad() {
         loadMovieDetail()
         loadTrailer()
+        loadInitalReviews()
     }
     
     private func loadMovieDetail() {
@@ -85,6 +88,20 @@ final class MovieDetailPresenter {
             )
             .disposed(by: disposeBag)
     }
+    
+    private func loadInitalReviews() {
+        currentPage = 1
+        interactor?.fetchReviews(id: id, page: currentPage)
+            .observe(on: scheduler)
+            .subscribe(
+                onFailure: {  [weak self] error in
+                    guard let self = self else { return }
+
+                    view?.display(showErrorMessage: error.localizedDescription)
+                }
+            )
+            .disposed(by: disposeBag)
+    }
 }
 
 final class MovieDetailPresenterTests: XCTestCase {
@@ -108,7 +125,8 @@ final class MovieDetailPresenterTests: XCTestCase {
         
         XCTAssertEqual(spy.interactorMessage, [
             .fetchMovie(id: id),
-            .fetchTrailers(id: id)
+            .fetchTrailers(id: id),
+            .fetchReviews(id: id, page: 1)
         ])
         XCTAssertEqual(spy.viewMessage, [
             .display(isLoading: true),
@@ -129,7 +147,8 @@ final class MovieDetailPresenterTests: XCTestCase {
         
         XCTAssertEqual(spy.interactorMessage, [
             .fetchMovie(id: id),
-            .fetchTrailers(id: id)
+            .fetchTrailers(id: id),
+            .fetchReviews(id: id, page: 1)
         ])
         XCTAssertEqual(spy.viewMessage, [
             .display(isLoading: true),
@@ -149,7 +168,8 @@ final class MovieDetailPresenterTests: XCTestCase {
         
         XCTAssertEqual(spy.interactorMessage, [
             .fetchMovie(id: id),
-            .fetchTrailers(id: id)
+            .fetchTrailers(id: id),
+            .fetchReviews(id: id, page: 1)
         ])
         XCTAssertTrue(spy.viewMessage.contains(.display(trailer: nil)))
     }
@@ -170,9 +190,22 @@ final class MovieDetailPresenterTests: XCTestCase {
         
         XCTAssertEqual(spy.interactorMessage, [
             .fetchMovie(id: id),
-            .fetchTrailers(id: id)
+            .fetchTrailers(id: id),
+            .fetchReviews(id: id, page: 1)
         ])
         XCTAssertTrue(spy.viewMessage.contains(.display(trailer: expectedURL)))
+    }
+    
+    func test_viewDidLoad_deliversReviewsOnFailure() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        let expectedError = anyError()
+        spy.loadReviewsStub = .error(expectedError)
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertTrue(spy.viewMessage.contains(.display(showErrorMessage: expectedError.localizedDescription)))
     }
     
     //MARK: Helpers
