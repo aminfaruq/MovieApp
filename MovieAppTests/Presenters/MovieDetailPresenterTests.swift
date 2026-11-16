@@ -46,6 +46,27 @@ final class MovieDetailPresenter {
         loadInitalReviews()
     }
     
+    func didLoadMore() {
+        let nextPage = currentPage + 1
+        view?.display(isPaginationLoading: true)
+        
+        interactor?.fetchReviews(id: id, page: nextPage)
+            .observe(on: scheduler)
+            .subscribe(
+                onSuccess: { [weak self] response in
+                    guard let self = self else { return }
+                    currentPage = response.page
+                    view?.display(isPaginationLoading: false)
+
+                },
+                onFailure: { [weak self] error in
+                    guard let self = self else { return }
+                    view?.display(isPaginationLoading: false)
+                }
+            )
+            .disposed(by: disposeBag)
+    }
+    
     private func loadMovieDetail() {
         view?.display(isLoading: true)
         
@@ -107,6 +128,8 @@ final class MovieDetailPresenter {
             )
             .disposed(by: disposeBag)
     }
+    
+    
 }
 
 final class MovieDetailPresenterTests: XCTestCase {
@@ -226,6 +249,34 @@ final class MovieDetailPresenterTests: XCTestCase {
         XCTAssertTrue(spy.viewMessage.contains(.display(reviews: reviews)))
     }
     
+    func test_didLoadMore_requestNextPage() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        
+        let review = makeReview()
+        spy.loadReviewsStub = .just(makePageReviews(page: 1, total_pages: 3, resultsModel: [review]))
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        spy.loadReviewsStub = .just(makePageReviews(page: 2, total_pages: 3, resultsModel: [review]))
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+        
+        spy.loadReviewsStub = .just(makePageReviews(page: 3, total_pages: 3, resultsModel: [review]))
+        sut.didLoadMore()
+        scheduler.advanceBy(10)
+
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovie(id: id),
+            .fetchTrailers(id: id),
+            .fetchReviews(id: id, page: 1),
+            .fetchReviews(id: id, page: 2),
+            .fetchReviews(id: id, page: 3)
+        ])
+        XCTAssertTrue(spy.viewMessage.contains(.display(isPaginationLoading: true)))
+        XCTAssertTrue(spy.viewMessage.contains(.display(isPaginationLoading: false)))
+    }
+        
     //MARK: Helpers
     private func makeSUT(
         id: Int = anyId(),
