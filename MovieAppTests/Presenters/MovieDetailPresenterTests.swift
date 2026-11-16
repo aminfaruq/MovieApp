@@ -35,6 +35,28 @@ final class MovieDetailPresenter {
         self.id = id
         self.scheduler = scheduler
     }
+    
+    private let disposeBag = DisposeBag()
+    
+    func viewDidLoad() {
+        loadMovieDetail()
+    }
+    
+    func loadMovieDetail() {
+        view?.display(isLoading: true)
+        
+        interactor?.fetchMovie(id: id)
+            .observe(on: scheduler)
+            .subscribe(
+                onFailure: { [weak self] error in
+                    guard let self = self else { return }
+                    
+                    view?.display(isLoading: false)
+                    view?.display(showErrorMessage: error.localizedDescription)
+                }
+            )
+            .disposed(by: disposeBag)
+    }
 }
 
 final class MovieDetailPresenterTests: XCTestCase {
@@ -45,6 +67,25 @@ final class MovieDetailPresenterTests: XCTestCase {
         XCTAssertEqual(spy.interactorCallCount, 0)
         XCTAssertEqual(spy.interactorMessage, [])
         XCTAssertEqual(spy.viewMessage, [])
+    }
+    
+    func test_viewDidLoad_deliversErrorOnFailure() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        let expectedError = anyError()
+        spy.loadMovieStub = .error(expectedError)
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovie(id: id)
+        ])
+        XCTAssertEqual(spy.viewMessage, [
+            .display(isLoading: true),
+            .display(isLoading: false),
+            .display(showErrorMessage: expectedError.localizedDescription)
+        ])
     }
     
     //MARK: Helpers
