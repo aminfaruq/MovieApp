@@ -20,10 +20,17 @@ public protocol MovieDetailViewProtocol: AnyObject {
     func display(showErrorMessage: String)
 }
 
+public protocol MovieDetailPresenterProtocol: AnyObject {
+    var view: MovieDetailViewProtocol? { get set }
+    var interactor: MovieDetailInteractorProtocol? { get set }
+    
+    func viewDidLoad()
+    func didLoadMore()
+}
 
-final class MovieDetailPresenter {
-    weak var view: MovieDetailViewProtocol?
-    var interactor: MovieDetailInteractorProtocol?
+public final class MovieDetailPresenter: MovieDetailPresenterProtocol {
+    public weak var view: MovieDetailViewProtocol?
+    public var interactor: MovieDetailInteractorProtocol?
     
     private let id: Int
     private let scheduler: SchedulerType
@@ -43,13 +50,13 @@ final class MovieDetailPresenter {
 
     private let disposeBag = DisposeBag()
     
-    func viewDidLoad() {
+    public func viewDidLoad() {
         loadMovieDetail()
         loadTrailer()
         loadInitalReviews()
     }
     
-    func didLoadMore() {
+    public func didLoadMore() {
         guard hasMore, !isLoadingMore else { return }
         
         let nextPage = currentPage + 1
