@@ -48,6 +48,12 @@ final class MovieDetailPresenter {
         interactor?.fetchMovie(id: id)
             .observe(on: scheduler)
             .subscribe(
+                onSuccess: { [weak self] response in
+                    guard let self = self else { return }
+                    
+                    view?.display(isLoading: false)
+                    view?.display(movie: response)
+                },
                 onFailure: { [weak self] error in
                     guard let self = self else { return }
                     
@@ -88,6 +94,26 @@ final class MovieDetailPresenterTests: XCTestCase {
         ])
     }
     
+    func test_viewDidLoad_deliversResponseOnSuccess() {
+        let id = anyId()
+        let (sut, spy, scheduler) = makeSUT(id: id)
+        
+        let movie = makeMovie(genresModel: [makeGenre()])
+        spy.loadMovieStub = .just(movie)
+        
+        sut.viewDidLoad()
+        scheduler.advanceBy(10)
+        
+        XCTAssertEqual(spy.interactorMessage, [
+            .fetchMovie(id: id)
+        ])
+        XCTAssertEqual(spy.viewMessage, [
+            .display(isLoading: true),
+            .display(isLoading: false),
+            .display(movie: movie)
+        ])
+    }
+    
     //MARK: Helpers
     private func makeSUT(
         id: Int = anyId(),
@@ -110,6 +136,39 @@ final class MovieDetailPresenterTests: XCTestCase {
         
         return (sut, spy, scheduler)
     }
+    
+    private func makeMovie(
+        id: Int = 1,
+        title: String = "a-title",
+        tagline: String = "a-tagline",
+        overview: String = "a-overview",
+        releaseDate: String = "a-releaseDate",
+        runtime: Int = 459,
+        voteAverage: Double = 9.9,
+        posterPath: String = "a-posterPath",
+        backdropPath: String = "a-backdropPath",
+        genresModel: [GenreModel]
+    ) -> MovieDetailModel {
+        let model = MovieDetailModel(
+            id: id,
+            title: title,
+            tagline: tagline,
+            overview: overview,
+            releaseDate: releaseDate,
+            runtime: "\(runtime)",
+            voteAverage: "\(voteAverage)",
+            genres: genresModel,
+            posterPath: URL(string: APIConfig.imageBaseURL + posterPath)!,
+            backdropPath: URL(string: APIConfig.imageBaseURL + backdropPath)!
+        )
+        
+        return model
+    }
+    
+    private func makeGenre(id: Int = anyId(), name: String = "a-name") -> GenreModel {
+        .init(id: id, name: name)
+    }
+    
     
     private class ViewSpy: MovieDetailViewProtocol, MovieDetailInteractorProtocol {
              
