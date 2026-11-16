@@ -23,7 +23,10 @@ final class MovieListRouter: MovieListRouterProtocol {
     }
     
     func navigateToDetail(view: (any MovieListViewProtocol)?, id: Int) {
+        guard let sourceView = view as? UIViewController else { return }
         
+        let view = MovieDetailRouter.createModule(id: id)
+        sourceView.navigationController?.pushViewController(view, animated: true)
     }
     
 }
