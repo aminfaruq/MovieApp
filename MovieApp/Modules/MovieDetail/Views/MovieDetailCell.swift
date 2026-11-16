@@ -17,7 +17,8 @@ class MovieDetailCell: UITableViewCell {
     @IBOutlet private weak var ratingLabel: UILabel!
     @IBOutlet private weak var overviewLabel: UILabel!
     
-    
+    static let identifier = "MovieDetailCell"
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
