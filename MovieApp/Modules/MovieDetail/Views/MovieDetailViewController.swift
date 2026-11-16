@@ -110,10 +110,14 @@ extension MovieDetailViewController: UITableViewDelegate, UITableViewDataSource 
             case .detail:
                 return nil
             case .trailer:
-                return trailerURL == nil ? nil : "Trailer"
+                return nil
             case .reviews:
                 return reviews.isEmpty ? nil : "User Reviews"
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }
 
