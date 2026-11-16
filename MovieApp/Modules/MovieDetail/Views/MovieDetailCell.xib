@@ -103,6 +103,14 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="backdropImageView" destination="0aE-av-VLy" id="LNV-kj-UMS"/>
+                <outlet property="overviewLabel" destination="CZ6-Rn-IB9" id="Pyh-zR-Hio"/>
+                <outlet property="ratingLabel" destination="1W2-cm-Y4M" id="027-cT-Tvx"/>
+                <outlet property="releaseDateLabel" destination="bfn-EC-5wb" id="FCY-Ca-jwy"/>
+                <outlet property="taglineLabel" destination="MbG-Vc-q9b" id="tSo-Qs-BsF"/>
+                <outlet property="titleLabel" destination="cXY-M5-izn" id="ibk-06-b9J"/>
+            </connections>
             <point key="canvasLocation" x="138.93129770992365" y="153.87323943661971"/>
         </tableViewCell>
     </objects>
