@@ -39,18 +39,6 @@ class MovieDetailCell: UITableViewCell {
         ratingLabel.text = model.voteAverage
         overviewLabel.text = model.overview
         
-        let view = UIView()
-        let label = UILabel()
-        view.addSubview(label)
-        view.snp.makeConstraints { make in
-            make.height.equalTo(25)
-        }
-        
-        label.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().offset(12)
-            make.trailing.bottom.equalToSuperview().inset(12)
-        }
-        
         stackView.arrangedSubviews.forEach { subview in
             stackView.removeArrangedSubview(subview)
             subview.removeFromSuperview()
