@@ -83,28 +83,28 @@ public final class RemoteMovieDetailLoader: MovieDetailLoader {
 extension RemoteMovieDetailLoader {
     private struct RootMovieDTO: Decodable {
         private let id: Int
-        private let title: String
+        private let title: String?
         private let tagline: String
         private let overview: String
         private let release_date: String
-        private let runtime: Int
+        private let runtime: Int?
         private let vote_average: Double
         private let genres: [RemoteGenreDTO]
-        private let poster_path: String
-        private let backdrop_path: String
+        private let poster_path: String?
+        private let backdrop_path: String?
         
         func toModel() -> MovieDetailModel {
             .init(
                 id: id,
-                title: title,
+                title: title ?? "",
                 tagline: tagline,
                 overview: overview,
                 releaseDate: "\(release_date)",
-                runtime: "\(runtime)",
+                runtime: "\(runtime ?? 0)",
                 voteAverage: "\(vote_average)",
                 genres: genres.map { $0.toModel() },
-                posterPath: URL(string: APIConfig.imageBaseURL + poster_path) ?? URL(string: "about:blank")!,
-                backdropPath: URL(string: APIConfig.imageBaseURL + backdrop_path) ?? URL(string: "about:blank")!
+                posterPath: URL(string: APIConfig.imageBaseURL + (poster_path ?? "about:blank")) ?? URL(string: "about:blank")!,
+                backdropPath: URL(string: APIConfig.imageBaseURL + (backdrop_path ?? "about:blank")) ?? URL(string: "about:blank")!
             )
         }
     }
@@ -153,7 +153,7 @@ extension RemoteMovieDetailLoader {
     
     private struct RemoteAuthorDetailDTO: Decodable {
         let username: String
-        let rating: Int?
+        let rating: Double?
     }
     
     private struct RootTrailerDTO: Decodable {

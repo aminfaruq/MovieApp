@@ -531,7 +531,7 @@ final class RemoteMovieDetailLoaderTests: XCTestCase {
     private func makeReview(
         id: String = "an-id",
         username: String = "username",
-        rating: Int = 9,
+        rating: Double = 9,
         content: String = "a content",
     ) -> (
         json: [String: Any],
