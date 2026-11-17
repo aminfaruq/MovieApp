@@ -116,6 +116,16 @@ extension MovieDetailViewController: UITableViewDelegate, UITableViewDataSource 
         }
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let sectionType = Section(rawValue: indexPath.section) else {
+            return
+        }
+        
+        if sectionType == .reviews && reviews.isEmpty && indexPath.row == reviews.count - 1 {
+            presenter?.didLoadMore()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
     }
